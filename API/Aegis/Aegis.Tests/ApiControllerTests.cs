@@ -30,6 +30,11 @@ namespace Aegis.Tests
             _controller = new ApiController(_mockUserManager.Object, _mockSignInManager.Object);
         }
 
+        public async Task RegisterAndAssertAsync(RegisterDefaultModel model, string expectedResult)
+        {
+
+        }
+
         [Fact]
         public async Task Register_Should_Create_User()
         {
@@ -62,6 +67,26 @@ namespace Aegis.Tests
 
             // Clean up (optional)
             // You may need to clean up if necessary, like deleting the test user from the mock UserManager
+        }
+
+
+        /**************************************************
+         * FIRST NAME CONSTRAINTS 
+         * - Expected Outcome: FAIL
+         * - Reason: SPECIAL CHARACTERS
+         *************************************************/
+        [Fact]
+        public async Task First_Name_Constraints_1()
+        {
+            var model = new RegisterDefaultModel
+            {
+                FirstName = "Test@123",
+                LastName = "User",
+                Email = "testuser@example.com",
+                ConfirmEmail = "testuser@example.com",
+                Password = "Test@1234",
+                ConfirmPassword = "Test@1234"
+            };
         }
     }
 }

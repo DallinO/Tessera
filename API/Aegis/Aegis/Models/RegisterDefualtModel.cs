@@ -5,11 +5,13 @@ namespace Aegis.Models
     public class RegisterDefaultModel
     {
         [Required(ErrorMessage = "First name is required")]
-        [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "First name cannot be longer than 50 characters")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name can only contain letters and no white spaces")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Last name is required")]
-        [StringLength(50, ErrorMessage = "Last name cannot be longer than 50 characters")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name cannot be longer than 50 characters")]
+        [RegularExpression(@"^[a-zA-Z-]")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
