@@ -32,7 +32,20 @@ namespace Aegis.Tests
 
         public async Task RegisterAndAssertAsync(RegisterDefaultModel model, string expectedResult)
         {
+            _mockUserManager.Setup(u => u.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
 
+            // Act
+            var result = await _controller.Register(model);
+
+            // Assert
+            Assert.IsType<OkObjectResult>(result); // Ensure the result is an OkObjectResult
+            var okResult = result as OkObjectResult;
+            Assert.NotNull(okResult);
+
+            var actualResult = okResult.Value?.GetType().GetProperty("Result")?.GetValue(okResult.Value, null) as string;
+
+            Assert.Equal(expectedResult, actualResult);
         }
 
         [Fact]
@@ -49,24 +62,7 @@ namespace Aegis.Tests
                 ConfirmPassword = "Test@1234"
             };
 
-            _mockUserManager.Setup(u => u.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
-                .ReturnsAsync(IdentityResult.Success);
-
-            // Act
-            var result = await _controller.Register(model);
-
-            // Assert
-            Assert.IsType<OkObjectResult>(result); // Ensure the result is an OkObjectResult
-            var okResult = result as OkObjectResult;
-            Assert.NotNull(okResult);
-
-            var expectedResult = "User created successfully";
-            var actualResult = okResult.Value?.GetType().GetProperty("Result")?.GetValue(okResult.Value, null) as string;
-
-            Assert.Equal(expectedResult, actualResult);
-
-            // Clean up (optional)
-            // You may need to clean up if necessary, like deleting the test user from the mock UserManager
+            RegisterAndAssertAsync(model, "User created successfully");
         }
 
 
@@ -75,18 +71,18 @@ namespace Aegis.Tests
          * - Expected Outcome: FAIL
          * - Reason: SPECIAL CHARACTERS
          *************************************************/
-        [Fact]
-        public async Task First_Name_Constraints_1()
-        {
-            var model = new RegisterDefaultModel
-            {
-                FirstName = "Test@123",
-                LastName = "User",
-                Email = "testuser@example.com",
-                ConfirmEmail = "testuser@example.com",
-                Password = "Test@1234",
-                ConfirmPassword = "Test@1234"
-            };
-        }
+        //[Fact]
+        //public async Task First_Name_Constraints_1()
+        //{
+        //    var model = new RegisterDefaultModel
+        //    {
+        //        FirstName = "Test@123",
+        //        LastName = "User",
+        //        Email = "testuser@example.com",
+        //        ConfirmEmail = "testuser@example.com",
+        //        Password = "Test@1234",
+        //        ConfirmPassword = "Test@1234"
+        //    };
+        //}
     }
 }
