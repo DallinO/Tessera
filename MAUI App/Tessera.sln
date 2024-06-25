@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tessera", "Tessera\Tessera.csproj", "{6637949C-6F9D-48A7-B3CF-E57930566DBB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tessera Models", "..\Libraries\Tessera Models\Tessera Models\Tessera Models.csproj", "{E25DC4D0-0641-4F0E-AF9B-77C9263DDF0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{6637949C-6F9D-48A7-B3CF-E57930566DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6637949C-6F9D-48A7-B3CF-E57930566DBB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6637949C-6F9D-48A7-B3CF-E57930566DBB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E25DC4D0-0641-4F0E-AF9B-77C9263DDF0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E25DC4D0-0641-4F0E-AF9B-77C9263DDF0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E25DC4D0-0641-4F0E-AF9B-77C9263DDF0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E25DC4D0-0641-4F0E-AF9B-77C9263DDF0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

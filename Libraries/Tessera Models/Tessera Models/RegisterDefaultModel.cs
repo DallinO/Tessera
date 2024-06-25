@@ -1,17 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Aegis.Models
+namespace Tessera_Models
 {
     public class RegisterDefaultModel
     {
         [Required(ErrorMessage = "First name is required")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "First name cannot be longer than 50 characters")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name can only contain letters and no white spaces")]
+        [StringLength(4)]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name can only contain letters, spaces, and hyphens")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Last name is required")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name cannot be longer than 50 characters")]
-        [RegularExpression(@"^[a-zA-Z-]")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name must be between 2 and 50 characters")]
+        [RegularExpression(@"^[a-zA-Z\s-]+$", ErrorMessage = "Last name can only contain letters, spaces, and hyphens")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
@@ -34,5 +34,4 @@ namespace Aegis.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
-
 }

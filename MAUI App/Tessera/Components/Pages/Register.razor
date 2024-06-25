@@ -1,0 +1,68 @@
+﻿@page "/register"
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
+@using Tessera_Models
+
+<h3>Register</h3>
+
+@if (AuthService.IsAuthenticated)
+{
+    <p>You are already registered and logged in.</p>
+}
+else
+{
+    <div>
+        <label>First Name:</label>
+        <input type="text" @bind="FirstName" />
+    </div>
+    <div>
+        <label>Last Name:</label>
+        <input type="text" @bind="LastName" />
+    </div>
+    <div>
+        <label>Email:</label>
+        <input type="email" @bind="Email" />
+    </div>
+    <div>
+        <label>Password:</label>
+        <input type="password" @bind="Password" />
+    </div>
+    <div>
+        <label>Confirm Password:</label>
+        <input type="password" @bind="ConfirmPassword" />
+    </div>
+    <button @onclick="RegisterAsync">Register</button>
+    <p>@RegisterError</p>
+}
+
+@code {
+    private string FirstName { get; set; }
+    private string LastName { get; set; }
+    private string Email { get; set; }
+    private string Password { get; set; }
+    private string ConfirmPassword { get; set; }
+    private string RegisterError { get; set; }
+
+    private async Task RegisterAsync()
+    {
+        var model = new RegisterDefaultModel
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                Password = Password,
+                ConfirmPassword = ConfirmPassword
+            };
+
+        bool result = await AuthService.Register(model);
+
+        if (result)
+        {
+            Navigation.NavigateTo("/login"); // Redirect to login page after successful registration
+        }
+        else
+        {
+            RegisterError = "Registration failed. Please check your details.";
+        }
+    }
+}

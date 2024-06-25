@@ -1,0 +1,51 @@
+﻿@page "/login"
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
+@using Tessera_Models
+
+<h3>Login</h3>
+
+@if (AuthService.IsAuthenticated)
+{
+    <p>You are already logged in.</p>
+}
+else
+{
+    <div>
+        <label>Email:</label>
+        <input type="email" @bind="Email" />
+    </div>
+    <div>
+        <label>Password:</label>
+        <input type="password" @bind="Password" />
+    </div>
+    <button @onclick="LoginAsync">Login</button>
+    <p>@LoginError</p>
+}
+
+@code {
+    private string Email { get; set; }
+    private string Password { get; set; }
+    private string LoginError { get; set; }
+
+    private async Task LoginAsync()
+    {
+        var model = new LoginDefaultModel
+            {
+                Email = Email,
+                Password = Password,
+                RememberMe = false
+            };
+
+        bool result = await AuthService.Login(model);
+
+        if (result)
+        {
+            Navigation.NavigateTo("/"); // Redirect to dashboard or another page on successful login
+        }
+        else
+        {
+            LoginError = "Login failed. Please check your credentials.";
+        }
+    }
+}

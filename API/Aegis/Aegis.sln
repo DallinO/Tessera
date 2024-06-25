@@ -5,7 +5,9 @@ VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aegis", "Aegis\Aegis.csproj", "{49AD942E-44EF-4587-8197-9E4A5FF023F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aegis.Tests", "Aegis.Tests\Aegis.Tests.csproj", "{BA4C1168-5233-4CA9-BE58-9DFB6EC70584}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aegis.Tests", "Aegis.Tests\Aegis.Tests.csproj", "{BA4C1168-5233-4CA9-BE58-9DFB6EC70584}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tessera Models", "..\..\Libraries\Tessera Models\Tessera Models\Tessera Models.csproj", "{A1F64F0F-D120-4BD9-9F8B-92E0475550C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{BA4C1168-5233-4CA9-BE58-9DFB6EC70584}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA4C1168-5233-4CA9-BE58-9DFB6EC70584}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA4C1168-5233-4CA9-BE58-9DFB6EC70584}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1F64F0F-D120-4BD9-9F8B-92E0475550C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1F64F0F-D120-4BD9-9F8B-92E0475550C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1F64F0F-D120-4BD9-9F8B-92E0475550C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1F64F0F-D120-4BD9-9F8B-92E0475550C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

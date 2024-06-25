@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Aegis.Models
+namespace Tessera_Models
 {
     public class LoginDefaultModel
     {
@@ -14,5 +14,4 @@ namespace Aegis.Models
 
         public bool RememberMe { get; set; }
     }
-
 }

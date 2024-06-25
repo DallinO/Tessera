@@ -1,0 +1,40 @@
+﻿@page "/startup"
+@inject IAuthService AuthService
+@using Tessera.Components.Pages
+@using Tessera_Models
+
+@if (!AuthService.IsAuthenticated)
+{
+     <div class="overlay">
+        <div class="startup-container">
+            @if (showLogin)
+            {
+                <Login OnLogin="@Login" />
+            }
+            else
+            {
+                <Register OnRegister="@Register" />
+            }
+        </div>
+    </div>
+}
+
+<h3>Startup</h3>
+
+@code {
+    bool showLogin = true; // Default to showing login form
+
+    private async Task Login(LoginDefaultModel model)
+    {
+        // Implement login logic using AuthService
+        await AuthService.Login(model);
+        // Optionally redirect on successful login
+    }
+
+    private async Task Register(RegisterDefaultModel model)
+    {
+        // Implement register logic using AuthService
+        await AuthService.Register(model);
+        // Optionally redirect on successful registration
+    }
+}

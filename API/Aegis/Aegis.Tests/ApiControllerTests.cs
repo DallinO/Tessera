@@ -1,88 +1,133 @@
-﻿using Aegis.Controllers;
-using Aegis.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
 using Moq;
-using System.Threading.Tasks;
-using Xunit;
+using Aegis.Controllers; // Update with your actual namespace
+using Aegis.Models; // Update with your actual namespace
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Tessera_Models;
 
-namespace Aegis.Tests
+public class RegisterControllerTests
 {
-    public class ApiControllerTests
+    private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
+    private readonly Mock<SignInManager<ApplicationUser>> _signInManagerMock;
+    private readonly ApiController _controller;
+
+    public RegisterControllerTests()
     {
-        private readonly Mock<UserManager<ApplicationUser>> _mockUserManager;
-        private readonly Mock<SignInManager<ApplicationUser>> _mockSignInManager;
-        private readonly ApiController _controller;
-
-        public ApiControllerTests()
-        {
-            // Setup mock UserManager
-            _mockUserManager = new Mock<UserManager<ApplicationUser>>(
-                Mock.Of<IUserStore<ApplicationUser>>(), null, null, null, null, null, null, null, null);
-
-            // Setup mock SignInManager
-            _mockSignInManager = new Mock<SignInManager<ApplicationUser>>(
-                _mockUserManager.Object, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<ApplicationUser>>(),
-                null, null, null, null);
-
-            // Create controller instance with mocked dependencies
-            _controller = new ApiController(_mockUserManager.Object, _mockSignInManager.Object);
-        }
-
-        public async Task RegisterAndAssertAsync(RegisterDefaultModel model, string expectedResult)
-        {
-            _mockUserManager.Setup(u => u.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
-                .ReturnsAsync(IdentityResult.Success);
-
-            // Act
-            var result = await _controller.Register(model);
-
-            // Assert
-            Assert.IsType<OkObjectResult>(result); // Ensure the result is an OkObjectResult
-            var okResult = result as OkObjectResult;
-            Assert.NotNull(okResult);
-
-            var actualResult = okResult.Value?.GetType().GetProperty("Result")?.GetValue(okResult.Value, null) as string;
-
-            Assert.Equal(expectedResult, actualResult);
-        }
-
-        [Fact]
-        public async Task Register_Should_Create_User()
-        {
-            // Arrange
-            var model = new RegisterDefaultModel
-            {
-                FirstName = "Test",
-                LastName = "User",
-                Email = "testuser@example.com",
-                ConfirmEmail = "testuser@example.com",
-                Password = "Test@1234",
-                ConfirmPassword = "Test@1234"
-            };
-
-            RegisterAndAssertAsync(model, "User created successfully");
-        }
-
-
-        /**************************************************
-         * FIRST NAME CONSTRAINTS 
-         * - Expected Outcome: FAIL
-         * - Reason: SPECIAL CHARACTERS
-         *************************************************/
-        //[Fact]
-        //public async Task First_Name_Constraints_1()
-        //{
-        //    var model = new RegisterDefaultModel
-        //    {
-        //        FirstName = "Test@123",
-        //        LastName = "User",
-        //        Email = "testuser@example.com",
-        //        ConfirmEmail = "testuser@example.com",
-        //        Password = "Test@1234",
-        //        ConfirmPassword = "Test@1234"
-        //    };
-        //}
+        _userManagerMock = MockUserManager<ApplicationUser>();
+        _signInManagerMock = MockSignInManager<ApplicationUser>(_userManagerMock.Object);
+        _controller = new ApiController(_userManagerMock.Object, _signInManagerMock.Object);
     }
+
+    [Fact]
+    public async Task Register_ValidModel_ReturnsOk()
+    {
+        // Arrange
+        var model = new RegisterDefaultModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            ConfirmEmail = "john.doe@example.com",
+            Password = "Password1!",
+            ConfirmPassword = "Password1!"
+        };
+
+        _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), model.Password))
+            .ReturnsAsync(IdentityResult.Success);
+
+        // Act
+        var result = await _controller.Register(model);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnValue = Assert.IsType<dynamic>(okResult.Value);
+        Assert.Equal("User created successfully", returnValue.Result);
+    }
+
+    [Fact]
+    public async Task Register_InvalidModel_ReturnsBadRequest()
+    {
+        // Arrange
+        var model = new RegisterDefaultModel(); // Invalid model
+
+        _controller.ModelState.AddModelError("FirstName", "Required");
+
+        // Act
+        var result = await _controller.Register(model);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        var modelState = Assert.IsType<SerializableError>(badRequestResult.Value);
+        Assert.True(modelState.ContainsKey("FirstName"));
+    }
+
+    [Fact]
+    public async Task Register_EmailMismatch_ReturnsBadRequest()
+    {
+        // Arrange
+        var model = new RegisterDefaultModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            ConfirmEmail = "jane.doe@example.com",
+            Password = "Password1!",
+            ConfirmPassword = "Password1!"
+        };
+
+        // Act
+        var result = await _controller.Register(model);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        var modelState = Assert.IsType<SerializableError>(badRequestResult.Value);
+        Assert.True(modelState.ContainsKey("ConfirmEmail"));
+    }
+
+    [Fact]
+    public async Task Register_PasswordMismatch_ReturnsBadRequest()
+    {
+        // Arrange
+        var model = new RegisterDefaultModel
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Email = "john.doe@example.com",
+            ConfirmEmail = "john.doe@example.com",
+            Password = "Password1!",
+            ConfirmPassword = "Password2!"
+        };
+
+        // Act
+        var result = await _controller.Register(model);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        var modelState = Assert.IsType<SerializableError>(badRequestResult.Value);
+        Assert.True(modelState.ContainsKey("ConfirmPassword"));
+    }
+
+    private static Mock<UserManager<TUser>> MockUserManager<TUser>() where TUser : class
+    {
+        var store = new Mock<IUserStore<TUser>>();
+        var mgr = new Mock<UserManager<TUser>>(store.Object, null, null, null, null, null, null, null, null);
+        return mgr;
+    }
+
+    private static Mock<SignInManager<TUser>> MockSignInManager<TUser>(UserManager<TUser> userManager) where TUser : class
+    {
+        var contextAccessor = new Mock<IHttpContextAccessor>();
+        var claimsFactory = new Mock<IUserClaimsPrincipalFactory<TUser>>();
+        var options = new Mock<IOptions<IdentityOptions>>();
+        var logger = new Mock<ILogger<SignInManager<TUser>>>();
+        var schemes = new Mock<IAuthenticationSchemeProvider>();
+        var confirmation = new Mock<IUserConfirmation<TUser>>();
+
+        return new Mock<SignInManager<TUser>>(userManager, contextAccessor.Object, claimsFactory.Object, options.Object, logger.Object, schemes.Object, confirmation.Object);
+    }
+
 }
