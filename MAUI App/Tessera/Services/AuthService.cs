@@ -31,7 +31,7 @@ namespace Tessera
             var result = await _apiService.Login(model);
 
             // If login was successful, update IsAuthenticated
-            if (result == "User Access Granted")
+            if (result == "User Access Granted" || result == "Generic Success")
             {
                 IsAuthenticated = true;
                 return true;

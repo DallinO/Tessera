@@ -53,7 +53,7 @@ namespace Aegis.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(new { Result = "Login successful" });
+                return Ok(new { Result = "User Access Granted" });
             }
 
             return Unauthorized("Invalid login attempt");
