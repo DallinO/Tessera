@@ -6,10 +6,27 @@ a, .btn-link {
     color: #006bb7;
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+.btn-primary
+{
+    background: #5E5DF0;
+    border-radius: 999px;
+    box-shadow: #5E5DF0 0 10px 20px -10px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    opacity: 1;
+    outline: 0 solid transparent;
+    padding: 8px 18px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: fit-content;
+    word-break: break-word;
+    border: 0;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -83,4 +100,102 @@ h1:focus {
     .flex-column, .navbar-brand {
         padding-left: env(safe-area-inset-left);
     }
+}
+
+/***********************************************************
+    Input Fields
+***********************************************************/
+.input-container {
+    position: relative;
+    margin: 20px auto;
+    width: 200px;
+}
+
+.input-container input[type="email"] {
+    font-size: 20px;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 5px 0;
+    background-color: transparent;
+    outline: none;
+}
+
+.input-container .label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #ccc;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.input-container input[type="email"]:focus ~ .label,
+.input-container input[type="email"]:valid ~ .label {
+    top: -20px;
+    font-size: 16px;
+    color: #333;
+}
+
+.input-container .underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #333;
+    transform: scaleX(0);
+    transition: all 0.3s ease;
+}
+
+.input-container input[type="email"]:focus ~ .underline,
+.input-container input[type="email"]:valid ~ .underline {
+    transform: scaleX(1);
+}
+
+/***********************************************************
+    Containers
+***********************************************************/
+
+/* Authenticaion Container */
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    height: 100vh; /* Full viewport height to center vertically */
+    width: 100vw; /* Full viewport width to center horizontally */
+}
+
+/* Startup Container */
+.startup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    height: 100vh; /* Full viewport height to center vertically */
+    width: 100vw; /* Full viewport width to center horizontally */
+}
+
+/***********************************************************
+    Buttons
+***********************************************************/
+
+/* Secondary Button */
+.cus-btn-secondary {
+    color: black; /* White text */
+    background-color: inherit;
+    padding: 15px 32px; /* Padding for the button */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Display inline-block */
+    font-size: 16px; /* Font size */
+    margin: 4px 2px; /* Margin */
+    cursor: pointer; /* Pointer cursor on hover */
+    border: none; /* No border */
+    transition: color 0.3s ease; /* Transition for text color */
+}
+
+.cus-btn-secondary:focus,
+.cus-btn-secondary:hover {
+    color: cornflowerblue; /* Text color on hover */
 }

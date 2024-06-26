@@ -3,7 +3,6 @@
 @inject NavigationManager Navigation
 @using Tessera_Models
 
-<h3>Login</h3>
 
 @if (AuthService.IsAuthenticated)
 {
@@ -11,19 +10,26 @@
 }
 else
 {
-    <div>
-        <label>Email:</label>
-        <input type="email" @bind="Email" />
+    <div class="auth-container">
+        <div class="input-container">
+            <input type="email" id="input" required="" @bind="Email">
+            <label for="input" class="label">Email</label>
+            <div class="underline"></div>
+        </div>
+        <div class="input-container">
+            <input type="email" id="input" required="" @bind="Password">
+            <label for="input" class="label">Password</label>
+            <div class="underline"></div>
+        </div>
+        <button class="btn-primary" @onclick="LoginAsync">Login</button>
+        <button class="cus-btn-secondary" @onclick="SwitchToRegister">Register</button>
+        <p>@LoginError</p>
     </div>
-    <div>
-        <label>Password:</label>
-        <input type="password" @bind="Password" />
-    </div>
-    <button @onclick="LoginAsync">Login</button>
-    <p>@LoginError</p>
 }
 
 @code {
+    [Parameter] public EventCallback OnSwitchToRegister { get; set; }
+
     private string Email { get; set; }
     private string Password { get; set; }
     private string LoginError { get; set; }
@@ -31,11 +37,11 @@ else
     private async Task LoginAsync()
     {
         var model = new LoginDefaultModel
-            {
-                Email = Email,
-                Password = Password,
-                RememberMe = false
-            };
+        {
+            Email = Email,
+            Password = Password,
+            RememberMe = false
+        };
 
         bool result = await AuthService.Login(model);
 
@@ -46,6 +52,14 @@ else
         else
         {
             LoginError = "Login failed. Please check your credentials.";
+        }
+    }
+
+    private async Task SwitchToRegister()
+    {
+        if (OnSwitchToRegister.HasDelegate)
+        {
+            await OnSwitchToRegister.InvokeAsync(null);
         }
     }
 }

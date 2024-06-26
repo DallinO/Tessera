@@ -5,36 +5,34 @@
 
 @if (!AuthService.IsAuthenticated)
 {
-     <div class="overlay">
+    <div class="overlay">
         <div class="startup-container">
+            <div>
+                <h1>Tessera Business Manager</h1>
+            </div>
             @if (showLogin)
             {
-                <Login OnLogin="@Login" />
+                <Login OnSwitchToRegister="SwitchToRegister"/>
+                @* <Login OnLogin="@Login" /> *@
             }
             else
             {
-                <Register OnRegister="@Register" />
+                <Register />
             }
         </div>
     </div>
 }
 
-<h3>Startup</h3>
-
 @code {
     bool showLogin = true; // Default to showing login form
 
-    private async Task Login(LoginDefaultModel model)
+    private void SwitchToRegister()
     {
-        // Implement login logic using AuthService
-        await AuthService.Login(model);
-        // Optionally redirect on successful login
+        showLogin = false;
     }
 
-    private async Task Register(RegisterDefaultModel model)
+    private void SwitchToLogin()
     {
-        // Implement register logic using AuthService
-        await AuthService.Register(model);
-        // Optionally redirect on successful registration
+        showLogin = true;
     }
 }
