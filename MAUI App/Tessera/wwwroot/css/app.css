@@ -111,7 +111,7 @@ h1:focus {
     width: 200px;
 }
 
-.input-container input[type="email"] {
+.input-container input[type="text"] {
     font-size: 20px;
     width: 100%;
     border: none;
@@ -130,8 +130,8 @@ h1:focus {
     pointer-events: none;
 }
 
-.input-container input[type="email"]:focus ~ .label,
-.input-container input[type="email"]:valid ~ .label {
+.input-container input[type="text"]:focus ~ .label,
+.input-container input[type="text"]:valid ~ .label {
     top: -20px;
     font-size: 16px;
     color: #333;
@@ -148,8 +148,8 @@ h1:focus {
     transition: all 0.3s ease;
 }
 
-.input-container input[type="email"]:focus ~ .underline,
-.input-container input[type="email"]:valid ~ .underline {
+.input-container input[type="text"]:focus ~ .underline,
+.input-container input[type="text"]:valid ~ .underline {
     transform: scaleX(1);
 }
 
@@ -163,8 +163,7 @@ h1:focus {
     flex-direction: column;
     justify-content: center; /* Center vertically */
     align-items: center; /* Center horizontally */
-    height: 100vh; /* Full viewport height to center vertically */
-    width: 100vw; /* Full viewport width to center horizontally */
+    flex: 1;
 }
 
 /* Startup Container */
@@ -172,8 +171,24 @@ h1:focus {
     display: flex;
     flex-direction: column;
     align-items: center; /* Center horizontally */
-    height: 100vh; /* Full viewport height to center vertically */
-    width: 100vw; /* Full viewport width to center horizontally */
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Register Container */
+.register-container {
+    display: flex;
+    flex-direction: Column; /* This is the default value, so it can be omitted */
+    justify-content: center; /* Distributes items evenly with space between them */
+    align-items: center; /* Aligns items vertically centered */
+    height: 100%;
+}
+
+.register-inputs-container {
+    display: flex;
+    flex-direction: row; /* This is the default value, so it can be omitted */
+    justify-content: center; /* Distributes items evenly with space between them */
+    align-items: center; /* Aligns items vertically centered */
 }
 
 /***********************************************************
@@ -198,4 +213,37 @@ h1:focus {
 .cus-btn-secondary:focus,
 .cus-btn-secondary:hover {
     color: cornflowerblue; /* Text color on hover */
+}
+
+/***********************************************************
+    Headers
+***********************************************************/
+
+.startup-header{
+    width: 100%;
+    text-align: center;
+}
+
+/***********************************************************
+    Debug
+***********************************************************/
+
+.debug-border-1 {
+    border: 2px solid orange;
+}
+
+.debug-border-2 {
+    border: 2px solid yellow;
+}
+
+.debug-border-3 {
+    border: 2px solid red;
+}
+
+.debug-border-4 {
+    border: 2px solid green;
+}
+
+.debug-border-5 {
+    border: 2px solid blue;
 }

@@ -5,21 +5,20 @@
 
 @if (!AuthService.IsAuthenticated)
 {
-    <div class="overlay">
-        <div class="startup-container">
-            <div>
-                <h1>Tessera Business Manager</h1>
-            </div>
-            @if (showLogin)
-            {
-                <Login OnSwitchToRegister="SwitchToRegister"/>
-                @* <Login OnLogin="@Login" /> *@
-            }
-            else
-            {
-                <Register />
-            }
+    
+    <div class="startup-container debug-border-5">
+        <div class="startup-header debug-border-4">
+            <h1>Tessera Business Manager</h1>
         </div>
+        @if (showLogin)
+        {
+            <Login OnSwitchToRegister="SwitchToRegister"/>
+            @* <Login OnLogin="@Login" /> *@
+        }
+        else
+        {
+            <Register OnSwitchToLogin="SwitchToLogin" />
+        }
     </div>
 }
 

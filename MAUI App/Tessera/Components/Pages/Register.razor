@@ -3,42 +3,62 @@
 @inject NavigationManager Navigation
 @using Tessera_Models
 
-<h3>Register</h3>
-
 @if (AuthService.IsAuthenticated)
 {
     <p>You are already registered and logged in.</p>
 }
 else
 {
-    <div>
-        <label>First Name:</label>
-        <input type="text" @bind="FirstName" />
+    <div class="register-container debug-border-1">
+        <div class="register-inputs-container debug-border-5">
+            <div class="auth-container debug-border-2">
+                <div class="input-container">
+                    <input type="text" id="input" required="" @bind="FirstName">
+                    <label for="input" class="label">First Name</label>
+                    <div class="underline"></div>
+                </div>
+                <div class="input-container">
+                    <input type="text" id="input" required="" @bind="LastName">
+                    <label for="input" class="label">Last Name</label>
+                    <div class="underline"></div>
+                </div>
+                <div class="input-container">
+                    <input type="text" id="input" required="" @bind="Email">
+                    <label for="input" class="label">Email</label>
+                    <div class="underline"></div>
+                </div>
+                <div class="input-container">
+                    <input type="text" id="input" required="" @bind="ConfirmEmail">
+                    <label for="input" class="label">Confirm Email</label>
+                    <div class="underline"></div>
+                </div>
+            </div>
+            <div class="auth-container debug-border-3">
+                <div class="input-container">
+                    <input type="text" id="input" required="" @bind="Password">
+                    <label for="input" class="label">Password</label>
+                    <div class="underline"></div>
+                </div>
+                <div class="input-container">
+                    <input type="text" id="input" required="" @bind="ConfirmPassword">
+                    <label for="input" class="label">Confirm Password</label>
+                    <div class="underline"></div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-primary" @onclick="RegisterAsync">Register</button>
+        <button class="cus-btn-secondary" @onclick="SwitchToLogin">Back To Login</button>
+        <p>@RegisterError</p>
     </div>
-    <div>
-        <label>Last Name:</label>
-        <input type="text" @bind="LastName" />
-    </div>
-    <div>
-        <label>Email:</label>
-        <input type="email" @bind="Email" />
-    </div>
-    <div>
-        <label>Password:</label>
-        <input type="password" @bind="Password" />
-    </div>
-    <div>
-        <label>Confirm Password:</label>
-        <input type="password" @bind="ConfirmPassword" />
-    </div>
-    <button @onclick="RegisterAsync">Register</button>
-    <p>@RegisterError</p>
 }
 
 @code {
+    [Parameter] public EventCallback OnSwitchToLogin { get; set; }
+
     private string FirstName { get; set; }
     private string LastName { get; set; }
     private string Email { get; set; }
+    private string ConfirmEmail { get; set; }
     private string Password { get; set; }
     private string ConfirmPassword { get; set; }
     private string RegisterError { get; set; }
@@ -46,13 +66,13 @@ else
     private async Task RegisterAsync()
     {
         var model = new RegisterDefaultModel
-            {
-                FirstName = FirstName,
-                LastName = LastName,
-                Email = Email,
-                Password = Password,
-                ConfirmPassword = ConfirmPassword
-            };
+        {
+            FirstName = FirstName,
+            LastName = LastName,
+            Email = Email,
+            Password = Password,
+            ConfirmPassword = ConfirmPassword
+        };
 
         bool result = await AuthService.Register(model);
 
@@ -63,6 +83,14 @@ else
         else
         {
             RegisterError = "Registration failed. Please check your details.";
+        }
+    }
+
+    private async Task SwitchToLogin()
+    {
+        if (OnSwitchToLogin.HasDelegate)
+        {
+            await OnSwitchToLogin.InvokeAsync(null);
         }
     }
 }
