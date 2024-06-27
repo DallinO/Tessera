@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tessera_Models;
+﻿using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json.Linq;
+using Tessera.Constants;
+using Tessera.Models;
 
 namespace Tessera
 {
     public interface IAuthService
     {
         bool IsAuthenticated { get; }
-        Task<bool> Login(LoginDefaultModel model);
-        Task<bool> Register(RegisterDefaultModel model);
+        Task<JObject> Login(LoginDefaultModel model);
+        Task<string> Register(RegisterDefaultModel model);
     }
 
     public class AuthService : IAuthService
@@ -25,34 +23,32 @@ namespace Tessera
 
         public bool IsAuthenticated { get; private set; }
 
-        public async Task<bool> Login(LoginDefaultModel model)
+        public async Task<JObject> Login(LoginDefaultModel model)
         {
             // Call API service to attempt login
             var result = await _apiService.Login(model);
-
-            // If login was successful, update IsAuthenticated
-            if (result == "User Access Granted" || result == "Generic Success")
-            {
+            if (result["result"]?.ToString() == Keys.API_LOGIN_SUCC)
                 IsAuthenticated = true;
-                return true;
-            }
-
-            return false; // Handle failed login case
+            return result;
         }
 
-        public async Task<bool> Register(RegisterDefaultModel model)
+        public async Task<string> Register(RegisterDefaultModel model)
         {
             // Call API service to attempt registration
             var result = await _apiService.Register(model);
 
             // If registration was successful, update IsAuthenticated
-            if (result == "User created successfully")
+            //if (result != null)
+            //{
+            //    if
+            try
             {
-                IsAuthenticated = true;
-                return true;
+                return result;
             }
-
-            return false; // Handle failed registration case
+            catch (NullReferenceException nullex)
+            {
+                return null;
+            }
         }
     }
 

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Tessera_Models
+namespace Tessera.Models
 {
     public class LoginDefaultModel
     {
-        [Required(ErrorMessage = "Username or Email is required")]
+        [Required(ErrorMessage = "Email is required")]
         [Display(Name = "Username or Email")]
         public string Email { get; set; }
 

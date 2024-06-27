@@ -216,12 +216,19 @@ h1:focus {
 }
 
 /***********************************************************
-    Headers
+    Text
 ***********************************************************/
 
 .startup-header{
     width: 100%;
     text-align: center;
+}
+
+.login-errors{
+    color: indianred;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 12px;
 }
 
 /***********************************************************

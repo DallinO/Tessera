@@ -1,7 +1,8 @@
 ﻿@page "/register"
 @inject IAuthService AuthService
 @inject NavigationManager Navigation
-@using Tessera_Models
+@using Tessera.Models
+@using Tessera.Constants;
 
 @if (AuthService.IsAuthenticated)
 {
@@ -74,9 +75,9 @@ else
             ConfirmPassword = ConfirmPassword
         };
 
-        bool result = await AuthService.Register(model);
+        string result = await AuthService.Register(model);
 
-        if (result)
+        if (result == Keys.API_REG_SUCC || result == Keys.API_GENERIC_SUCC)
         {
             Navigation.NavigateTo("/login"); // Redirect to login page after successful registration
         }

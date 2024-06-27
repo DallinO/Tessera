@@ -1,9 +1,8 @@
-﻿using Aegis.Models; // Assuming ApplicationUser is defined in this namespace
-using Microsoft.AspNetCore.Http;
+﻿using Aegis.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Tessera_Models;
+using Tessera.Models;
+using Tessera.Constants;
 
 namespace Aegis.Controllers
 {
@@ -40,7 +39,7 @@ namespace Aegis.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(new { Result = "User created successfully" });
+                return Ok(new { Result = Keys.API_REG_SUCC});
             }
 
             return BadRequest(result.Errors);
@@ -53,7 +52,7 @@ namespace Aegis.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(new { Result = "User Access Granted" });
+                return Ok(new { Result = Keys.API_LOGIN_SUCC });
             }
 
             return Unauthorized("Invalid login attempt");

@@ -1,7 +1,10 @@
 ﻿@page "/login"
 @inject IAuthService AuthService
 @inject NavigationManager Navigation
-@using Tessera_Models
+@using Tessera.Models
+@using Tessera.Constants;
+@using Newtonsoft.Json.Linq;
+@using System.Text;
 
 
 @if (AuthService.IsAuthenticated)
@@ -23,7 +26,7 @@ else
         </div>
         <button class="btn-primary" @onclick="LoginAsync">Login</button>
         <button class="cus-btn-secondary" @onclick="SwitchToRegister">Register</button>
-        <p>@LoginError</p>
+        <p class="login-errors">@LoginError</p>
     </div>
 }
 
@@ -32,7 +35,7 @@ else
 
     private string Email { get; set; }
     private string Password { get; set; }
-    private string LoginError { get; set; }
+    private MarkupString LoginError { get; set; }
 
     private async Task LoginAsync()
     {
@@ -43,15 +46,37 @@ else
             RememberMe = false
         };
 
-        bool result = await AuthService.Login(model);
+        JObject result = await AuthService.Login(model);
+        string resultString = result["result"]?.ToString();
+        JObject errors = JObject.Parse(result["errors"]?.ToString());
 
-        if (result)
+        if (resultString == Keys.API_GENERIC_SUCC || resultString == Keys.API_LOGIN_SUCC)
         {
             Navigation.NavigateTo("/"); // Redirect to dashboard or another page on successful login
         }
         else
         {
-            LoginError = "Login failed. Please check your credentials.";
+            StringBuilder errorMessages = new StringBuilder();
+            bool genericErrorFlag = true;
+
+            if (errors.ContainsKey("Email"))
+            {
+                JArray emailErrorsArray = (JArray)errors["Email"];
+                errorMessages.AppendLine(string.Join(", ", emailErrorsArray.Select(e => e.ToString())));
+                errorMessages.Append("<br />");
+                genericErrorFlag = false;
+            }
+            if (errors.ContainsKey("Password"))
+            {
+                JArray passwordErrorsArray = (JArray)errors["Password"];
+                errorMessages.AppendLine(string.Join(", ", passwordErrorsArray.Select(e => e.ToString())));
+                errorMessages.Append("<br />");
+                genericErrorFlag = false;
+            }
+            if (genericErrorFlag)
+                LoginError = new MarkupString("Login failed. Please check your credentials.");
+            else
+                LoginError = new MarkupString(errorMessages.ToString());
         }
     }
 
