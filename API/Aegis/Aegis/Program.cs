@@ -1,13 +1,20 @@
+#define _DEV
+
 using Aegis.Data;
-using Aegis.Models;
+using Tessera.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+#if _DEV
+builder.Services.AddDbContext<TesseraDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TestDbConnection")));
+#else
 builder.Services.AddDbContext<TesseraDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+#endif
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {

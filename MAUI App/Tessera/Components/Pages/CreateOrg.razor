@@ -1,4 +1,4 @@
-﻿@page "/login"
+﻿@page "/createorg"
 @inject IAuthService AuthService
 @inject NavigationManager Navigation
 @using Tessera.Models
@@ -7,41 +7,40 @@
 @using System.Text;
 
 
-
 <div class="auth-container">
     <div class="input-container">
-        <input type="text" id="input" required="" @bind="Email">
-        <label for="input" class="label">Email</label>
+        <input type="text" id="input" required="" @bind="Name">
+        <label for="input" class="label">Name</label>
         <div class="underline"></div>
     </div>
     <div class="input-container">
-        <input type="text" id="input" required="" @bind="Password">
-        <label for="input" class="label">Password</label>
+        <input type="text" id="input" required="" @bind="ConfirmName">
+        <label for="input" class="label">Confirm Name</label>
         <div class="underline"></div>
     </div>
-    <button class="btn-primary" @onclick="LoginAsync">Login</button>
-    <button class="cus-btn-secondary" @onclick="SwitchToRegister">Register</button>
+    <button class="btn-primary" @onclick="CreateOrgAsync">Create Organization</button>
+    <button class="cus-btn-secondary" @onclick="OnSwitchToLogin">Return To Login</button>
     <p class="login-errors">@LoginError</p>
 </div>
 
-@code {
-    [Parameter] public EventCallback OnSwitchToRegister { get; set; }
-    [Parameter] public View CurrentView { get; set; }
 
-    private string Email { get; set; } = "td1@test.com";
-    private string Password { get; set; } = "Test@123";
+@code {
+    [Parameter] public EventCallback OnSwitchToLogin { get; set; }
+    [Parameter] public EventCallback OnSwitchToDestination { get; set; }
+
+    private string Name{ get; set; } = "Test Organization One";
+    private string ConfirmName { get; set; } = "Test Organization One";
     private MarkupString LoginError { get; set; }
 
-    private async Task LoginAsync()
+    private async Task CreateOrgAsync()
     {
-        var model = new LoginDefaultModel
+        var model = new OrganizationModel
         {
-            Email = Email,
-            Password = Password,
-            RememberMe = false
+            Name = Name,
+            ConfirmName = ConfirmName
         };
 
-        JObject result = await AuthService.Login(model);
+        JObject result = await AuthService.CreateOrg(model);
 
         if (result.ContainsKey("result"))
         {
@@ -81,11 +80,19 @@
         }
     }
 
-    private async Task SwitchToRegister()
+    private async Task SwitchToLogin()
     {
-        if (OnSwitchToRegister.HasDelegate)
+        if (OnSwitchToLogin.HasDelegate)
         {
-            await OnSwitchToRegister.InvokeAsync(null);
+            await OnSwitchToLogin.InvokeAsync(null);
+        }
+    }
+
+    private async Task SwitchToDestination()
+    {
+        if (OnSwitchToDestination.HasDelegate)
+        {
+            await OnSwitchToDestination.InvokeAsync(null);
         }
     }
 }

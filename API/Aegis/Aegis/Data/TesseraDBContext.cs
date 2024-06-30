@@ -1,4 +1,4 @@
-﻿using Aegis.Models;
+﻿using Tessera.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -10,6 +10,8 @@ namespace Aegis.Data
             : base(options)
         {
         }
+
+        public DbSet<OrganizationBase> Organizations { get; set; }
 
         // DbSet properties for your application's entities if needed
         // Example:

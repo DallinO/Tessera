@@ -1,8 +1,9 @@
-﻿using Aegis.Models;
+﻿using Tessera.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Tessera.Models;
+using Aegis.Data;
 using Tessera.Constants;
+using System.Security.Claims;
 
 namespace Aegis.Controllers
 {
@@ -12,11 +13,13 @@ namespace Aegis.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly TesseraDbContext _dbContext;
 
-        public ApiController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public ApiController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, TesseraDbContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _dbContext = dbContext;
         }
 
         [HttpPost("Register")]
@@ -33,6 +36,7 @@ namespace Aegis.Controllers
                 LastName = model.LastName,
                 UserName = model.Email,
                 Email = model.Email
+
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -57,5 +61,39 @@ namespace Aegis.Controllers
 
             return Unauthorized("Invalid login attempt");
         }
+
+        [HttpPost("CreateOrg")]
+        public async Task<IActionResult> CreateOrg([FromBody] OrganizationModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            string ownerId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(ownerId))
+            {
+                return Unauthorized();
+            }
+
+            var organization = new OrganizationBase
+            {
+                Name = model.Name,
+                OwnerId = ownerId
+            };
+
+            _dbContext.Organizations.Add(organization);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                return Ok(organization);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to create organization. Please try again later.");
+            }
+
+         }
     }
 }

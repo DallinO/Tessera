@@ -5,13 +5,13 @@ namespace Tessera.Models
     public class RegisterDefaultModel
     {
         [Required(ErrorMessage = "First name is required")]
-        [StringLength(4)]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name can only contain letters, spaces, and hyphens")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "First name must be between 2 and 50 characters")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name can only contain letters")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Last name is required")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name must be between 2 and 50 characters")]
-        [RegularExpression(@"^[a-zA-Z\s-]+$", ErrorMessage = "Last name can only contain letters, spaces, and hyphens")]
+        [RegularExpression(@"^[a-zA-Z\s-']+$", ErrorMessage = "Last name can only contain letters, spaces, hyphens, and apostrophes")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
@@ -20,7 +20,7 @@ namespace Tessera.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Confirm email is required")]
-        [Compare("Email", ErrorMessage = "The email and confirmation email do not match.")]
+        [Compare("Email", ErrorMessage = "Emails do not match.")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string ConfirmEmail { get; set; }
 
@@ -31,7 +31,7 @@ namespace Tessera.Models
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
     }
 }
