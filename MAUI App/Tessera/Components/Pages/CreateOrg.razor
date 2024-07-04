@@ -20,7 +20,7 @@
     </div>
     <button class="btn-primary" @onclick="CreateOrgAsync">Create Organization</button>
     <button class="cus-btn-secondary" @onclick="OnSwitchToLogin">Return To Login</button>
-    <p class="login-errors">@LoginError</p>
+    <p class="login-errors">@OrgError</p>
 </div>
 
 
@@ -30,7 +30,7 @@
 
     private string Name{ get; set; } = "Test Organization One";
     private string ConfirmName { get; set; } = "Test Organization One";
-    private MarkupString LoginError { get; set; }
+    private MarkupString OrgError { get; set; }
 
     private async Task CreateOrgAsync()
     {
@@ -45,7 +45,7 @@
         if (result.ContainsKey("result"))
         {
             string resultString = result["result"]?.ToString();
-            if (resultString == Keys.API_GENERIC_SUCC || resultString == Keys.API_LOGIN_SUCC)
+            if (resultString == Keys.API_GENERIC_SUCC || resultString == Keys.API_ORG_SUCC)
             {
                 Navigation.NavigateTo("/"); // Redirect to dashboard or another page on successful login
             }
@@ -71,11 +71,14 @@
                     errorMessages.Append("<br />");
                 }
 
-                LoginError = new MarkupString(errorMessages.ToString());
+                OrgError = new MarkupString(errorMessages.ToString());
             }
             catch (Newtonsoft.Json.JsonReaderException)
             {
-                LoginError = new MarkupString("Login failed. Please check your credentials.");
+                if (String.IsNullOrEmpty(result["errors"].ToString()))
+                    OrgError = new MarkupString("Organization Could Not Be Created");
+                else
+                    OrgError = new MarkupString(result["errors"].ToString());
             }
         }
     }

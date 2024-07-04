@@ -12,7 +12,7 @@
         </div>
         @if (currentView == View.Login)
         {
-            <Login OnSwitchToRegister="SwitchToRegister"/>
+            <Login OnSwitchToRegister="SwitchToRegister" OnSwitchToCreateOrg="SwitchToCreateOrg"/>
         }
         else if (currentView == View.Register)
         {

@@ -12,6 +12,8 @@ namespace Aegis.Data
         }
 
         public DbSet<OrganizationBase> Organizations { get; set; }
+        public DbSet<UserOrganization> UserOrganizations { get; set; }
+
 
         // DbSet properties for your application's entities if needed
         // Example:
@@ -23,6 +25,20 @@ namespace Aegis.Data
 
             // Customize the ASP.NET Identity model and override defaults if needed
             // For example, you can rename the default ASP.NET Identity tables
+
+            // Configure the many-to-many relationship
+            builder.Entity<UserOrganization>()
+                .HasKey(uo => new { uo.ApplicationUserId, uo.OrganizationBaseId });
+
+            builder.Entity<UserOrganization>()
+                .HasOne(uo => uo.ApplicationUser)
+                .WithMany()
+                .HasForeignKey(uo => uo.ApplicationUserId);
+
+            builder.Entity<UserOrganization>()
+                .HasOne(uo => uo.OrganizationBase)
+                .WithMany()
+                .HasForeignKey(uo => uo.OrganizationBaseId);
         }
     }
 }

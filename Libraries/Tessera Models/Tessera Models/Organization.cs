@@ -12,17 +12,24 @@ namespace Tessera.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
-        public string OwnerId { get; set; }
+        public ApplicationUser Owner { get; set; }
     }
-    
-    public class OrganizationFull
+
+    public class UserOrganization
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string OwnerId { get; set; }
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+        public Guid OrganizationBaseId { get; set; }
+        public OrganizationBase OrganizationBase { get; set; }
+        public bool IsOwner { get; set; }
+    }
+
+
+    public class OrganizationFull : OrganizationBase
+    {
         public List<OrganizationUser> Users { get; set; } = new List<OrganizationUser>();
         public RolesTemplate CurrentRoleTemplate { get; set; }
     }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Aegis.Data;
 using Tessera.Constants;
 using System.Security.Claims;
+using Aegis.Services;
 
 namespace Aegis.Controllers
 {
@@ -11,15 +12,11 @@ namespace Aegis.Controllers
     [ApiController]
     public class ApiController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly TesseraDbContext _dbContext;
+        private readonly AuthService _authService;
 
-        public ApiController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, TesseraDbContext dbContext)
+        public ApiController(AuthService authService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _dbContext = dbContext;
+            _authService = authService;
         }
 
         [HttpPost("Register")]
@@ -30,16 +27,7 @@ namespace Aegis.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                UserName = model.Email,
-                Email = model.Email
-
-            };
-
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var result = await _authService.RegisterAsync(model);
 
             if (result.Succeeded)
             {
@@ -52,7 +40,7 @@ namespace Aegis.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDefaultModel model)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+            var result = await _authService.LoginAsync(model);
 
             if (result.Succeeded)
             {
@@ -76,18 +64,13 @@ namespace Aegis.Controllers
                 return Unauthorized();
             }
 
-            var organization = new OrganizationBase
-            {
-                Name = model.Name,
-                OwnerId = ownerId
-            };
-
-            _dbContext.Organizations.Add(organization);
-
             try
             {
-                await _dbContext.SaveChangesAsync();
-                return Ok(organization);
+                var (success, errorMsg) = await _authService.CreateOrganizationAsync(ownerId, model);
+                if (success)
+                    return Ok(new { Result = Keys.API_ORG_SUCC });
+                else
+                    return Ok(new { Errors = errorMsg });
             }
             catch (Exception)
             {

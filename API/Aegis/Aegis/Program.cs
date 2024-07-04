@@ -4,6 +4,7 @@ using Aegis.Data;
 using Tessera.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Aegis.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<DbContextFactory>();
+builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
 

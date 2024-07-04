@@ -26,6 +26,7 @@
 
 @code {
     [Parameter] public EventCallback OnSwitchToRegister { get; set; }
+    [Parameter] public EventCallback OnSwitchToCreateOrg{ get; set; }
     [Parameter] public View CurrentView { get; set; }
 
     private string Email { get; set; } = "td1@test.com";
@@ -48,7 +49,14 @@
             string resultString = result["result"]?.ToString();
             if (resultString == Keys.API_GENERIC_SUCC || resultString == Keys.API_LOGIN_SUCC)
             {
-                Navigation.NavigateTo("/"); // Redirect to dashboard or another page on successful login
+                if (!AuthService.HasOrganization)
+                {
+                    await SwitchToCreateOrg();
+                }
+                else
+                {
+                    Navigation.NavigateTo("/"); // Redirect to dashboard or another page on successful login
+                }
             }
         }
         else if (result.ContainsKey("errors"))
@@ -86,6 +94,14 @@
         if (OnSwitchToRegister.HasDelegate)
         {
             await OnSwitchToRegister.InvokeAsync(null);
+        }
+    }
+
+    private async Task SwitchToCreateOrg()
+    {
+        if (OnSwitchToCreateOrg.HasDelegate)
+        {
+            await OnSwitchToCreateOrg.InvokeAsync(null);
         }
     }
 }

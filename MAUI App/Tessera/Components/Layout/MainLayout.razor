@@ -5,8 +5,9 @@
 
 <div class="page">
 
-    @if (!AuthService.IsAuthenticated || !AuthService.HasOrganization)
+    @if (!AuthService.IsAuthenticated)
     {
+
         <div class="startup-overlay">
             <Startup />
         </div>

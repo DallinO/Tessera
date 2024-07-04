@@ -4,6 +4,7 @@ using Aegis.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aegis.Migrations
 {
     [DbContext(typeof(TesseraDbContext))]
-    partial class TesseraDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240703030911_UpdateApplicationUser3")]
+    partial class UpdateApplicationUser3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,6 +181,10 @@ namespace Aegis.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("JoinedOrgs")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -195,6 +202,10 @@ namespace Aegis.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("OwnedOrgs")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -239,31 +250,12 @@ namespace Aegis.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
-
                     b.ToTable("Organizations");
-                });
-
-            modelBuilder.Entity("Tessera.Models.UserOrganization", b =>
-                {
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("OrganizationBaseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsOwner")
-                        .HasColumnType("bit");
-
-                    b.HasKey("ApplicationUserId", "OrganizationBaseId");
-
-                    b.HasIndex("OrganizationBaseId");
-
-                    b.ToTable("UserOrganizations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -315,34 +307,6 @@ namespace Aegis.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Tessera.Models.OrganizationBase", b =>
-                {
-                    b.HasOne("Tessera.Models.ApplicationUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("Tessera.Models.UserOrganization", b =>
-                {
-                    b.HasOne("Tessera.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Tessera.Models.OrganizationBase", "OrganizationBase")
-                        .WithMany()
-                        .HasForeignKey("OrganizationBaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("OrganizationBase");
                 });
 #pragma warning restore 612, 618
         }
