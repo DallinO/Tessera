@@ -1,7 +1,7 @@
 #define _DEV
 
 using Aegis.Data;
-using Tessera.Models;
+using Tessera.Models.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Aegis.Services;
@@ -17,7 +17,7 @@ builder.Services.AddDbContext<TesseraDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 #endif
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+builder.Services.AddIdentity<Scribe, IdentityRole>(options =>
 {
     // Configure identity options if needed
     options.Password.RequireDigit = true;
@@ -30,8 +30,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<DbContextFactory>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<BookService>();
 
 var app = builder.Build();
 

@@ -1,8 +1,9 @@
-﻿@page "/login"
-@inject IAuthService AuthService
+﻿@inject ILibraryService LibraryService
 @inject NavigationManager Navigation
-@using Tessera.Models
+@using Tessera.Models.Book
+@using Tessera.Models.Authentication
 @using Tessera.Constants;
+@using Newtonsoft.Json;
 @using Newtonsoft.Json.Linq;
 @using System.Text;
 
@@ -25,8 +26,9 @@
 </div>
 
 @code {
-    [Parameter] public EventCallback OnSwitchToRegister { get; set; }
-    [Parameter] public EventCallback OnSwitchToCreateOrg{ get; set; }
+    [Parameter] public EventCallback OnSwitchToRegister  { get; set; }
+    [Parameter] public EventCallback OnSwitchToCreateOrg { get; set; }
+    [Parameter] public EventCallback OnSwitchToSelectOrg { get; set; }
     [Parameter] public View CurrentView { get; set; }
 
     private string Email { get; set; } = "td1@test.com";
@@ -42,21 +44,31 @@
             RememberMe = false
         };
 
-        JObject result = await AuthService.Login(model);
+        JObject result = await LibraryService.LoginAsync(model);
 
         if (result.ContainsKey("result"))
         {
             string resultString = result["result"]?.ToString();
             if (resultString == Keys.API_GENERIC_SUCC || resultString == Keys.API_LOGIN_SUCC)
             {
-                if (!AuthService.HasOrganization)
+                switch (LibraryService.Books.Length)
                 {
-                    await SwitchToCreateOrg();
+                    case 0:
+                        LoginError = new MarkupString("Failed retrieving book data");
+                        break;
+
+                    case 1:
+                        await SwitchToSelectOrg();
+                        break;
+
+                    default:
+                        await SwitchToSelectOrg(); // Redirect to dashboard or another page on successful login
+                        break;
                 }
-                else
-                {
-                    Navigation.NavigateTo("/"); // Redirect to dashboard or another page on successful login
-                }
+            }
+            else
+            {
+                await SwitchToCreateOrg();
             }
         }
         else if (result.ContainsKey("errors"))
@@ -102,6 +114,14 @@
         if (OnSwitchToCreateOrg.HasDelegate)
         {
             await OnSwitchToCreateOrg.InvokeAsync(null);
+        }
+    }
+    
+    private async Task SwitchToSelectOrg()
+    {
+        if (OnSwitchToSelectOrg.HasDelegate)
+        {
+            await OnSwitchToSelectOrg.InvokeAsync(null);
         }
     }
 }

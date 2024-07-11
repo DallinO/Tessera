@@ -1,18 +1,19 @@
-﻿using Tessera.Models;
+﻿using Tessera.Models.Book;
+using Tessera.Models.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Aegis.Data
 {
-    public class TesseraDbContext : IdentityDbContext<ApplicationUser>
+    public class TesseraDbContext : IdentityDbContext<Scribe>
     {
         public TesseraDbContext(DbContextOptions<TesseraDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<OrganizationBase> Organizations { get; set; }
-        public DbSet<UserOrganization> UserOrganizations { get; set; }
+        public DbSet<Preface> Library { get; set; }
+        public DbSet<Catalog> Catalog { get; set; }
 
 
         // DbSet properties for your application's entities if needed
@@ -27,18 +28,18 @@ namespace Aegis.Data
             // For example, you can rename the default ASP.NET Identity tables
 
             // Configure the many-to-many relationship
-            builder.Entity<UserOrganization>()
-                .HasKey(uo => new { uo.ApplicationUserId, uo.OrganizationBaseId });
+            builder.Entity<Catalog>()
+                .HasKey(uo => new { uo.ScribeId, uo.BookId });
 
-            builder.Entity<UserOrganization>()
-                .HasOne(uo => uo.ApplicationUser)
+            builder.Entity<Catalog>()
+                .HasOne(uo => uo.Scribe)
                 .WithMany()
-                .HasForeignKey(uo => uo.ApplicationUserId);
+                .HasForeignKey(uo => uo.ScribeId);
 
-            builder.Entity<UserOrganization>()
-                .HasOne(uo => uo.OrganizationBase)
+            builder.Entity<Catalog>()
+                .HasOne(uo => uo.Preface)
                 .WithMany()
-                .HasForeignKey(uo => uo.OrganizationBaseId);
+                .HasForeignKey(uo => uo.BookId);
         }
     }
 }

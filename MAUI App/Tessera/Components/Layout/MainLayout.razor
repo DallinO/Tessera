@@ -1,11 +1,11 @@
 ﻿@inherits LayoutComponentBase
-@inject IAuthService AuthService
+@inject ILibraryService LibraryService
 @inject NavigationManager Navigation
 @using Tessera.Components.Pages
 
 <div class="page">
 
-    @if (!AuthService.IsAuthenticated)
+    @if (!LibraryService.IsAuthenticated)
     {
 
         <div class="startup-overlay">

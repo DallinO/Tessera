@@ -1,9 +1,9 @@
-﻿@page "/createorg"
-@inject IAuthService AuthService
+﻿@inject ILibraryService LibraryService
 @inject NavigationManager Navigation
-@using Tessera.Models
+@using Tessera.Models.Book
 @using Tessera.Constants;
 @using Newtonsoft.Json.Linq;
+@using Newtonsoft.Json;
 @using System.Text;
 
 
@@ -18,7 +18,7 @@
         <label for="input" class="label">Confirm Name</label>
         <div class="underline"></div>
     </div>
-    <button class="btn-primary" @onclick="CreateOrgAsync">Create Organization</button>
+    <button class="btn-primary" @onclick="CreateOrgAsync">Create Book</button>
     <button class="cus-btn-secondary" @onclick="OnSwitchToLogin">Return To Login</button>
     <p class="login-errors">@OrgError</p>
 </div>
@@ -26,28 +26,45 @@
 
 @code {
     [Parameter] public EventCallback OnSwitchToLogin { get; set; }
-    [Parameter] public EventCallback OnSwitchToDestination { get; set; }
+    [Parameter] public EventCallback OnSwitchToSelectOrg { get; set; }
 
-    private string Name{ get; set; } = "Test Organization One";
-    private string ConfirmName { get; set; } = "Test Organization One";
+    private string Name{ get; set; } = "Test Book One";
+    private string ConfirmName { get; set; } = "Test Book One";
     private MarkupString OrgError { get; set; }
 
     private async Task CreateOrgAsync()
     {
-        var model = new OrganizationModel
+        var model = new BookModel
         {
             Name = Name,
             ConfirmName = ConfirmName
         };
 
-        JObject result = await AuthService.CreateOrg(model);
+        var result = await LibraryService.CreateBookAsync(model);
 
         if (result.ContainsKey("result"))
         {
             string resultString = result["result"]?.ToString();
             if (resultString == Keys.API_GENERIC_SUCC || resultString == Keys.API_ORG_SUCC)
             {
-                Navigation.NavigateTo("/"); // Redirect to dashboard or another page on successful login
+                switch (LibraryService.Books.Length)
+                {
+                    case 0:
+                        OrgError = new MarkupString("Book Created. Failed To Retrieve Books Data.");
+                        break;
+
+                    case 1:
+                        await SwitchToSelectOrg();
+                        break;
+
+                    default:
+                        await SwitchToSelectOrg(); // Redirect to dashboard or another page on successful login
+                        break;
+                }
+            }
+            else
+            {
+                await SwitchToLogin();
             }
         }
         else if (result.ContainsKey("errors"))
@@ -76,7 +93,7 @@
             catch (Newtonsoft.Json.JsonReaderException)
             {
                 if (String.IsNullOrEmpty(result["errors"].ToString()))
-                    OrgError = new MarkupString("Organization Could Not Be Created");
+                    OrgError = new MarkupString("Book Could Not Be Created");
                 else
                     OrgError = new MarkupString(result["errors"].ToString());
             }
@@ -91,11 +108,11 @@
         }
     }
 
-    private async Task SwitchToDestination()
+    private async Task SwitchToSelectOrg()
     {
-        if (OnSwitchToDestination.HasDelegate)
+        if (OnSwitchToSelectOrg.HasDelegate)
         {
-            await OnSwitchToDestination.InvokeAsync(null);
+            await OnSwitchToSelectOrg.InvokeAsync(null);
         }
     }
 }

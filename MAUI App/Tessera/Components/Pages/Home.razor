@@ -1,5 +1,6 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+@inject ILibraryService LibraryService
+<div>
+    <h1>@LibraryService.CurrBook.Title</h1>
+</div>

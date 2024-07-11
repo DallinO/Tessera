@@ -215,6 +215,25 @@ h1:focus {
     color: cornflowerblue; /* Text color on hover */
 }
 
+
+.navbar-chapter-button {
+    background-color: transparent;
+    width: 100%; /* Make the button fill its container */
+    border: 0px; /* Optional: a light border for better visibility */
+    color: #000; /* Optional: text color */
+    padding: 10px 20px; /* Padding to make the button larger */
+    border-radius: 4px; /* Rounded edges */
+    color: whitesmoke;
+    text-align: left;
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover state */
+.navbar-chapter-button:hover {
+    background-color: rgba(255, 255, 255, 0.25); /* Semi-transparent white */
+}
+
 /***********************************************************
     Text
 ***********************************************************/

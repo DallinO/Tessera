@@ -1,7 +1,6 @@
-﻿@page "/register"
-@inject IAuthService AuthService
+﻿@inject ILibraryService LibraryService
 @inject NavigationManager Navigation
-@using Tessera.Models
+@using Tessera.Models.Authentication
 @using Tessera.Constants;
 @using Newtonsoft.Json.Linq;
 @using System.Text;
@@ -58,9 +57,9 @@
 
     // RegisterDefualtModel Inputs
     private string FirstName { get; set; } = "TestDummy";
-    private string LastName { get; set; } = "Five";
-    private string Email { get; set; } = "td5@test.com";
-    private string ConfirmEmail { get; set; } = "td5@test.com";
+    private string LastName { get; set; } = "Three";
+    private string Email { get; set; } = "td3@test.com";
+    private string ConfirmEmail { get; set; } = "td3@test.com";
     private string Password { get; set; } = "Test@123";
     private string ConfirmPassword { get; set; } = "Test@123";
 
@@ -87,7 +86,7 @@
 
         ResetErrorMessages();
 
-        JObject result = await AuthService.Register(model);
+        JObject result = await LibraryService.RegisterAsync(model);
 
         if (result.ContainsKey("result"))
         {
@@ -96,7 +95,23 @@
             if (resultString == Keys.API_REG_SUCC || resultString == Keys.API_GENERIC_SUCC)
             {
                 // Redirect to login page after successful registration
-                await SwitchToCreateOrg();
+                var loginModel = new LoginDefaultModel
+                {
+                    Email = Email,
+                    Password = Password,
+                    RememberMe = false
+                };
+
+                JObject loginResult = await LibraryService.LoginAsync(loginModel);
+                resultString = loginResult["result"].ToString();
+                if (resultString == Keys.API_LOGIN_SUCC || resultString == Keys.API_GENERIC_SUCC)
+                {
+                    await SwitchToCreateOrg();
+                }
+                else
+                {
+                    GenericError = "Registration Succeeded. Attempt to login Failed.";
+                }
             }
         }
 

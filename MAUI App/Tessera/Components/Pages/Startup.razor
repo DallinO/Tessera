@@ -1,32 +1,45 @@
 ﻿@page "/startup"
-@inject IAuthService AuthService
+@inject ILibraryService LibraryService
+@inject NavigationManager Navigation
 @using Tessera.Components.Pages
 @using Tessera.Constants
 
-@if (!AuthService.IsAuthenticated || !AuthService.HasOrganization)
+<p>Test</p>
+@if (!LibraryService.IsAuthenticated || !LibraryService.HasBook)
 {
     
     <div class="startup-container debug-border-5">
         <div class="startup-header debug-border-4">
             <h1>Tessera Business Manager</h1>
         </div>
-        @if (currentView == View.Login)
+        @switch (currentView)
         {
-            <Login OnSwitchToRegister="SwitchToRegister" OnSwitchToCreateOrg="SwitchToCreateOrg"/>
-        }
-        else if (currentView == View.Register)
-        {
-            <Register OnSwitchToLogin="SwitchToLogin" OnSwitchToCreateOrg="SwitchToCreateOrg" />
-        }
-        else if (currentView == View.CreateOrg)
-        {
-            <CreateOrg OnSwitchToLogin="SwitchToLogin"/>
-        }
-        else
-        {
-            <p>No view selected.</p>
+            case View.Login:
+                <Login OnSwitchToRegister="SwitchToRegister" OnSwitchToCreateOrg="SwitchToCreateOrg" OnSwitchToSelectOrg="SwitchToSelectOrg"/>
+                break;
+
+            case View.Register:
+                <Register OnSwitchToLogin="SwitchToLogin" OnSwitchToCreateOrg="SwitchToCreateOrg" />
+                break;
+
+            case View.CreateOrg:
+                <CreateOrg OnSwitchToLogin="SwitchToLogin" OnSwitchToSelectOrg="SwitchToSelectOrg"/>
+                break;
+
+            case View.SelectOrg:
+                <SelectOrg OnSwitchToLogin="SwitchToLogin"/>
+                break;
+
+            default:
+                <p>No view selected.</p>
+                break;
+
         }
     </div>
+}
+else
+{
+    Navigation.NavigateTo("/");
 }
 
 @code {
@@ -45,5 +58,10 @@
     private void SwitchToCreateOrg()
     {
         currentView = View.CreateOrg;
+    }
+    
+    private void SwitchToSelectOrg()
+    {
+        currentView = View.SelectOrg;
     }
 }

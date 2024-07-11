@@ -1,0 +1,22 @@
+﻿CREATE TABLE Customer (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    FirstName NVARCHAR(MAX) NOT NULL,
+    LastName NVARCHAR(MAX) NOT NULL,
+    WorkNumber INT NOT NULL,
+    CellNumber INT NOT NULL,
+    HomeNumber INT NOT NULL,
+    HousingType NVARCHAR(MAX) NOT NULL
+);
+
+
+CREATE TABLE Address (
+    Id NVARCHAR(MAX) PRIMARY KEY,
+    Street NVARCHAR(MAX) NOT NULL,
+    City NVARCHAR(MAX) NOT NULL,
+    State NVARCHAR(MAX) NOT NULL,
+    PostalCode NVARCHAR(MAX) NOT NULL,
+    Country NVARCHAR(MAX) NOT NULL,
+    CustomerId UNIQUEIDENTIFIER NOT NULL,
+    CONSTRAINT FK_Address_Customer FOREIGN KEY (CustomerId) REFERENCES Customer(Id)
+);
+

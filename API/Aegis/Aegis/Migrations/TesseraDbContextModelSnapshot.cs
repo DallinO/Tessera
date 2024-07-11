@@ -155,7 +155,7 @@ namespace Aegis.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Tessera.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Tessera.Models.Authentication.Scribe", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -228,42 +228,41 @@ namespace Aegis.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Tessera.Models.OrganizationBase", b =>
+            modelBuilder.Entity("Tessera.Models.Book.Catalog", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OwnerId")
+                    b.Property<string>("ScribeId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Organizations");
-                });
-
-            modelBuilder.Entity("Tessera.Models.UserOrganization", b =>
-                {
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid>("OrganizationBaseId")
+                    b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsOwner")
                         .HasColumnType("bit");
 
-                    b.HasKey("ApplicationUserId", "OrganizationBaseId");
+                    b.HasKey("ScribeId", "BookId");
 
-                    b.HasIndex("OrganizationBaseId");
+                    b.HasIndex("BookId");
 
-                    b.ToTable("UserOrganizations");
+                    b.ToTable("Catalog");
+                });
+
+            modelBuilder.Entity("Tessera.Models.Book.Preface", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Library");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -277,7 +276,7 @@ namespace Aegis.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Tessera.Models.ApplicationUser", null)
+                    b.HasOne("Tessera.Models.Authentication.Scribe", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -286,7 +285,7 @@ namespace Aegis.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Tessera.Models.ApplicationUser", null)
+                    b.HasOne("Tessera.Models.Authentication.Scribe", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -301,7 +300,7 @@ namespace Aegis.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tessera.Models.ApplicationUser", null)
+                    b.HasOne("Tessera.Models.Authentication.Scribe", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -310,39 +309,30 @@ namespace Aegis.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Tessera.Models.ApplicationUser", null)
+                    b.HasOne("Tessera.Models.Authentication.Scribe", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tessera.Models.OrganizationBase", b =>
+            modelBuilder.Entity("Tessera.Models.Book.Catalog", b =>
                 {
-                    b.HasOne("Tessera.Models.ApplicationUser", "Owner")
+                    b.HasOne("Tessera.Models.Book.Preface", "Preface")
                         .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("Tessera.Models.UserOrganization", b =>
-                {
-                    b.HasOne("Tessera.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tessera.Models.OrganizationBase", "OrganizationBase")
+                    b.HasOne("Tessera.Models.Authentication.Scribe", "Scribe")
                         .WithMany()
-                        .HasForeignKey("OrganizationBaseId")
+                        .HasForeignKey("ScribeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("Preface");
 
-                    b.Navigation("OrganizationBase");
+                    b.Navigation("Scribe");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Aegis.Data;
 using Tessera.Constants;
+using Tessera.Models.Book;
+using Tessera.Models.Authentication;
 using System.Security.Claims;
 using Aegis.Services;
+using Tessera.Models.ChapterComponents;
 
 namespace Aegis.Controllers
 {
@@ -13,10 +16,12 @@ namespace Aegis.Controllers
     public class ApiController : ControllerBase
     {
         private readonly AuthService _authService;
+        private readonly BookService _bookService;
 
-        public ApiController(AuthService authService)
+        public ApiController(AuthService authService, BookService bookService)
         {
             _authService = authService;
+            _bookService = bookService;
         }
 
         [HttpPost("Register")]
@@ -37,6 +42,11 @@ namespace Aegis.Controllers
             return BadRequest(result.Errors);
         }
 
+
+        /***************************************************
+         * LOGIN HTTP POST
+         * - Verify user credentials.
+         ***************************************************/
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDefaultModel model)
         {
@@ -44,14 +54,29 @@ namespace Aegis.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(new { Result = Keys.API_LOGIN_SUCC });
+                var books = await _authService.GetBooks(model.Email);
+                if (books != null)
+                {
+                    return Ok(new 
+                    { 
+                        Result = Keys.API_LOGIN_SUCC, 
+                        Books = books 
+                    });
+                }
+                else
+                {
+                    return Ok(new { Result = Keys.API_LOGIN_SUCC });
+                }
             }
 
             return Unauthorized("Invalid login attempt");
         }
 
+
+
+
         [HttpPost("CreateOrg")]
-        public async Task<IActionResult> CreateOrg([FromBody] OrganizationModel model)
+        public async Task<IActionResult> CreateOrg([FromBody] BookModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -66,9 +91,24 @@ namespace Aegis.Controllers
 
             try
             {
-                var (success, errorMsg) = await _authService.CreateOrganizationAsync(ownerId, model);
+                var (success, errorMsg) = await _authService.CreateBookAsync(ownerId, model);
                 if (success)
+                {
+                    var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                    if (!string.IsNullOrEmpty(userEmail))
+                    {
+                        var userOrgs = await _authService.GetBooks(userEmail);
+                        if (userOrgs != null)
+                        {
+                            return Ok(new
+                            {
+                                Result = Keys.API_ORG_SUCC,
+                                Books = userOrgs
+                            });
+                        }
+                    }
                     return Ok(new { Result = Keys.API_ORG_SUCC });
+                }
                 else
                     return Ok(new { Errors = errorMsg });
             }
@@ -78,5 +118,38 @@ namespace Aegis.Controllers
             }
 
          }
+
+
+
+        [HttpPost("FetchChapters")]
+        public async Task<IActionResult> FetchChapters([FromBody] string bookTitle)
+        {
+            if (string.IsNullOrEmpty(bookTitle))
+            {
+                return BadRequest("Database name cannot be null or empty.");
+            }
+
+            try
+            {
+                Guid? bookId = await _authService.GetBookIdByTitleAsync(bookTitle);
+                if (bookId == null)
+                {
+                    return StatusCode(500, "Internal server error");
+                }
+
+                var chapters = await _bookService.GetChapters(bookId);
+                if (chapters == null || !chapters.Any())
+                {
+                    return NotFound("No chapters found.");
+                }
+                return Ok(chapters);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error in FetchChapters: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }

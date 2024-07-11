@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Tessera.Constants;
 
 namespace Aegis.Data
 {
@@ -12,14 +13,14 @@ namespace Aegis.Data
             _configuration = configuration;
         }
 
-        public TesseraDbContext CreateDbContext(string organizationConnectionStringName)
+        public BookDbContext CreateDbContext(string dbName)
         {
-            string connectionString = _configuration.GetConnectionString(organizationConnectionStringName);
+            string connectionString = Keys.SQL_SERVER_ROOT + $"Database = {dbName}; Trusted_Connection = True; Encrypt = False;";
 
-            var optionsBuilder = new DbContextOptionsBuilder<TesseraDbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<BookDbContext>();
             optionsBuilder.UseSqlServer(connectionString);
 
-            return new TesseraDbContext(optionsBuilder.Options);
+            return new BookDbContext(optionsBuilder.Options);
         }
     }
 }

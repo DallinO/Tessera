@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http;
 
 namespace Tessera
 {
@@ -51,7 +49,7 @@ namespace Tessera
                 client.BaseAddress = new Uri("http://localhost:5206");
                 // Configure other settings as needed
             });
-            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ILibraryService, LibraryService>();
 
             // Finalizes the configuration, builds, then returns the MauiApp
             // instance.
