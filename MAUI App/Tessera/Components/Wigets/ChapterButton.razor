@@ -1,0 +1,63 @@
+﻿@inject IViewService View
+@inject ILibraryService Library
+@using Tessera.Core.Services
+@using Tessera.Models.ChapterComponents
+
+<button class="btn-alpha">
+    <div class="inner-buttons">
+        <button class=" inner-button">
+            <img src="caret_right_fill.svg" alt="caret right" />
+        </button>
+    </div>
+    <span class="button-text">@Text</span>
+    <div class="inner-buttons">
+        <button class="inner-button">
+            <img src="three_dots_horizontal.svg" alt="three dots" />
+        </button>
+    </div>
+    <div class="inner-buttons">
+        <button class="inner-button" @onclick="OpenAddMenu">
+            <img src="plus_lg.svg" alt="plus" />
+        </button>
+    </div>
+</button>
+<div>
+    @if (Library.CurrBook.Chapters[ChapterIndex].Contents.Count > 0)
+    {
+        @foreach (LeafDto leaf in Library.CurrBook.Chapters[ChapterIndex].Contents)
+        {
+            <button class="btn-alpha">@leaf.Name</button>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public string Text { get; set; }
+    [Parameter] public int ChapterIndex { get; set; }
+    [Parameter] public Action OpenModal { get; set; }
+
+    private void OpenAddMenu()
+    {
+        Library.SelectedChapter = Library.CurrBook.Chapters[ChapterIndex];
+        OpenModal?.Invoke();
+    }
+}
+
+<style>
+.btn-alpha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; /* Adjust as needed */
+    background-color: transparent;
+    border: none; /* Optional: a light border for better visibility */
+    color: #fff; /* Set text color to white */
+    padding: 10px; /* Padding to make the button larger */
+    border-radius: 4px; /* Rounded edges */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    text-align: left; /* Align text to the left */
+    position: relative; /* Make sure the position is relative */
+}
+
+</style>

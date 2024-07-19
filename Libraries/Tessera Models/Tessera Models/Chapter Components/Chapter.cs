@@ -18,7 +18,7 @@ namespace Tessera.Models.ChapterComponents
     {
         public string Title { get; set; }
         public string Description{ get; set; }
-        public List<LeafModel>? Contents { get; set; }
+        public List<LeafDto> Contents { get; set; } = new List<LeafDto>();
     }
 
 

@@ -9,7 +9,7 @@ namespace Tessera.Models.ChapterComponents.Data
 {
 
     // Application Model
-    public class DataList : LeafModel
+    public class DataList : LeafDto
     {
         public List<DataColumn> Columns { get; set; } = new List<DataColumn>();
 

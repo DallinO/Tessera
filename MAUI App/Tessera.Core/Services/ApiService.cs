@@ -7,7 +7,7 @@ using Tessera.Models.Authentication;
 using Tessera.Models.Book;
 using Tessera.Models.ChapterComponents;
 
-namespace Tessera
+namespace Tessera.Core.Services
 {
     public interface IApiService
     {

@@ -1,0 +1,43 @@
+﻿@using Microsoft.JSInterop
+@using Tessera.Components.Pages
+
+
+<div class="modal-dialog debug-border-1" @onmouseenter="MouseEnter" @onmouseleave="MouseLeave">
+    <div class="modal-header">
+        <h5 class="modal-title">Modal Title</h5>
+        <button type="button" class="close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- Modal body content goes here -->
+        <p>This is the modal body content.</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnMouseEnter { get; set; }
+    [Parameter] public EventCallback OnMouseLeave { get; set; }
+
+    private async Task MouseEnter()
+    {
+        if (OnMouseEnter.HasDelegate)
+        {
+            Console.WriteLine("Mouse Entered");
+            await OnMouseEnter.InvokeAsync(null);
+        }
+    }
+    
+    private async Task MouseLeave()
+    {
+        if (OnMouseLeave.HasDelegate)
+        {
+            Console.WriteLine("Mouse Exited");
+            await OnMouseLeave.InvokeAsync(null);
+        }
+    }
+}

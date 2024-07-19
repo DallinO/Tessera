@@ -27,4 +27,28 @@
 
 </body>
 
+
 </html>
+
+<script>
+    function getElementRect(element) {
+        return element.getBoundingClientRect();
+    }
+
+    window.getMouseX = function () {
+        return new Promise(resolve => {
+            document.addEventListener('click', function (event) {
+                resolve(event.clientX);
+            }, { once: true });
+        });
+    };
+
+    window.getMouseY = function () {
+        return new Promise(resolve => {
+            document.addEventListener('click', function (event) {
+                resolve(event.clientY);
+            }, { once: true });
+        });
+    };
+</script>
+

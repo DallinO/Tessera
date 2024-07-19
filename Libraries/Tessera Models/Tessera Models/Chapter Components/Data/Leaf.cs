@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Tessera.Models.ChapterComponents
 {
     // Database Entity
-    public abstract class Leaf
+    public abstract class LeafEntity
     {
         public int Id { get; set; }
         public int ParentId { get; set; }
@@ -17,7 +17,13 @@ namespace Tessera.Models.ChapterComponents
         public string Description { get; set; }
     }
 
-    public abstract class LeafModel
+    public class LeafModel
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+    
+    public abstract class LeafDto
     {
         public string Name { get; set; }
         public string Description { get; set; }

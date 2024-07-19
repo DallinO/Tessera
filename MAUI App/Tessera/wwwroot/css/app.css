@@ -191,6 +191,24 @@ h1:focus {
     align-items: center; /* Aligns items vertically centered */
 }
 
+.overlay-container {
+    position: relative; /* Ensure relative positioning for absolute children */
+    width: 100%; /* Adjust as needed */
+    height: 100%; /* Adjust as needed */
+}
+
+.overlay-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the content */
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Box shadow for a lifted effect */
+    z-index: 1000; /* Ensure it's above other content */
+}
+
 /***********************************************************
     Buttons
 ***********************************************************/
@@ -216,23 +234,65 @@ h1:focus {
 }
 
 
-.navbar-chapter-button {
+/* Main button style */
+.btn-alpha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; /* Adjust as needed */
     background-color: transparent;
-    width: 100%; /* Make the button fill its container */
-    border: 0px; /* Optional: a light border for better visibility */
-    color: #000; /* Optional: text color */
-    padding: 10px 20px; /* Padding to make the button larger */
+    border: none; /* Optional: a light border for better visibility */
+    color: #fff; /* Set text color to white */
+    padding: 10px; /* Padding to make the button larger */
     border-radius: 4px; /* Rounded edges */
-    color: whitesmoke;
-    text-align: left;
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    text-align: left; /* Align text to the left */
+    position: relative; /* Make sure the position is relative */
+}
+
+/* Text inside main button */
+.button-text {
+    flex-grow: 1;
+}
+
+/* Container for inner buttons */
+.inner-buttons {
+    display: flex;
+    visibility: hidden; /* Hide inner buttons by default */
+    opacity: 0; /* Make inner buttons fully transparent by default */
+    transition: visibility 0s, opacity 0.3s ease-in-out; /* Smooth transition for hover effect */
+}
+
+/* Inner button style */
+.inner-button {
+    width: 40px; /* Adjust size as needed */
+    height: 40px; /* Ensure square shape */
+    background-color: transparent;
+    border: none; /* Optional: a light border for better visibility */
+    color: #000; /* Text color */
+    border-radius: 4px; /* Optional: slightly rounded edges */
     cursor: pointer; /* Change cursor to pointer on hover */
     transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
-/* Hover state */
-.navbar-chapter-button:hover {
+/* Hover state for main button */
+.btn-alpha:hover {
     background-color: rgba(255, 255, 255, 0.25); /* Semi-transparent white */
 }
+
+/* Hover state for inner buttons within the main button */
+.btn-alpha:hover .inner-buttons {
+    visibility: visible; /* Make inner buttons visible */
+    opacity: 1; /* Make inner buttons fully opaque */
+}
+
+/* Hover state for inner buttons */
+.inner-button:hover {
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white for inner buttons */
+}
+
+
 
 /***********************************************************
     Text
@@ -273,3 +333,66 @@ h1:focus {
 .debug-border-5 {
     border: 2px solid blue;
 }
+
+
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure the modal is above other content */
+}
+
+.modal-dialog {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 400px; /* Adjust as needed */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Optional: box shadow for depth */
+}
+
+.modal-content {
+    padding: 16px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.modal-title {
+    margin: 0;
+}
+
+.modal-body {
+    padding: 8px 0;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+    margin-top: 8px;
+}
+
+.close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+    .close:focus {
+        outline: none;
+    }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Blazored.Modal;
+using Microsoft.Extensions.Logging;
+using Tessera.Core.Services;
 
 namespace Tessera
 {
@@ -50,6 +52,8 @@ namespace Tessera
                 // Configure other settings as needed
             });
             builder.Services.AddScoped<ILibraryService, LibraryService>();
+            builder.Services.AddScoped<IViewService, ViewService>();
+            builder.Services.AddBlazoredModal();
 
             // Finalizes the configuration, builds, then returns the MauiApp
             // instance.

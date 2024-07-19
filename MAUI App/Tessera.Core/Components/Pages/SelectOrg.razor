@@ -1,0 +1,48 @@
+﻿@inject ILibraryService LibraryService
+@inject NavigationManager Navigation
+@using Tessera.Models.Book
+@using Tessera.Constants;
+@using Newtonsoft.Json.Linq;
+@using System.Text;
+
+
+<div class="auth-container">
+    @foreach (BookDto org in LibraryService.Books)
+    {
+        <button class="btn-primary" @onclick="() => SwitchToHome(counter - 1)">@org.Title</button>
+        counter++;
+    }
+    <button class="cus-btn-secondary" @onclick="OnSwitchToLogin">Return To Login</button>
+    <p class="login-errors">@OrgError</p>
+</div>
+
+
+@code {
+    [Parameter] public EventCallback OnSwitchToLogin { get; set; }
+    private MarkupString OrgError { get; set; }
+    private int counter = 0;
+
+    private async Task SwitchToLogin()
+    {
+        if (OnSwitchToLogin.HasDelegate)
+        {
+            await OnSwitchToLogin.InvokeAsync(null);
+        }
+    }
+
+    private async Task SwitchToHome(int index)
+    {
+        LibraryService.HasBook = true;
+        LibraryService.CurrBook = LibraryService.Books[index];
+        var result = await LibraryService.GetChaptersAsync();
+        if (result != null)
+        {
+            OrgError = new MarkupString(result.ToString());
+        }
+        else
+        {
+            await SwitchToLogin();
+        }
+    }
+
+}

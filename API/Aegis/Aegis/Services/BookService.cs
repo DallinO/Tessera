@@ -57,7 +57,8 @@ namespace Aegis.Services
                     var chapterDtos = chapters.Select(chapter => new ChapterDto
                     {
                         Title = chapter.Title,
-                        Description = chapter.Description
+                        Description = chapter.Description,
+                        //Contents = new List<LeafDto>()
                     }).ToList();
 
                     return chapterDtos;

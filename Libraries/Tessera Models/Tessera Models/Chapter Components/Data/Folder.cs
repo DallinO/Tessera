@@ -2,8 +2,8 @@
 
 namespace Tessera.Models.ChapterComponents.Data
 {
-    public class Folder : Leaf
+    public class FolderDto : LeafDto
     {
-        public List<LeafModel> Contents { get; set; }
+        public List<LeafDto> Contents { get; set; }
     }
 }

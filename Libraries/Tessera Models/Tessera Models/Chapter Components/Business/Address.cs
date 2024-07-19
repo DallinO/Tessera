@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Tessera.CodeGenerators;
 
-namespace Tessera.Models.WorkspaceComponents.Business
+namespace Tessera.Models.ChapterComponents
 {
     public class AddressEntity
     {

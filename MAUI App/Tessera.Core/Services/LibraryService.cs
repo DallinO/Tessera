@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Components;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Tessera.Models.Authentication;
 using Tessera.Models.Book;
 using Tessera.Constants;
+using Tessera.Core.Services;
+using Tessera.Models.ChapterComponents;
 
 namespace Tessera
 {
@@ -12,6 +13,7 @@ namespace Tessera
         bool IsAuthenticated { get; set; }
         bool HasBook { get; set; }
         BookDto CurrBook { get; set; }
+        ChapterDto SelectedChapter { get; set; }
         BookDto[] Books { get; set; }
         Task<JObject> LoginAsync(LoginDefaultModel model);
         Task<JObject> RegisterAsync(RegisterDefaultModel model);
@@ -24,6 +26,8 @@ namespace Tessera
         private readonly IApiService _apiService;
         public bool IsAuthenticated { get; set; } = false;
         public bool HasBook { get; set; } = false;
+
+
         private BookDto _currBook;
         public BookDto CurrBook
         {
@@ -34,6 +38,19 @@ namespace Tessera
             }
         }
         private BookDto[] _books;
+
+
+        private ChapterDto _selectedChapter;
+        public ChapterDto SelectedChapter
+        {
+            get => _selectedChapter;
+            set
+            {
+                _selectedChapter = value;
+            }
+        }
+
+
         public BookDto[] Books
         {
             get => _books;

@@ -1,10 +1,11 @@
 ﻿@inject ILibraryService LibraryService
 @using Tessera.Models.Book
 @using Tessera.Models.ChapterComponents
+@using Tessera.Components.Wigets
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Tessera</a>
+        <a class="navbar-brand">Tessera</a>
     </div>
 </div>
 
@@ -16,12 +17,56 @@
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
-            @foreach (ChapterDto chapter in LibraryService.CurrBook.Chapters)
+            @for(int i = 0; i < LibraryService.CurrBook.Chapters.Count; i++)
             {
-                <button class="navbar-chapter-button">
-                    @chapter.Title
-                </button>
+                <ChapterButton Text="@LibraryService.CurrBook.Chapters[i].Title" ChapterIndex="i" OpenModal="OpenModal"/>
             }
+            <!-- ExampleComponent.razor
+            <button class="btn btn-primary" @onclick="OpenModal">Toggle Overlay Modal</button>
+             -->
+            <AddLeaf @ref="leafModal" OnAddLeaf="AddLeaf"/>
         </div>
     </nav>
 </div>
+
+@code {
+
+    private AddLeaf leafModal;
+
+    private void OpenModal()
+    {
+        leafModal.OpenModal();
+    }
+
+    private void AddLeaf(LeafDto leaf)
+    {
+        if (leaf != null)
+        {
+            LibraryService.SelectedChapter.Contents.Add(leaf);
+            StateHasChanged();
+        }
+    }
+
+
+    // private OverlayModal overlayModal;
+
+    // private void ToggleOverlayModal()
+    // {
+    //     if (overlayModal != null)
+    //     {
+    //         if (!overlayModal.IsVisible())
+    //         {
+    //             overlayModal.Show();
+    //         }
+    //         else
+    //         {
+    //             overlayModal.Close();
+    //         }
+    //     }
+    // }
+
+    // private void HandleOverlayModalClose()
+    // {
+    //     // Handle any additional logic when the overlay modal is closed
+    // }
+}
