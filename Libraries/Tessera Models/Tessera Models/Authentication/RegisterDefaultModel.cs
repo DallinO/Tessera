@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Tessera.Models.Authentication
+namespace Tessera.Models
 {
     public class RegisterDefaultModel
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Tessera.Models.Book
+namespace Tessera.Models
 {
     public class BookModel
     {

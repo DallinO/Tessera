@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tessera.Models.ChapterComponents;
-
-namespace Tessera.Models.ChapterComponents.Data
+﻿namespace Tessera.Models
 {
 
     // Application Model
-    public class DataList : LeafDto
+    public class DataListDto : LeafDto
     {
         public List<DataColumn> Columns { get; set; } = new List<DataColumn>();
 

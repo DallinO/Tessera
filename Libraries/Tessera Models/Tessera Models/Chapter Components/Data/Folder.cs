@@ -1,6 +1,4 @@
-﻿using Tessera.Models.ChapterComponents;
-
-namespace Tessera.Models.ChapterComponents.Data
+﻿namespace Tessera.Models
 {
     public class FolderDto : LeafDto
     {

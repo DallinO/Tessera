@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace Tessera.Models.Book
+namespace Tessera.Models
 {
     // Book Base
     public class Preface

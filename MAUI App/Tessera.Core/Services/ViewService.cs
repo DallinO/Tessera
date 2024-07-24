@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace Tessera.Core.Services
 {
@@ -11,6 +7,8 @@ namespace Tessera.Core.Services
         bool ShowChapterAddMenu { get; set; }
         bool ShowChapterSettings { get; set; }
         bool ShowTemplateMenu { get; set; }
+        Type DynamicComponentType { get; set; }
+        Dictionary<string, object> Parameters { get; set; }
     }
 
     public class ViewService : IViewService
@@ -18,6 +16,8 @@ namespace Tessera.Core.Services
         public bool ShowChapterAddMenu { get; set; } = false;
         public bool ShowChapterSettings { get; set; } = false;
         public bool ShowTemplateMenu { get; set; } = false;
+        public Type DynamicComponentType { get; set; }
+        public Dictionary<string, object> Parameters { get; set; } = new Dictionary<string, object>();
     }
 
 }

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tessera", "Tessera\Tessera.csproj", "{6637949C-6F9D-48A7-B3CF-E57930566DBB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tessera Models", "..\Libraries\Tessera Models\Tessera Models\Tessera Models.csproj", "{E25DC4D0-0641-4F0E-AF9B-77C9263DDF0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tessera.Models", "..\Libraries\Tessera Models\Tessera Models\Tessera.Models.csproj", "{E25DC4D0-0641-4F0E-AF9B-77C9263DDF0A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tessera.Core", "Tessera.Core\Tessera.Core.csproj", "{50CF6DC3-6A76-4FF6-8A6F-95C9873C9A96}"
 EndProject

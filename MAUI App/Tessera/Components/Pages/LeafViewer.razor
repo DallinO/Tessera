@@ -1,0 +1,11 @@
+﻿@page "/leaf-viewer"
+@inherits LayoutComponentBase
+@inject IViewService View
+
+<div>
+    @if (View.DynamicComponentType != null)
+    {
+        <DynamicComponent Type="@View.DynamicComponentType"
+                          Parameters="@View.Parameters" />
+    }
+</div>

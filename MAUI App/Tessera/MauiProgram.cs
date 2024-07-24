@@ -52,7 +52,7 @@ namespace Tessera
                 // Configure other settings as needed
             });
             builder.Services.AddScoped<ILibraryService, LibraryService>();
-            builder.Services.AddScoped<IViewService, ViewService>();
+            builder.Services.AddSingleton<IViewService, ViewService>();
             builder.Services.AddBlazoredModal();
 
             // Finalizes the configuration, builds, then returns the MauiApp

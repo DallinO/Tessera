@@ -1,13 +1,8 @@
 ﻿using Tessera.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Aegis.Data;
 using Tessera.Constants;
-using Tessera.Models.Book;
-using Tessera.Models.Authentication;
 using System.Security.Claims;
 using Aegis.Services;
-using Tessera.Models.ChapterComponents;
 
 namespace Aegis.Controllers
 {

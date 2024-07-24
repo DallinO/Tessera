@@ -2,28 +2,38 @@
 {
     <div class="modal-overlay-2">
         <div class="modal-content-2">
-            <button class="btn-alpha">
-                List
-            </button>
-            <button class="btn-alpha">
-                Document
-            </button>
-            <button class="btn-alpha">
-                Template
-            </button>
-            <button class="btn-alpha" @onclick="() => AddLeafComponent(LeafType.Customer)">
-                Customer
-            </button>
+            <div>
+                <div>
+                    <input type="text" @bind="firstName" placeholder="First Name" />
+                    <input type="text" @bind="lastName" placeholder="Last Name" />
+                </div>
+                <div>
+                    <input type="text" @bind="homeNumber" placeholder="Home Number" />
+                    <input type="text" @bind="workNumber" placeholder="Work Number" />
+                </div>
+                <div>
+                    <input type="text" @bind="cellNumber" placeholder="Cell Number" />
+                    <input type="text" @bind="lastName" placeholder="Last Name" />
+                </div>
+            </div>
             <div class="modal-footer-2">
-                <button @onclick="CloseModal" class="btn btn-primary">Close</button>
+                <button @onclick="CloseModal" class="btn btn-secondary">Cancel</button>
+                <button @onclick="Submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </div>
 }
 
 @code {
-    [Parameter] public Action<LeafDto> OnAddLeaf { get; set; }
+    [Parameter] public Action<CustomerDto> OnAddCustomer { get; set; }
+
     private bool isVisible = false;
+    private string firstName;
+    private string lastName;
+    private string homeNumber;
+    private string workNumber;
+    private string cellNumber;
+    private HousingType housing;
 
     public void CloseModal()
     {
@@ -37,16 +47,10 @@
         StateHasChanged();
     }
 
-    private void AddLeafComponent(LeafType leaf)
+    private void Submit()
     {
-        switch(leaf)
-        {
-            case LeafType.Customer:
-                OnAddLeaf?.Invoke(new CustomerListDto());
-                break;               
 
-        }
-
+        OnAddCustomer?.Invoke(new CustomerDto());
         CloseModal();
     }
 }

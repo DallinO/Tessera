@@ -1,6 +1,4 @@
-﻿using Tessera.Models.Authentication;
-
-namespace Tessera.Models.Book
+﻿namespace Tessera.Models
 {
     /***************************************************
     * SCHOLAR CLASS

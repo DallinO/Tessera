@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Tessera.Constants;
-using Tessera.Models.ChapterComponents;
+﻿using Tessera.Constants;
 
-namespace Tessera.Models.ChapterComponents
+namespace Tessera.Models
 {
     public class ServiceCallDto : LeafDto
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Tessera.Models.Authentication
+namespace Tessera.Models
 {
     public class Scribe : IdentityUser
     {

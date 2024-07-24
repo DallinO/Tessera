@@ -68,6 +68,7 @@
 
     <ItemGroup>
         <PackageReference Include="Blazored.Modal" Version="7.3.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.7" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.70" />
@@ -78,7 +79,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Libraries\Tessera Models\Tessera Models\Tessera Models.csproj" />
+      <ProjectReference Include="..\..\Libraries\Tessera Models\Tessera Models\Tessera.Models.csproj" />
       <ProjectReference Include="..\Tessera.Core\Tessera.Core.csproj" />
     </ItemGroup>
 

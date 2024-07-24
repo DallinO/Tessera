@@ -1,7 +1,7 @@
-﻿@inject IViewService View
+﻿@page "/your-page"
+@inject IViewService ViewService
 @inject ILibraryService Library
-@using Tessera.Core.Services
-@using Tessera.Models.ChapterComponents
+@inject NavigationManager Navigation
 
 <button class="btn-alpha">
     <div class="inner-buttons">
@@ -26,7 +26,22 @@
     {
         @foreach (LeafDto leaf in Library.CurrBook.Chapters[ChapterIndex].Contents)
         {
-            <button class="btn-alpha">@leaf.Name</button>
+            try
+            {
+                var leafType = leaf switch
+                {
+                    CustomerListDto _ => LeafType.Customer,
+                    DataListDto _ => LeafType.List,
+                    DocumentDto _ => LeafType.Document
+                };
+            
+                <button class="btn-alpha" @onclick="() => ShowLeafViewer(leafType)">@leaf.Name</button>
+
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                // Display Error Message
+            }
         }
     }
 </div>
@@ -40,6 +55,23 @@
     {
         Library.SelectedChapter = Library.CurrBook.Chapters[ChapterIndex];
         OpenModal?.Invoke();
+    }
+
+    private void ShowLeafViewer(LeafType type)
+    {
+        Type componentType = null;
+        switch (type)
+        {
+            case LeafType.Customer:
+                componentType = typeof(Customers);
+                break;
+        }
+        if (componentType != null)
+        {
+            ViewService.DynamicComponentType = componentType;
+            ViewService.Parameters["CustomerList"] = new CustomerListDto();
+            Navigation.NavigateTo("/leaf-viewer");
+        }
     }
 }
 

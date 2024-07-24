@@ -1,0 +1,65 @@
+﻿@* Title Section *@
+<h2>Customer Information</h2>
+
+@* Action *@
+<div>
+    <button class="btn-primary">Add Customer</button>
+
+</div>
+
+@* Table *@
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th>Contact Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (CustomerDto customer in CustomerList.Customers)
+        {
+            <tr>
+                <td>@customer.FirstName</td>
+                <td>@customer.LastName</td>
+                <td>@customer.Address.GetAddressString()</td>
+                <td>
+                    <select @bind="customer.SelectedContact">
+                        <option value="Work">Work</option>
+                        <option value="Cell">Cell</option>
+                        <option value="Home">Home</option>
+                    </select>
+                    <div>
+                        @GetContactNumber(customer)
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+@code {
+    [Parameter] public CustomerListDto CustomerList {get; set;}
+
+    private string GetContactNumber(CustomerDto customer)
+    {
+        return customer.SelectedContact switch
+        {
+            "Work" => customer.WorkNumber.ToString(),
+            "Cell" => customer.CellNumber.ToString(),
+            "Home" => customer.HomeNumber.ToString(),
+            _ => "No contact selected"
+        };
+    }
+
+
+}
+
+<style>
+.action-section{
+
+}
+</style>

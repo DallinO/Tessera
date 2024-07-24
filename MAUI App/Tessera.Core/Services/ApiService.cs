@@ -3,9 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using Tessera.Constants;
-using Tessera.Models.Authentication;
-using Tessera.Models.Book;
-using Tessera.Models.ChapterComponents;
+using Tessera.Models;
 
 namespace Tessera.Core.Services
 {

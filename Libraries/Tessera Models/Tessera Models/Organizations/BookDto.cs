@@ -1,6 +1,4 @@
-﻿using Tessera.Models.ChapterComponents;
-
-namespace Tessera.Models.Book
+﻿namespace Tessera.Models
 {
     public class BookDto
     {

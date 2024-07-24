@@ -1,7 +1,4 @@
-﻿
-using Tessera.Models.ChapterComponents;
-
-namespace Tessera.Models.ChapterComponents
+﻿namespace Tessera.Models
 {
 
     public class CustomerListDto : LeafDto
@@ -12,6 +9,7 @@ namespace Tessera.Models.ChapterComponents
         {
             Name = "Customers";
             Description = "Customer account information.";
+            Customers = new List<CustomerDto>();
         }
     }
 
@@ -23,6 +21,7 @@ namespace Tessera.Models.ChapterComponents
         public int WorkNumber { get; set; }
         public int CellNumber { get; set; }
         public int HomeNumber { get; set; }
+        public string SelectedContact { get; set; } = "Home"; // Default to "Home"
         public HousingType HousingType { get; set; }
         public AddressDto Address { get; set; }
     }

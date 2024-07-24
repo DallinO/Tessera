@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Tessera.CodeGenerators;
 
-namespace Tessera.Models.ChapterComponents
+namespace Tessera.Models
 {
     public class AddressEntity
     {
@@ -15,6 +15,20 @@ namespace Tessera.Models.ChapterComponents
     }
 
     public class AddressDto
+    {
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string PostalCode { get; set; }
+        public string Country { get; set; }
+
+        public string GetAddressString()
+        {
+            return $"{Street} {City} {State} {Country} {PostalCode}";
+        }
+    }
+    
+    public class AddressModel
     {
         [Required(ErrorMessage = "Street is required.")]
         [StringLength(100, ErrorMessage = "Street can't be longer than 100 characters.")]

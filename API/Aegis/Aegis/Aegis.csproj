@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\Tessera Models\Tessera Models\Tessera Models.csproj" />
+    <ProjectReference Include="..\..\..\Libraries\Tessera Models\Tessera Models\Tessera.Models.csproj" />
   </ItemGroup>
 
 </Project>

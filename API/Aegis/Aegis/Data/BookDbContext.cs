@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Tessera.Models.Book;
-using Tessera.Models.ChapterComponents;
+using Tessera.Models;
 
 namespace Aegis.Data
 {

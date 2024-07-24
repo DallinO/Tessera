@@ -1,13 +1,9 @@
 ﻿using Aegis.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Tessera.Models.Authentication;
-using Tessera.Models.ChapterComponents;
-using System.Xml.Linq;
-using Microsoft.EntityFrameworkCore.Internal;
+using Tessera.Models;
 using Microsoft.Data.SqlClient;
 using Tessera.Constants;
-using System.Net;
 
 namespace Aegis.Services
 {
