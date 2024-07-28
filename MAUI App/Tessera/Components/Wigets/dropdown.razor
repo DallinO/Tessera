@@ -1,6 +1,6 @@
 ﻿@typeparam TEnum
 
-<select @bind="SelectedValue" @onchange="OnChange">
+<select @bind="SelectedValue">
     @foreach (var value in Enum.GetValues(typeof(TEnum)).Cast<TEnum>())
     {
         <option value="@value">@value</option>
@@ -11,12 +11,12 @@
     [Parameter] public TEnum SelectedValue { get; set; }
     [Parameter] public EventCallback<TEnum> SelectedValueChanged { get; set; }
 
-    private void OnChange(ChangeEventArgs e)
+    private async Task OnChange(ChangeEventArgs e)
     {
         if (Enum.TryParse(typeof(TEnum), e.Value.ToString(), out var parsedValue))
         {
             SelectedValue = (TEnum)parsedValue;
-            SelectedValueChanged.InvokeAsync(SelectedValue);
+            await SelectedValueChanged.InvokeAsync(SelectedValue);
         }
     }
 }

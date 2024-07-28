@@ -15,6 +15,9 @@
                     <input type="text" @bind="cellNumber" placeholder="Cell Number" />
                     <input type="text" @bind="lastName" placeholder="Last Name" />
                 </div>
+                <div>
+                    <Dropdown TEnum="HousingType" SelectedValue="HousingType.Owner" SelectedValueChanged="OnHousingTypeChanged" />
+                </div>
             </div>
             <div class="modal-footer-2">
                 <button @onclick="CloseModal" class="btn btn-secondary">Cancel</button>
@@ -45,6 +48,11 @@
     {
         isVisible = true;
         StateHasChanged();
+    }
+
+    private void OnHousingTypeChanged(HousingType newValue)
+    {
+        housing = newValue;
     }
 
     private void Submit()
