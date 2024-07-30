@@ -1,4 +1,5 @@
-﻿using Tessera.Models;
+﻿using Tessera.Models.Authentication;
+using Tessera.Models.Book;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 

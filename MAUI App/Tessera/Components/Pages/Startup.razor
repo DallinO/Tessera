@@ -1,10 +1,8 @@
-﻿@page "/startup"
+﻿@namespace Tessera.Core.Components.Pages
+@page "/startup"
 @inject ILibraryService LibraryService
 @inject NavigationManager Navigation
-@using Tessera.Components.Pages
-@using Tessera.Constants
 
-<p>Test</p>
 @if (!LibraryService.IsAuthenticated || !LibraryService.HasBook)
 {
     
