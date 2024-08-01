@@ -136,7 +136,7 @@ namespace Tessera.Core.Services
          * *************************************************/
         public async Task<JObject> CreateBookAsync(BookModel model)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/Api/CreateOrg", model);
+            var response = await _httpClient.PostAsJsonAsync("api/Api/CreateBook", model);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();

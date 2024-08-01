@@ -2,7 +2,7 @@
 {
     public static class Keys
     {
-        public const string SQL_SERVER_ROOT = "Server=DESKTOP-K3CVC1F\\SQLEXPRESS;";
+        public const string SQL_SERVER_ROOT = "Server=mssql-180120-0.cloudclusters.net,10040;";
         public const string SQL_SERVER_TESSERA_TEST = "TestDbConnection";
         public const string INIT_BOOK_SCRIPT = "InitializeBook.sql";
 

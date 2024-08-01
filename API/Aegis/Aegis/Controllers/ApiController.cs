@@ -70,8 +70,8 @@ namespace Aegis.Controllers
 
 
 
-        [HttpPost("CreateOrg")]
-        public async Task<IActionResult> CreateOrg([FromBody] BookModel model)
+        [HttpPost("CreateBook")]
+        public async Task<IActionResult> CreateBook([FromBody] BookModel model)
         {
             if (!ModelState.IsValid)
             {
