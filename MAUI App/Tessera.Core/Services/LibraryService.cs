@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Tessera.Models;
+using Tessera.Models.Authentication;
+using Tessera.Models.Book;
+using Tessera.Models.Chapter;
 using Tessera.Constants;
-using Tessera.Core.Services;
 
-namespace Tessera
+namespace Tessera.Core.Services
 {
     public interface ILibraryService
     {

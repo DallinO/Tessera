@@ -1,7 +1,8 @@
 ﻿using Aegis.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Tessera.Models;
+using Tessera.Models.Authentication;
+using Tessera.Models.Chapter;
 using Microsoft.Data.SqlClient;
 using Tessera.Constants;
 

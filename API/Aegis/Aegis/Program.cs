@@ -1,7 +1,7 @@
 #define _DEV
 
 using Aegis.Data;
-using Tessera.Models;
+using Tessera.Models.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Aegis.Services;

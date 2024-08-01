@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-
-namespace Tessera.Core.Services
+﻿namespace Tessera.Core.Services
 {
     public interface IViewService
     {

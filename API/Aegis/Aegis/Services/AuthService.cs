@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Tessera.Models;
+using Tessera.Models.Authentication;
+using Tessera.Models.Book;
 using Aegis.Data;
 using Microsoft.EntityFrameworkCore;
 
