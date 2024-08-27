@@ -8,12 +8,13 @@ using Tessera.Models.Authentication;
 using Tessera.Models.Book;
 using Tessera.Models.Chapter;
 using Microsoft.JSInterop;
+using Blazored.SessionStorage;
 
 namespace Tessera.Core.Services
 {
     public interface IApiService
     {
-        Task<(JObject, bool)> LoginAsync(LoginDefaultModel model);
+        Task<(JObject, bool)> LoginAsync(LoginRequest model);
         Task<(JObject, bool)> RegisterAsync(RegisterDefaultModel model);
         Task<JObject> CreateBookAsync(BookModel model);
         Task<(List<ChapterDto>, string)> GetChapters(string dbName);
@@ -25,38 +26,60 @@ namespace Tessera.Core.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jsRuntime;
+        private readonly ISessionStorageService _sss;
+        private const string JWT_KEY = nameof(JWT_KEY);
+        private string? _jwtCache;
 
-        public ApiService(HttpClient httpClient, IJSRuntime jsRuntime)
+        public ApiService(HttpClient httpClient, IJSRuntime jsRuntime, ISessionStorageService sss)
         {
             _httpClient = httpClient;
             _jsRuntime = jsRuntime;
+            _sss = sss;
         }
 
+        public async ValueTask<string> GetJwtAsync()
+        {
+            if (string.IsNullOrEmpty(_jwtCache))
+            {
+                _jwtCache = await _sss.GetItemAsync<string>(JWT_KEY);
+            }
+
+            return _jwtCache;
+        }
+
+
+        public async Task LogoutAsync()
+        {
+            await _sss.RemoveItemAsync(JWT_KEY);
+            _jwtCache = null;
+        }
 
         /***************************************************
          * LOGIN ASYNC
          * *************************************************/
-        public async Task<(JObject, bool)> LoginAsync(LoginDefaultModel model)
+        public async Task<(JObject, bool)> LoginAsync(LoginRequest model)
         {
             await UpdateHttpClientAsync();
             var response = await _httpClient.PostAsJsonAsync("api/Api/Login", model);
-            var result = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
-                if (result != null)
+                var content = await response.Content.ReadFromJsonAsync<LoginResponse>();
+
+                if (content != null)
                 {
-                    JObject jsonObject = JObject.Parse(result);
+                    await _sss.SetItemAsync(JWT_KEY, content.JwtToken);
 
-                    // Store the access token in local storage
-                    var token = jsonObject["token"]?.ToString();
-                    if (!string.IsNullOrEmpty(token))
-                    {
-                        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "accessToken", token);
-                    }
 
-                    return jsonObject["result"]?.ToString() == Keys.API_LOGIN_SUCC ?
-                        (jsonObject, true) : (jsonObject, false);
+                    //// Store the access token in local storage
+                    //var token = jsonObject["token"]?.ToString();
+                    //if (!string.IsNullOrEmpty(token))
+                    //{
+                    //    await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "accessToken", token);
+                    //}
+
+                    //return jsonObject["result"]?.ToString() == Keys.API_LOGIN_SUCC ?
+                    //    (jsonObject, true) : (jsonObject, false);
                 }
 
                 return (new JObject { ["result"] = Keys.API_GENERIC_SUCC }, false);

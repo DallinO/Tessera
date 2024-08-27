@@ -20,7 +20,7 @@ namespace Tessera.Core.Services
         List<BookDto> Books { get; set; }
 
 
-        Task<JObject> LoginAsync(LoginDefaultModel model);
+        Task<JObject> LoginAsync(LoginRequest model);
         Task<JObject> RegisterAsync(RegisterDefaultModel model);
         Task<JObject> CreateBookAsync(BookModel model);
         Task<string> GetChaptersAsync();
@@ -86,7 +86,7 @@ namespace Tessera.Core.Services
         /***************************************************
          * LOGIN ASYNC
          ***************************************************/
-        public async Task<JObject> LoginAsync(LoginDefaultModel model)
+        public async Task<JObject> LoginAsync(LoginRequest model)
         {
             var (jsonObj, status) = await _apiService.LoginAsync(model);
             if (jsonObj.ContainsKey("books"))

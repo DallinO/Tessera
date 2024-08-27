@@ -2,7 +2,7 @@
 
 namespace Tessera.Models.Authentication
 {
-    public class LoginDefaultModel
+    public class LoginRequest
     {
         [Required(ErrorMessage = "Email is required")]
         [Display(Name = "Username or Email")]
@@ -13,5 +13,12 @@ namespace Tessera.Models.Authentication
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+    }
+
+    public class LoginResponse
+    {
+        public required string JwtToken { get; set; }
+        public DateTime Expiration { get; set; }
+        public HttpResponseMessage HttpResponseMessage { get; set; }
     }
 }

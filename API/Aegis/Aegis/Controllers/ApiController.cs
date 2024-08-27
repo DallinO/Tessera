@@ -301,6 +301,7 @@ namespace Aegis.Controllers
 
 
         [HttpPost("ValidateToken")]
+        [Authorize]
         public IActionResult ValidateToken()
         {
             var authHeader = HttpContext.Request.Headers["Authorization"].FirstOrDefault();

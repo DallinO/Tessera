@@ -1,6 +1,0 @@
-@Aegis_HostAddress = http://localhost:5206
-
-GET {{Aegis_HostAddress}}/
-Accept: application/json
-
-###

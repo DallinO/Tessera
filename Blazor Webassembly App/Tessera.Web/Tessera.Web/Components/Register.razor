@@ -108,7 +108,7 @@
             if (resultString == Keys.API_REG_SUCC || resultString == Keys.API_GENERIC_SUCC)
             {
                 // Redirect to login page after successful registration
-                var loginModel = new LoginDefaultModel
+                var loginModel = new LoginRequest
                 {
                     Email = Email,
                     Password = Password,
