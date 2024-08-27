@@ -1,0 +1,25 @@
+/***********************************************************
+    Select Field
+***********************************************************/
+.ts-select-container {
+    border: 2px solid red;
+    width: 200px;
+}
+
+.ts-select-body {
+    border: 2px solid yellow;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ts-select-display {
+    border: 2px solid green;
+    color: white;
+    width: 100%;
+}
+
+.ts-dropdown-item {
+    border: 2px solid blue;
+    background-color: transparent;
+}

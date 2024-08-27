@@ -1,13 +1,17 @@
-﻿using Tessera.Models.Authentication;
+﻿using System.ComponentModel.DataAnnotations;
+using Tessera.Models.Authentication;
 
 namespace Tessera.Models.Book
 {
     public class Catalog
     {
         public string ScribeId { get; set; }
-        public Scribe Scribe { get; set; }
         public Guid BookId { get; set; }
-        public Preface Preface { get; set; }
         public bool IsOwner { get; set; }
+
+        // Navigation Properties
+        public Scribe Scribe { get; set; }
+        public BookEntity BookEntity { get; set; }
     }
+
 }

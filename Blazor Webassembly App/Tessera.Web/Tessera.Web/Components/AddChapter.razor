@@ -1,0 +1,52 @@
+﻿@namespace Tessera.Web
+
+@if (isVisible)
+{
+    <div class="ts-modal-overlay">
+        <div class="ts-modal-content">
+            <div>
+                <div class="ts-input-container">
+                    <input type="text" @bind="name" placeholder="Name" />
+                </div>
+                <div class="ts-input-container">
+                    <input type="text" @bind="description" placeholder="Description" />
+                </div>
+            </div>
+            <div class="ts-modal-footer">
+                <button @onclick="CloseModal" class="ts-secondary-btn ts-modal-button-left">Cancel</button>
+                <button @onclick="Submit" class="ts-primary-btn ts-modal-button-right">Submit</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public Action<ChapterDto> OnAddChapter { get; set; }
+
+    private bool isVisible = false;
+    private string name;
+    private string description;
+
+    public void CloseModal()
+    {
+        isVisible = false;
+        StateHasChanged();
+    }
+
+    public void OpenModal()
+    {
+        isVisible = true;
+        StateHasChanged();
+    }
+
+    private void Submit()
+    {
+        OnAddChapter?.Invoke(
+            new ChapterDto() 
+            { 
+                Title = name, 
+                Description = description 
+            });
+        CloseModal();
+    }
+}

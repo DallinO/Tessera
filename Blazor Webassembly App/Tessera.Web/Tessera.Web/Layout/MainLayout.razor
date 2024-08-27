@@ -1,0 +1,39 @@
+﻿@inherits LayoutComponentBase
+@inject ILibraryService Library
+@inject IViewService View
+@inject NavigationManager Navigation
+
+<div class="page">
+
+    @if (!Library.IsAuthenticated)
+    {
+
+        <div class="startup-overlay">
+            <Startup />
+        </div>
+    }
+    else
+    {
+        <div class="ts-sidebar">
+            <NavMenu />
+        </div>
+
+        <main>
+            <div class="ts-top-row ts-utility ts-border">
+                <div calss="ts-utility-root">
+                    @Library.CurrBook.Title
+                </div>
+                <div class="ts-utility-search">
+                </div>
+                <div class="ts-utility-account-container">
+                    <button class="ts-account-button">
+                        @Library.Author.FirstName[0]
+                    </button>
+                </div>
+            </div>
+            <div class="ts-content ts-border">
+                @Body
+            </div>
+        </main>
+    }
+</div>

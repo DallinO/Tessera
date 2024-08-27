@@ -11,13 +11,26 @@ namespace Tessera.Core.Services
     {
         bool IsAuthenticated { get; set; }
         bool HasBook { get; set; }
+        ScribeDto Author {  get; set; }
+
+
+
         BookDto CurrBook { get; set; }
         ChapterDto SelectedChapter { get; set; }
-        BookDto[] Books { get; set; }
+        List<BookDto> Books { get; set; }
+
+
         Task<JObject> LoginAsync(LoginDefaultModel model);
         Task<JObject> RegisterAsync(RegisterDefaultModel model);
         Task<JObject> CreateBookAsync(BookModel model);
         Task<string> GetChaptersAsync();
+        Task<JObject> AddChapterAsync(ChapterDto chapter);
+        Task<JObject> RemoveChapterAsync(string chapterName);
+        Task<JObject> AddRowAsync(int chapterIndex);
+        Task<JObject> RemoveRowAsync(int chapterIndex);
+        Task<JObject> UpdateChapterAsync(int chapterIndex);
+        Task<JObject> UpdateRowAsync(int chapterIndex);
+        Task FetchTokenAsync();
     }
 
     public class LibraryService : ILibraryService
@@ -25,6 +38,7 @@ namespace Tessera.Core.Services
         private readonly IApiService _apiService;
         public bool IsAuthenticated { get; set; } = false;
         public bool HasBook { get; set; } = false;
+        public ScribeDto Author { get; set; } = new ScribeDto();
 
 
         private BookDto _currBook;
@@ -36,8 +50,6 @@ namespace Tessera.Core.Services
                 _currBook = value;
             }
         }
-        private BookDto[] _books;
-
 
         private ChapterDto _selectedChapter;
         public ChapterDto SelectedChapter
@@ -50,7 +62,8 @@ namespace Tessera.Core.Services
         }
 
 
-        public BookDto[] Books
+        private List<BookDto> _books;
+        public List<BookDto> Books
         {
             get => _books;
             set
@@ -62,13 +75,16 @@ namespace Tessera.Core.Services
             }
         }
 
+
         public LibraryService(IApiService apiService)
         {
             _apiService = apiService;
+            _books = new List<BookDto>();
         }
 
+
         /***************************************************
-         * LOGIN
+         * LOGIN ASYNC
          ***************************************************/
         public async Task<JObject> LoginAsync(LoginDefaultModel model)
         {
@@ -76,8 +92,14 @@ namespace Tessera.Core.Services
             if (jsonObj.ContainsKey("books"))
             {
                 var booksJson = jsonObj["books"].ToString();
-                var books = JsonConvert.DeserializeObject<BookDto[]>(booksJson);
+                var books = JsonConvert.DeserializeObject<List<BookDto>>(booksJson);
                 Books = books;
+            }
+            if (jsonObj.ContainsKey("author"))
+            {
+                var authorJson = jsonObj["author"].ToString();
+                var author = JsonConvert.DeserializeObject<ScribeDto>(authorJson);
+                Author = author;
             }
             if (status)
             {
@@ -102,6 +124,9 @@ namespace Tessera.Core.Services
         }
 
 
+        /***************************************************
+         * REGISTRATION ASYNC
+         ***************************************************/
         public async Task<JObject> RegisterAsync(RegisterDefaultModel model)
         {
             var (jsonObj, status) = await _apiService.RegisterAsync(model);
@@ -113,24 +138,29 @@ namespace Tessera.Core.Services
         }
 
 
+        /***************************************************
+         * CREATE BOOK ASYNC
+         ***************************************************/
         public async Task<JObject> CreateBookAsync(BookModel model)
         {
             var result = await _apiService.CreateBookAsync(model);
             if (result.ContainsKey("result"))
             {
-                var jsonObj = JObject.FromObject(result["result"]);
                 if (result.ContainsKey("books"))
                 {
                     var BooksJson = result["books"].ToString();
-                    var books = JsonConvert.DeserializeObject<BookDto[]>(BooksJson);
+                    var books = JsonConvert.DeserializeObject<List<BookDto>>(BooksJson);
                     Books = books;
-                    if (books.Length == 1)
+                    if (books.Count == 1)
                     {
                         CurrBook = books[0];
                     }
                 }
 
-                return jsonObj;
+                return new JObject
+                {
+                    ["result"] = result["result"]
+                };
             }
             else if (result.ContainsKey("errors"))
             {
@@ -141,6 +171,10 @@ namespace Tessera.Core.Services
             return null;
         }
 
+
+        /***************************************************
+         * GET CHAPTERS ASYNC
+         ***************************************************/
         public async Task<string> GetChaptersAsync()
         {
             var (chapters, errorMsg) = await _apiService.GetChapters(CurrBook.Title);
@@ -154,5 +188,60 @@ namespace Tessera.Core.Services
             return null;
 
         }
+
+
+        /***************************************************
+         * ADD CHAPTER ASYNC
+         ***************************************************/
+        public async Task<JObject> AddChapterAsync(ChapterDto chapter)
+        {
+            AddChapterRequest request = new()
+            {
+                BookId = CurrBook.Id,
+                Title = chapter.Title,
+                Description = chapter.Description
+            };
+
+            var (response, status) = await _apiService.AddChapter(request);
+            if (status)
+                CurrBook.Chapters.Add(chapter);
+
+            if (response != null)
+                return response;
+
+            else
+                return new JObject() { ["Errors"] = "Unknown Error" };
+        }
+
+        public async Task<JObject> RemoveChapterAsync(string chapterName)
+        {
+            return new JObject();
+        }
+
+        public async Task<JObject> AddRowAsync(int chapterIndex)
+        {
+            return new JObject();
+        }
+
+        public async Task<JObject> RemoveRowAsync(int chapterIndex)
+        {
+            return new JObject();
+        }
+
+        public async Task<JObject> UpdateChapterAsync(int chapterIndex)
+        {
+            return new JObject();
+        }
+
+        public async Task<JObject> UpdateRowAsync(int chapterIndex)
+        {
+            return new JObject();
+        }
+
+        public async Task FetchTokenAsync()
+        {
+            IsAuthenticated = await _apiService.ValidateTokenAsync();
+        }
+
     }
 }

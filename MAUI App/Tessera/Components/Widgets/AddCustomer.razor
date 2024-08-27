@@ -2,64 +2,56 @@
 
 @if (isVisible)
 {
-    <div class="modal-overlay-2">
-        <div class="modal-content-2">
-            <div>
-                <div>
-                    <div>
-                        <div class="input-container">
-                            <input type="text" @bind="firstName" placeholder="First Name" />
-                        </div>
-                        <div class="input-container">
-                            <input type="text" @bind="lastName" placeholder="Last Name" />
-                        </div>
-                        <div>
-                            <Dropdown 
-                                TItem="HousingType"
-                                Items="Enum.GetValues(typeof(HousingType))
-                                        .Cast<HousingType>()
-                                        .ToList()"
-                                SelectedValue="HousingType.Owner" 
-                                SelectedValueChanged="OnHousingTypeChanged" />
-                        </div>
+    <div class="ts-modal-overlay">
+        <div class="ts-modal-content">
+            <div class="ts-modal-body">
+                <div class="ts-modal-body-section">
+                    <div class="ts-input-container">
+                        <input type="text" @bind="firstName" placeholder="First Name" />
                     </div>
-                    <div>
-                        <div class="input-container">
-                            <input type="text" @bind="homeNumber" placeholder="Home Number" />
-                        </div>
-                        <div class="input-container">
-                            <input type="text" @bind="workNumber" placeholder="Work Number" />
-                        </div>
-                        <div class="input-container">
-                            <input type="text" @bind="cellNumber" placeholder="Cell Number" />
-                        </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="lastName" placeholder="Last Name" />
+                    </div>
+                    <div class="ts-select-container">
+                        <Dropdown 
+                            TItem="HousingType"
+                            Items="Enum.GetValues(typeof(HousingType))
+                                    .Cast<HousingType>()
+                                    .ToList()"
+                            SelectedValue="HousingType.Owner" 
+                            SelectedValueChanged="OnHousingTypeChanged" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="homeNumber" placeholder="Home Number" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="workNumber" placeholder="Work Number" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="cellNumber" placeholder="Cell Number" />
                     </div>
                 </div>
-                <div>
-                    <div>
-                        <div class="input-container">
-                            <input type="text" @bind="street" placeholder="Street" />
-                        </div>
-                        <div class="input-container">
-                            <input type="text" @bind="city" placeholder="City" />
-                        </div>
+                <div class="ts-modal-body-section">
+                    <div class="ts-input-container">
+                        <input type="text" @bind="street" placeholder="Street" />
                     </div>
-                    <div>
-                        <div class="input-container">
-                            <input type="text" @bind="state" placeholder="State/Province" />
-                        </div>
-                        <div class="input-container">
-                            <input type="text" @bind="country" placeholder="Country" />
-                        </div>
-                        <div class="input-container">
-                            <input type="text" @bind="postalCode" placeholder="Postal Code" />
-                        </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="city" placeholder="City" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="state" placeholder="State/Province" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="country" placeholder="Country" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="postalCode" placeholder="Postal Code" />
                     </div>
                 </div>
             </div>
-            <div class="modal-footer-2">
-                <button @onclick="CloseModal" class="btn btn-secondary">Cancel</button>
-                <button @onclick="Submit" class="btn btn-primary">Submit</button>
+            <div class="ts-modal-footer">
+                <button @onclick="CloseModal" class="ts-secondary-btn ts-modal-button-left">Cancel</button>
+                <button @onclick="Submit" class="ts-primary-btn ts-modal-button-right">Submit</button>
             </div>
         </div>
     </div>
@@ -105,51 +97,3 @@
         CloseModal();
     }
 }
-
-<style>
-    .modal-overlay-2 {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .modal-content-2 {
-        background: linear-gradient(45deg, #0c04a5 0%, #4301a4 50%);
-        border-radius: 5px;
-        width: 80%;
-        max-width: 500px;
-        padding: 20px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .modal-header-2 {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-    }
-
-    .modal-body-2 {
-        margin-bottom: 10px;
-    }
-
-    .modal-footer-2 {
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .close-button-2 {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-    }
-</style>

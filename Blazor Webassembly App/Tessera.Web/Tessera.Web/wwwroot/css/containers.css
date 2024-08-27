@@ -1,0 +1,68 @@
+﻿/***********************************************************
+    Containers
+***********************************************************/
+/* Authenticaion Container */
+.ts-auth-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    flex: 1;
+    border: 2px solid red;
+    padding: 0px 5px 0px 5px;
+}
+
+.ts-auth-container-item {
+    margin-top: 10px;
+    border: 2px solid green;
+}
+
+.ts-auth-container-item-top {
+}
+
+.ts-auth-container-btn-container {
+    margin-top: 5px;
+}
+
+/* Startup Container */
+.ts-startup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Register Container */
+.ts-register-container {
+    display: flex;
+    flex-direction: Column; /* This is the default value, so it can be omitted */
+    justify-content: center; /* Distributes items evenly with space between them */
+    align-items: center; /* Aligns items vertically centered */
+    height: 100%;
+}
+
+.register-inputs-container {
+    display: flex;
+    flex-direction: row; /* This is the default value, so it can be omitted */
+    justify-content: center; /* Distributes items evenly with space between them */
+    align-items: center; /* Aligns items vertically centered */
+}
+
+.overlay-container {
+    position: relative; /* Ensure relative positioning for absolute children */
+    width: 100%; /* Adjust as needed */
+    height: 100%; /* Adjust as needed */
+}
+
+.overlay-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the content */
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Box shadow for a lifted effect */
+    z-index: 1000; /* Ensure it's above other content */
+}

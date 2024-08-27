@@ -1,0 +1,138 @@
+﻿@namespace Tessera.Web
+
+@inject ILibraryService Library
+@inject NavigationManager Navigation
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq;
+@using System.Text;
+
+
+
+<div class="ts-auth-container">
+    <div class="ts-auth-container-item-top">
+        <div class="ts-label-container">
+            <label for="email-input" class="ts-label">Email</label>
+        </div>
+        <div class="ts-input-container">
+            <input class="ts-primary-input" type="text" id="email-input" required="" @bind="Email">
+        </div>
+    </div>
+    <div class="ts-auth-container-item">
+        <div class="ts-label-container">
+            <label for="pw-input" class="ts-label">Password</label>
+        </div>
+        <div class="ts-input-container">
+            <input class="ts-primary-input" type="text" id="pw-input" required="" @bind="Password">
+        </div>
+    </div>
+    <div class="ts-auth-container-item">
+        <button class="ts-primary-btn" @onclick="LoginAsync">Login</button>
+    </div>
+    <div class="ts-auth-container-btn-container">
+        <button class="ts-secondary-btn" @onclick="SwitchToRegister">Register</button>
+    </div>
+    <div class="ts-auth-container-item">
+        <p class="ts-auth-errors">@LoginError</p>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnSwitchToRegister { get; set; }
+    [Parameter] public EventCallback OnSwitchToCreateOrg { get; set; }
+    [Parameter] public EventCallback OnSwitchToSelectOrg { get; set; }
+    [Parameter] public View CurrentView { get; set; }
+
+    private string Email { get; set; } = "td1@test.com";
+    private string Password { get; set; } = "Test@123";
+    private MarkupString LoginError { get; set; }
+
+    private async Task LoginAsync()
+    {
+        var model = new LoginDefaultModel
+        {
+            Email = Email,
+            Password = Password,
+            RememberMe = false
+        };
+
+        JObject result = await Library.LoginAsync(model);
+
+        if (result.ContainsKey("result"))
+        {
+            string resultString = result["result"]?.ToString();
+            if (resultString == Keys.API_GENERIC_SUCC || resultString == Keys.API_LOGIN_SUCC)
+            {
+                switch (Library.Books.Count)
+                {
+                    case 0:
+                        await SwitchToCreateOrg();
+                        break;
+
+                    case 1:
+                        await SwitchToSelectOrg();
+                        break;
+
+                    default:
+                        await SwitchToSelectOrg(); // Redirect to dashboard or another page on successful login
+                        break;
+                }
+            }
+            else
+            {
+                await SwitchToCreateOrg();
+            }
+        }
+        else if (result.ContainsKey("errors"))
+        {
+            StringBuilder errorMessages = new StringBuilder();
+
+            try
+            {
+                JObject errors = JObject.Parse(result["errors"]?.ToString());
+
+                if (errors.ContainsKey("Email"))
+                {
+                    JArray emailErrorsArray = (JArray)errors["Email"];
+                    errorMessages.AppendLine(string.Join(", ", emailErrorsArray.Select(e => e.ToString())));
+                    errorMessages.Append("<br />");
+                }
+                if (errors.ContainsKey("Password"))
+                {
+                    JArray passwordErrorsArray = (JArray)errors["Password"];
+                    errorMessages.AppendLine(string.Join(", ", passwordErrorsArray.Select(e => e.ToString())));
+                    errorMessages.Append("<br />");
+                }
+
+                LoginError = new MarkupString(errorMessages.ToString());
+            }
+            catch (Newtonsoft.Json.JsonReaderException)
+            {
+                LoginError = new MarkupString("Login failed. Please check your credentials.");
+            }
+        }
+    }
+
+    private async Task SwitchToRegister()
+    {
+        if (OnSwitchToRegister.HasDelegate)
+        {
+            await OnSwitchToRegister.InvokeAsync(null);
+        }
+    }
+
+    private async Task SwitchToCreateOrg()
+    {
+        if (OnSwitchToCreateOrg.HasDelegate)
+        {
+            await OnSwitchToCreateOrg.InvokeAsync(null);
+        }
+    }
+
+    private async Task SwitchToSelectOrg()
+    {
+        if (OnSwitchToSelectOrg.HasDelegate)
+        {
+            await OnSwitchToSelectOrg.InvokeAsync(null);
+        }
+    }
+}

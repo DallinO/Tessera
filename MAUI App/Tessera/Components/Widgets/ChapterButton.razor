@@ -1,62 +1,89 @@
 ﻿@namespace Tessera.Core.Components.Widgets
 
-@page "/your-page"
 @inject IViewService ViewService
 @inject ILibraryService Library
 @inject NavigationManager Navigation
+@inject IJSRuntime JS
 
-<button class="btn-alpha">
-    <div class="inner-buttons">
-        <button class=" inner-button">
+<button class="ts-basic-button" id="@ButtonId" @onclick="ToggleColor">
+    <div class="ts-inner-button-container">
+        <button class="ts-inner-button" @onclick="ToggleLeaves">
             <img src="caret_right_fill.svg" alt="caret right" />
         </button>
     </div>
-    <span class="button-text">@Text</span>
-    <div class="inner-buttons">
-        <button class="inner-button">
+    <div class="ts-basic-button-text">@Title</div>
+    <div class="ts-filler"></div>
+    <div class="ts-inner-button-container">
+        <button class="ts-inner-button" @onclick="OpenSettings">
             <img src="three_dots_horizontal.svg" alt="three dots" />
         </button>
-    </div>
-    <div class="inner-buttons">
-        <button class="inner-button" @onclick="OpenAddMenu">
+        <button class="ts-inner-button" @onclick="OpenAddMenu">
             <img src="plus_lg.svg" alt="plus" />
         </button>
     </div>
 </button>
-<div>
-    @if (Library.CurrBook.Chapters[ChapterIndex].Contents.Count > 0)
-    {
-        @foreach (LeafDto leaf in Library.CurrBook.Chapters[ChapterIndex].Contents)
+@if (showLeaves)
+{
+    <div class="ts-leaf-container">
+        @if (Library.CurrBook.Chapters[ChapterIndex].Contents.Count > 0)
         {
-            try
+            @foreach (LeafDto leaf in Library.CurrBook.Chapters[ChapterIndex].Contents)
             {
-                var leafType = leaf switch
+                try
                 {
-                    CustomerListDto _ => LeafType.Customer,
-                    DataListDto _ => LeafType.List,
-                    DocumentDto _ => LeafType.Document
-                };
-            
-                <button class="btn-alpha" @onclick="() => ShowLeafViewer(leafType)">@leaf.Name</button>
+                    var leafType = leaf switch
+                    {
+                        CustomerListDto _ => LeafType.Customer,
+                        ListDto _ => LeafType.List,
+                        DocumentDto _ => LeafType.Document
+                    };
+                    <LeafButton LeafName="@leaf.Name"  LeftIcon="@BuildIconPath(leaf.Name)" Type="@leafType" OnShowLeafViewer="ShowLeafViewer" />
 
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                // Display Error Message
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    // Display Error Message
+                }
             }
         }
-    }
-</div>
+    </div>
+
+}
+
+<ChapterSettings @ref="chapterSettings" 
+    Title="@Title" 
+    Description="@Description" 
+    OnOpenSettings="OpenSettings"
+    />
 
 @code {
-    [Parameter] public string Text { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Description { get; set; }
     [Parameter] public int ChapterIndex { get; set; }
-    [Parameter] public Action OpenModal { get; set; }
+    [Parameter] public Action OnOpenAddMenu { get; set; }
+    [Parameter] public string ChapterIcon { get; set; }
+    [Parameter] public string ButtonId { get; set; }
+
+    private ChapterSettings chapterSettings;
+
+    private bool showLeaves = false;
 
     private void OpenAddMenu()
     {
         Library.SelectedChapter = Library.CurrBook.Chapters[ChapterIndex];
-        OpenModal?.Invoke();
+        OnOpenAddMenu.Invoke();
+    }
+
+    private void OpenSettings()
+    {
+        Library.SelectedChapter = Library.CurrBook.Chapters[ChapterIndex];
+        chapterSettings.isVisible = true;
+    }
+
+    private void ToggleLeaves()
+    {
+        if (showLeaves) showLeaves = false;
+        else showLeaves = true;
     }
 
     private void ShowLeafViewer(LeafType type)
@@ -75,23 +102,14 @@
             Navigation.NavigateTo("/leaf-viewer");
         }
     }
-}
 
-<style>
-.btn-alpha {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%; /* Adjust as needed */
-    background-color: transparent;
-    border: none; /* Optional: a light border for better visibility */
-    color: #fff; /* Set text color to white */
-    padding: 10px; /* Padding to make the button larger */
-    border-radius: 4px; /* Rounded edges */
-    cursor: pointer; /* Change cursor to pointer on hover */
-    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
-    text-align: left; /* Align text to the left */
-    position: relative; /* Make sure the position is relative */
-}
+    private async Task ToggleColor()
+    {
+        await JS.InvokeVoidAsync("toggleButtonColor", ButtonId);
+    }
 
-</style>
+    private string BuildIconPath(string leafName)
+    {
+        return $"{leafName.ToLower()}.svg";
+    }
+}

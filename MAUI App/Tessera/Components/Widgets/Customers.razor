@@ -1,46 +1,48 @@
 ﻿@namespace Tessera.Core.Components.Widgets
 
 @* Title Section *@
-<h2>Customer Information</h2>
 
-@* Action *@
-<div>
-    <button class="btn-primary" @onclick="OpenModal">Add Customer</button>
-    <AddCustomer @ref="addCustomer" />
+<div class="ts-customer-page">
+    @* Action *@
+    <h2>Customer Information</h2>
+    <div class="ts-customer-page-header">
+        <button class="ts-primary-btn" @onclick="OpenModal">Add Customer</button>
+        <AddCustomer @ref="addCustomer" />
+    </div>
+    @* Table *@
+    <div class="ts-customer-table-container">
+        <table class="ts-customer-table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Address</th>
+                    <th>Contact Info</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (CustomerDto customer in CustomerList.Customers)
+                {
+                    <tr>
+                        <td>@customer.FirstName</td>
+                        <td>@customer.LastName</td>
+                        <td>@customer.Address.GetAddressString()</td>
+                        <td>
+                            <select @bind="customer.SelectedContact">
+                                <option value="Work">Work</option>
+                                <option value="Cell">Cell</option>
+                                <option value="Home">Home</option>
+                            </select>
+                            <div>
+                                @GetContactNumber(customer)
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
-
-@* Table *@
-<table class="table">
-    <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Address</th>
-            <th>Contact Info</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (CustomerDto customer in CustomerList.Customers)
-        {
-            <tr>
-                <td>@customer.FirstName</td>
-                <td>@customer.LastName</td>
-                <td>@customer.Address.GetAddressString()</td>
-                <td>
-                    <select @bind="customer.SelectedContact">
-                        <option value="Work">Work</option>
-                        <option value="Cell">Cell</option>
-                        <option value="Home">Home</option>
-                    </select>
-                    <div>
-                        @GetContactNumber(customer)
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-
-</table>
 
 
 @code {

@@ -3,55 +3,70 @@
 @inject ILibraryService LibraryService
 @inject NavigationManager Navigation
 
-<div class="register-container debug-border-1">
-    <div class="register-inputs-container debug-border-5">
-        <div class="auth-container debug-border-2">
-            <p class="login-errors">@FirstNameError</p>
-            <div class="input-container">
-                <input type="text" id="input" required="" @bind="FirstName">
-                <label for="input" class="label">First Name</label>
-                <div class="underline"></div>
-            </div>
-            <p class="login-errors">@LastNameError</p>
-            <div class="input-container">
-                <input type="text" id="input" required="" @bind="LastName">
-                <label for="input" class="label">Last Name</label>
-                <div class="underline"></div>
-            </div>
-            <p class="login-errors">@EmailError</p>
-            <div class="input-container">
-                <input type="text" id="input" required="" @bind="Email">
-                <label for="input" class="label">Email</label>
-                <div class="underline"></div>
-            </div>
-            <p class="login-errors">@ConfirmEmailError</p>
-            <div class="input-container">
-                <input type="text" id="input" required="" @bind="ConfirmEmail">
-                <label for="input" class="label">Confirm Email</label>
-                <div class="underline"></div>
-            </div>
-            <p class="login-errors">@PasswordError</p>
-            <div class="input-container">
-                <input type="text" id="input" required="" @bind="Password">
-                <label for="input" class="label">Password</label>
-                <div class="underline"></div>
-            </div>
-            <p class="login-errors">@ConfirmPasswordError</p>
-            <div class="input-container">
-                <input type="text" id="input" required="" @bind="ConfirmPassword">
-                <label for="input" class="label">Confirm Password</label>
-                <div class="underline"></div>
-            </div>
+<div class="ts-auth-container">
+    <p class="ts-auth-errors @(string.IsNullOrWhiteSpace(FirstNameError.ToString()) ? "" : "visible")">@FirstNameError</p>
+    <div class="ts-auth-container-item">
+        <div class="ts-label-container">
+            <label for="fn-input" class="ts-label">First Name</label>
+        </div>
+        <div class="ts-input-container">
+            <input class="ts-primary-input" type="text" id="fn-input" required="" @bind="FirstName">
         </div>
     </div>
-    <p class="login-errors">@GenericError</p>
-    <button class="btn-primary" @onclick="RegisterAsync">Register</button>
-    <button class="cus-btn-secondary" @onclick="SwitchToLogin">Back To Login</button>
+    <p class="ts-auth-errors @(string.IsNullOrWhiteSpace(LastNameError.ToString()) ? "" : "visible")">@LastNameError</p>
+    <div class="ts-auth-container-item">
+        <div class="ts-label-container">
+            <label for="ln-input" class="ts-label">Last Name</label>
+        </div>
+        <div class="ts-input-container">
+            <input class="ts-primary-input" type="text" id="ln-input" required="" @bind="LastName">
+        </div>
+    </div>
+    <p class="ts-auth-errors @(string.IsNullOrWhiteSpace(EmailError.ToString()) ? "" : "visible")">@EmailError</p>
+    <div class="ts-auth-container-item">
+        <div class="ts-label-container">
+            <label for="em-input" class="ts-label">Email</label>
+        </div>
+        <div class="ts-input-container">
+            <input class="ts-primary-input" type="text" id="em-input" required="" @bind="Email">
+        </div>
+    </div>
+    <p class="ts-auth-errors ">@ConfirmEmailError</p>
+    <div class="ts-auth-container-item">
+        <div class="ts-label-container">
+            <label for="ce-input" class="ts-label">Confirm Email</label>
+        </div>
+        <div class="ts-input-container">
+            <input class="ts-primary-input" type="text" id="ce-input" required="" @bind="ConfirmEmail">
+        </div>
+    </div>
+    <p class="ts-auth-errors">@PasswordError</p>
+    <div class="ts-auth-container-item">
+        <div class="ts-label-container">
+            <label for="pw-input" class="ts-label">Password</label>
+        </div>
+        <div class="ts-input-container">
+            <input class="ts-primary-input" type="text" id="pw-input" required="" @bind="Password">
+        </div>
+    </div>
+    <p class="ts-auth-errors">@ConfirmPasswordError</p>
+    <div class="ts-auth-container-item">
+        <div class="ts-label-container">
+            <label for="cp-input" class="ts-label">Confirm Password</label>
+        </div>
+        <div class="ts-input-container">
+            <input class="ts-primary-input" type="text" id="cp-input" required="" @bind="ConfirmPassword">
+        </div>
+    </div>
+    <p class="ts-auth-errors">@GenericError</p>
+    <button class="ts-primary-btn" @onclick="RegisterAsync">Register</button>
+    <button class="ts-secondary-btn" @onclick="SwitchToLogin">Back To Login</button>
 </div>
 
 @code {
     [Parameter] public EventCallback OnSwitchToLogin { get; set; }
     [Parameter] public EventCallback OnSwitchToCreateOrg { get; set; }
+    string test = "visisble";
 
     // RegisterDefualtModel Inputs
     private string FirstName { get; set; } = "TestDummy";
@@ -128,42 +143,42 @@
                 if (errors.ContainsKey("FirstName"))
                 {
                     JArray FNameErrorsArray = (JArray)errors["FirstName"];
-                    FNameErrorMessages.AppendLine(string.Join(", ", FNameErrorsArray.Select(e => e.ToString())));
+                    FNameErrorMessages.AppendLine(string.Join("<br />", FNameErrorsArray.Select(e => e.ToString())));
                     FNameErrorMessages.Append("<br />");
                     FirstNameError = new MarkupString(FNameErrorMessages.ToString());
                 }
                 if (errors.ContainsKey("LastName"))
                 {
                     JArray LNameErrorsArray = (JArray)errors["LastName"];
-                    LNameErrorMessages.AppendLine(string.Join(", ", LNameErrorsArray.Select(e => e.ToString())));
-                    LNameErrorMessages.Append("<br />");
+                    LNameErrorMessages.AppendLine(string.Join("<br />", LNameErrorsArray.Select(e => e.ToString())));
+             
                     LastNameError = new MarkupString(LNameErrorMessages.ToString());
                 }
                 if (errors.ContainsKey("Email"))
                 {
                     JArray EmailErrorsArray = (JArray)errors["Email"];
-                    EmailErrorMessages.AppendLine(string.Join(", ", EmailErrorsArray.Select(e => e.ToString())));
+                    EmailErrorMessages.AppendLine(string.Join("<br />", EmailErrorsArray.Select(e => e.ToString())));
                     EmailErrorMessages.Append("<br />");
                     EmailError = new MarkupString(EmailErrorMessages.ToString());
                 }
                 if (errors.ContainsKey("ConfirmEmail"))
                 {
                     JArray CEmailErrorsArray = (JArray)errors["ConfirmEmail"];
-                    CEmailErrorMessages.AppendLine(string.Join(", ", CEmailErrorsArray.Select(e => e.ToString())));
+                    CEmailErrorMessages.AppendLine(string.Join("<br />", CEmailErrorsArray.Select(e => e.ToString())));
                     CEmailErrorMessages.Append("<br />");
                     ConfirmEmailError = new MarkupString(CEmailErrorMessages.ToString());
                 }
                 if (errors.ContainsKey("Password"))
                 {
                     JArray PassErrorsArray = (JArray)errors["Password"];
-                    PassErrorMessages.AppendLine(string.Join(", ", PassErrorsArray.Select(e => e.ToString())));
+                    PassErrorMessages.AppendLine(string.Join("<br />", PassErrorsArray.Select(e => e.ToString())));
                     PassErrorMessages.Append("<br />");
                     PasswordError = new MarkupString(PassErrorMessages.ToString());
                 }
                 if (errors.ContainsKey("ConfirmPassword"))
                 {
                     JArray CPassErrorsArray = (JArray)errors["ConfirmPassword"];
-                    CPassErrorMessages.AppendLine(string.Join(", ", CPassErrorsArray.Select(e => e.ToString())));
+                    CPassErrorMessages.AppendLine(string.Join("<br />", CPassErrorsArray.Select(e => e.ToString())));
                     CPassErrorMessages.Append("<br />");
                     ConfirmPasswordError = new MarkupString(CPassErrorMessages.ToString());
                 }

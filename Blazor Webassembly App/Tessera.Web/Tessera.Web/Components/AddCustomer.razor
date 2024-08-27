@@ -1,0 +1,99 @@
+﻿@namespace Tessera.Web
+
+@if (isVisible)
+{
+    <div class="ts-modal-overlay">
+        <div class="ts-modal-content">
+            <div class="ts-modal-body">
+                <div class="ts-modal-body-section">
+                    <div class="ts-input-container">
+                        <input type="text" @bind="firstName" placeholder="First Name" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="lastName" placeholder="Last Name" />
+                    </div>
+                    <div class="ts-select-container">
+                        <Dropdown 
+                            TItem="HousingType"
+                            Items="Enum.GetValues(typeof(HousingType))
+                                    .Cast<HousingType>()
+                                    .ToList()"
+                            SelectedValue="HousingType.Owner" 
+                            SelectedValueChanged="OnHousingTypeChanged" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="homeNumber" placeholder="Home Number" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="workNumber" placeholder="Work Number" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="cellNumber" placeholder="Cell Number" />
+                    </div>
+                </div>
+                <div class="ts-modal-body-section">
+                    <div class="ts-input-container">
+                        <input type="text" @bind="street" placeholder="Street" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="city" placeholder="City" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="state" placeholder="State/Province" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="country" placeholder="Country" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input type="text" @bind="postalCode" placeholder="Postal Code" />
+                    </div>
+                </div>
+            </div>
+            <div class="ts-modal-footer">
+                <button @onclick="CloseModal" class="ts-secondary-btn ts-modal-button-left">Cancel</button>
+                <button @onclick="Submit" class="ts-primary-btn ts-modal-button-right">Submit</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public Action<CustomerDto> OnAddCustomer { get; set; }
+
+    private bool isVisible = false;
+    private string firstName;
+    private string lastName;
+    private string homeNumber;
+    private string workNumber;
+    private string cellNumber;
+    private HousingType housing;
+    private string street;
+    private string city;
+    private string state;
+    private string country;
+    private string postalCode;
+
+    public void CloseModal()
+    {
+        isVisible = false;
+        StateHasChanged();
+    }
+
+    public void OpenModal()
+    {
+        isVisible = true;
+        StateHasChanged();
+    }
+
+    private void OnHousingTypeChanged(HousingType newValue)
+    {
+        housing = newValue;
+    }
+
+    private void Submit()
+    {
+
+        OnAddCustomer?.Invoke(new CustomerDto());
+        CloseModal();
+    }
+}

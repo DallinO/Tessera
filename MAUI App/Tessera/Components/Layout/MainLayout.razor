@@ -1,11 +1,11 @@
 ﻿@inherits LayoutComponentBase
-@inject ILibraryService LibraryService
+@inject ILibraryService Library
 @inject IViewService View
 @inject NavigationManager Navigation
 
 <div class="page">
 
-    @if (!LibraryService.IsAuthenticated)
+    @if (!Library.IsAuthenticated)
     {
 
         <div class="startup-overlay">
@@ -14,18 +14,26 @@
     }
     else
     {
-        <div class="sidebar">
+        <div class="ts-sidebar">
             <NavMenu />
         </div>
 
         <main>
-            <div class="top-row px-4">
-                <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <div class="ts-top-row ts-utility ts-border">
+                <div calss="ts-utility-root">
+                    @Library.CurrBook.Title
+                </div>
+                <div class="ts-utility-search">
+                </div>
+                <div class="ts-utility-account-container">
+                    <button class="ts-account-button">
+                        @Library.Author.FirstName[0]
+                    </button>
+                </div>
             </div>
-
-            <article class="content px-4">
+            <div class="ts-content ts-border">
                 @Body
-            </article>
+            </div>
         </main>
     }
 

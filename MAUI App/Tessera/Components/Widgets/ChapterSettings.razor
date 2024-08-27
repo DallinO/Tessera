@@ -1,7 +1,45 @@
 ﻿@namespace Tessera.Core.Components.Widgets
 
-<h3>ChapterSettings</h3>
+@if (isVisible)
+{
+    <div class="ts-modal-overlay">
+        <div class="ts-modal-content">
+            <div class="ts-chapter-settings-header">
+                <input class="ts-basic-input-field" type="text" @bind="Title" />
+                <input type="text" @bind="Description" />
+            </div>
+            <div class="ts-modal-body">
+                <button class="ts-secondary-btn">
+                    <div class="ts-leaf-icon">
+                        <img src="trash_fill.svg" alt="trash" />
+                    </div>
+                    <p class="ts-delete-btn-text">Delete</p>
+                </button>
+            </div>
+            <div class="ts-modal-footer">
+                <button @onclick="CloseModal" class="ts-secondary-btn ts-modal-button-left">Close</button>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Description { get; set; }
+    [Parameter] public EventCallback OnOpenSettings { get; set; }
+    public bool isVisible = false;
 
+    private void CloseModal()
+    {
+        isVisible = false;
+        StateHasChanged();
+    }
+
+    public async Task OpenModal()
+    {
+        if(OnOpenSettings.HasDelegate)
+        {
+            await OnOpenSettings.InvokeAsync(null);
+        }
+    }
 }

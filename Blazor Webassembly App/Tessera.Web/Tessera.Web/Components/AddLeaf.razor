@@ -1,0 +1,54 @@
+﻿@namespace Tessera.Web
+
+@if (isVisible)
+{
+    <div class="ts-modal-overlay">
+        <div class="ts-modal-content">
+            <button class="ts-basic-button">
+                List
+            </button>
+            <button class="ts-basic-button">
+                Document
+            </button>
+            <button class="ts-basic-button">
+                Template
+            </button>
+            <button class="ts-basic-button" @onclick="() => AddLeafComponent(LeafType.Customer)">
+                Customer
+            </button>
+            <div class="ts-modal-footer">
+                <button @onclick="CloseModal" class="ts-secondary-btn ts-modal-button-left">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public Action<LeafDto> OnAddLeaf { get; set; }
+    private bool isVisible = false;
+
+    public void CloseModal()
+    {
+        isVisible = false;
+        StateHasChanged();
+    }
+
+    public void OpenModal()
+    {
+        isVisible = true;
+        StateHasChanged();
+    }
+
+    private void AddLeafComponent(LeafType leaf)
+    {
+        switch(leaf)
+        {
+            case LeafType.Customer:
+                OnAddLeaf?.Invoke(new CustomerListDto());
+                break;               
+
+        }
+
+        CloseModal();
+    }
+}

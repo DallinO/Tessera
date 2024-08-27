@@ -1,0 +1,24 @@
+﻿@namespace Tessera.Core.Components.Widgets
+
+@inject ILibraryService Library
+
+<button class="ts-basic-button">
+    <span class="ts-basic-button-text">@Library.CurrBook.Title</span>
+    <div class="ts-inner-button-container">
+        <button class="ts-inner-button">
+            <img src="switch.svg" alt="switch book" />
+        </button>
+        <button class="ts-inner-button" @onclick="OpenAddMenu">
+            <img src="plus_lg.svg" alt="add book" />
+        </button>
+    </div>
+</button>
+
+@code {
+    [Parameter] public Action OpenModal { get; set; }
+
+    private void OpenAddMenu()
+    {
+        OpenModal?.Invoke();
+    }
+}

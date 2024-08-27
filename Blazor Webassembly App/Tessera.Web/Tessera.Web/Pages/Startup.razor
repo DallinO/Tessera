@@ -1,0 +1,79 @@
+﻿@namespace Tessera.Web
+@page "/startup"
+@inject ILibraryService LibraryService
+@inject NavigationManager Navigation
+
+@if (!LibraryService.IsAuthenticated || !LibraryService.HasBook)
+{
+    
+    <div class="ts-startup-container">
+        <div class="ts-startup-header">
+            <h1>Tessera Business Manager</h1>
+        </div>
+        @switch (currentView)
+        {
+            case View.Login:
+                <Login OnSwitchToRegister="SwitchToRegister" OnSwitchToCreateOrg="SwitchToCreateOrg" OnSwitchToSelectOrg="SwitchToSelectOrg"/>
+                break;
+
+            case View.Register:
+                <Register OnSwitchToLogin="SwitchToLogin" OnSwitchToCreateOrg="SwitchToCreateOrg" />
+                break;
+
+            case View.CreateOrg:
+                <CreateOrg OnSwitchToLogin="SwitchToLogin" OnSwitchToSelectOrg="SwitchToSelectOrg"/>
+                break;
+
+            case View.SelectOrg:
+                <SelectBook OnSwitchToLogin="SwitchToLogin"/>
+                break;
+
+            default:
+                <p>No view selected.</p>
+                break;
+
+        }
+    </div>
+}
+else
+{
+    Navigation.NavigateTo("/");
+}
+
+@code {
+    private View currentView = View.Login; // Default to showing login form
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LibraryService.FetchTokenAsync();
+        if (LibraryService.IsAuthenticated)
+        {
+            if (LibraryService.HasBook)
+            {
+                currentView = View.SelectOrg;
+            }
+
+            currentView = View.CreateOrg;
+        }
+    }
+
+    private void SwitchToRegister()
+    {
+        currentView = View.Register;
+    }
+
+    private void SwitchToLogin()
+    {
+        currentView = View.Login;
+    }
+
+    private void SwitchToCreateOrg()
+    {
+        currentView = View.CreateOrg;
+    }
+    
+    private void SwitchToSelectOrg()
+    {
+        currentView = View.SelectOrg;
+    }
+}

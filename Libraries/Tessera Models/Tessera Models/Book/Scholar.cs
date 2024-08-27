@@ -1,4 +1,6 @@
-﻿namespace Tessera.Models.Book
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Tessera.Models.Book
 {
     /***************************************************
     * SCHOLAR CLASS
@@ -6,11 +8,8 @@
     ***************************************************/
     public class ScholarEntity
     {
-        // Unique identifier.
-        public int Id { get; set; }
-        // Id reference to the Scribe
-        public string UserId { get; set; }
-        // Reference to the Role
-        public int roleId { get; set; }
+        [Key]
+        public string ScribeId { get; set; }
+        public int RoleId { get; set; }
     }
 }

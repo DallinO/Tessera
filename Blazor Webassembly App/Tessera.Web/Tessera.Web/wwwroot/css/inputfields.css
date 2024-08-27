@@ -1,0 +1,21 @@
+﻿/***********************************************************
+    Input Fields
+***********************************************************/
+.ts-input-container {
+    display: flex;
+    padding: 0px 8px 0px 8px;
+    height: 35px;
+    width: fit-content;
+    border: 2px solid;
+    border-radius: 12px;
+}
+
+.ts-primary-input {
+    border: none;
+    outline: none;
+}
+
+.ts-label {
+    text-align: left;
+    padding-left: 10px;
+}

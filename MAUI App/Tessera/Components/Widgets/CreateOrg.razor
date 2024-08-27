@@ -4,20 +4,20 @@
 @inject NavigationManager Navigation
 
 
-<div class="auth-container">
-    <div class="input-container">
+<div class="ts-auth-container">
+    <div class="ts-input-container">
         <input type="text" id="input" required="" @bind="Name">
         <label for="input" class="label">Name</label>
         <div class="underline"></div>
     </div>
-    <div class="input-container">
+    <div class="ts-input-container">
         <input type="text" id="input" required="" @bind="ConfirmName">
         <label for="input" class="label">Confirm Name</label>
         <div class="underline"></div>
     </div>
-    <button class="btn-primary" @onclick="CreateOrgAsync">Create Book</button>
-    <button class="cus-btn-secondary" @onclick="OnSwitchToLogin">Return To Login</button>
-    <p class="login-errors">@OrgError</p>
+    <button class="ts-primary-btn" @onclick="CreateOrgAsync">Create Book</button>
+    <button class="ts-secondary-btn" @onclick="OnSwitchToLogin">Return To Login</button>
+    <p class="ts-login-errors">@OrgError</p>
 </div>
 
 
@@ -44,7 +44,7 @@
             string resultString = result["result"]?.ToString();
             if (resultString == Keys.API_GENERIC_SUCC || resultString == Keys.API_ORG_SUCC)
             {
-                switch (LibraryService.Books.Length)
+                switch (LibraryService.Books.Count)
                 {
                     case 0:
                         OrgError = new MarkupString("Book Created. Failed To Retrieve Books Data.");

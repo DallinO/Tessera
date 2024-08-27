@@ -6,8 +6,8 @@
 @if (!LibraryService.IsAuthenticated || !LibraryService.HasBook)
 {
     
-    <div class="startup-container debug-border-5">
-        <div class="startup-header debug-border-4">
+    <div class="ts-startup-container">
+        <div class="ts-startup-header">
             <h1>Tessera Business Manager</h1>
         </div>
         @switch (currentView)
@@ -25,7 +25,7 @@
                 break;
 
             case View.SelectOrg:
-                <SelectOrg OnSwitchToLogin="SwitchToLogin"/>
+                <SelectBook OnSwitchToLogin="SwitchToLogin"/>
                 break;
 
             default:

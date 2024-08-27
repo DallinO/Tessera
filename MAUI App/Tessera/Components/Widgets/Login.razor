@@ -1,6 +1,6 @@
 ﻿@namespace Tessera.Core.Components.Widgets
 
-@inject ILibraryService LibraryService
+@inject ILibraryService Library
 @inject NavigationManager Navigation
 @using Newtonsoft.Json;
 @using Newtonsoft.Json.Linq;
@@ -8,24 +8,36 @@
 
 
 
-<div class="auth-container">
-    <div class="input-container">
-        <input type="text" id="input" required="" @bind="Email">
-        <label for="input" class="label">Email</label>
-        <div class="underline"></div>
+<div class="ts-auth-container">
+    <div class="ts-auth-container-item-top">
+        <div class="ts-label-container">
+            <label for="email-input" class="ts-label">Email</label>
+        </div>
+        <div class="ts-input-container">
+            <input class="ts-primary-input" type="text" id="email-input" required="" @bind="Email">
+        </div>
     </div>
-    <div class="input-container">
-        <input type="text" id="input" required="" @bind="Password">
-        <label for="input" class="label">Password</label>
-        <div class="underline"></div>
+    <div class="ts-auth-container-item">
+        <div class="ts-label-container">
+            <label for="pw-input" class="ts-label">Password</label>
+        </div>
+        <div class="ts-input-container">
+            <input class="ts-primary-input" type="text" id="pw-input" required="" @bind="Password">
+        </div>
     </div>
-    <button class="btn-primary" @onclick="LoginAsync">Login</button>
-    <button class="cus-btn-secondary" @onclick="SwitchToRegister">Register</button>
-    <p class="login-errors">@LoginError</p>
+    <div class="ts-auth-container-item">
+        <button class="ts-primary-btn" @onclick="LoginAsync">Login</button>
+    </div>
+    <div class="ts-auth-container-btn-container">
+        <button class="ts-secondary-btn" @onclick="SwitchToRegister">Register</button>
+    </div>
+    <div class="ts-auth-container-item">
+        <p class="ts-auth-errors">@LoginError</p>
+    </div>
 </div>
 
 @code {
-    [Parameter] public EventCallback OnSwitchToRegister  { get; set; }
+    [Parameter] public EventCallback OnSwitchToRegister { get; set; }
     [Parameter] public EventCallback OnSwitchToCreateOrg { get; set; }
     [Parameter] public EventCallback OnSwitchToSelectOrg { get; set; }
     [Parameter] public View CurrentView { get; set; }
@@ -37,23 +49,23 @@
     private async Task LoginAsync()
     {
         var model = new LoginDefaultModel
-        {
-            Email = Email,
-            Password = Password,
-            RememberMe = false
-        };
+            {
+                Email = Email,
+                Password = Password,
+                RememberMe = false
+            };
 
-        JObject result = await LibraryService.LoginAsync(model);
+        JObject result = await Library.LoginAsync(model);
 
         if (result.ContainsKey("result"))
         {
             string resultString = result["result"]?.ToString();
             if (resultString == Keys.API_GENERIC_SUCC || resultString == Keys.API_LOGIN_SUCC)
             {
-                switch (LibraryService.Books.Length)
+                switch (Library.Books.Count)
                 {
                     case 0:
-                        LoginError = new MarkupString("Failed retrieving book data");
+                        await SwitchToCreateOrg();
                         break;
 
                     case 1:
@@ -115,7 +127,7 @@
             await OnSwitchToCreateOrg.InvokeAsync(null);
         }
     }
-    
+
     private async Task SwitchToSelectOrg()
     {
         if (OnSwitchToSelectOrg.HasDelegate)

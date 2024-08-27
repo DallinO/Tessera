@@ -1,0 +1,46 @@
+﻿@namespace Tessera.Core.Components.Widgets
+
+@inject ILibraryService LibraryService
+@inject NavigationManager Navigation
+
+
+<div class="ts-auth-container">
+    @foreach (BookDto org in LibraryService.Books)
+    {
+        <button class="ts-primary-btn" @onclick="() => SwitchToHome(counter - 1)">@org.Title</button>
+        counter++;
+    }
+    <button class="ts-secondary-btn" @onclick="OnSwitchToLogin">Return To Login</button>
+    <p class="ts-login-errors">@OrgError</p>
+</div>
+
+
+@code {
+    [Parameter] public EventCallback OnSwitchToLogin { get; set; }
+    private MarkupString OrgError { get; set; }
+    private int counter = 0;
+
+    private async Task SwitchToLogin()
+    {
+        if (OnSwitchToLogin.HasDelegate)
+        {
+            await OnSwitchToLogin.InvokeAsync(null);
+        }
+    }
+
+    private async Task SwitchToHome(int index)
+    {
+        LibraryService.HasBook = true;
+        LibraryService.CurrBook = LibraryService.Books[index];
+        var result = await LibraryService.GetChaptersAsync();
+        if (result != null)
+        {
+            OrgError = new MarkupString(result.ToString());
+        }
+        else
+        {
+            await SwitchToLogin();
+        }
+    }
+
+}

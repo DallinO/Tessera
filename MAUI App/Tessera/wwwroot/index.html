@@ -35,6 +35,20 @@
         return element.getBoundingClientRect();
     }
 
+    function toggleButtonColor(buttonId) {
+        // Deselect all buttons
+        const allButtons = document.querySelectorAll('.ts-basic-button');
+        allButtons.forEach(button => {
+            button.classList.remove('clicked');
+        });
+
+        // Select the clicked button
+        const button = document.getElementById(buttonId);
+        if (button) {
+            button.classList.add('clicked');
+        }
+    }
+
     window.getMouseX = function () {
         return new Promise(resolve => {
             document.addEventListener('click', function (event) {
@@ -50,5 +64,21 @@
             }, { once: true });
         });
     };
+
+    //function initializeButtonClickHandlers() {
+    //    const button = document.getElementById('ts-basic-button');
+    //    if (button) {
+    //        button.addEventListener('click', (event) => {
+    //            if (event.target.closest('.ts-inner-button')) {
+    //                // Clicked on an inner button, so stop the event from propagating to the parent button
+    //                event.stopPropagation();
+    //            } else {
+    //                // Clicked elsewhere on the parent button, handle it normally
+    //                console.log('Parent button clicked');
+    //            }
+    //        });
+    //    }
+    //}
+
 </script>
 

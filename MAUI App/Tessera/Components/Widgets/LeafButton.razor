@@ -1,0 +1,33 @@
+﻿@namespace Tessera.Core.Components.Widgets
+
+<button class="ts-basic-button" id="ts-basic-button" @onclick="ShowLeafViewer">
+    <div class="ts-leaf-icon-container">
+        <div class="ts-leaf-icon">
+            <img src="@LeftIcon" alt="left icon" />
+        </div>
+    </div>
+    <div class="ts-basic-button-text">
+        @LeafName
+    </div>
+    <div class="ts-filler"></div>
+    <div class="ts-inner-button-container">
+        <button class="ts-inner-button">
+            <img src="three_dots_horizontal.svg" alt="three dots" />
+        </button>
+    </div>
+</button>
+
+@code {
+    [Parameter] public string LeftIcon { get; set; }
+    [Parameter] public string LeafName { get; set; }
+    [Parameter] public LeafType Type { get; set; }
+    [Parameter] public EventCallback<LeafType> OnShowLeafViewer { get; set; }
+
+    private async Task ShowLeafViewer()
+    {
+        if (OnShowLeafViewer.HasDelegate)
+        {
+            await OnShowLeafViewer.InvokeAsync(Type);
+        }
+    }
+}

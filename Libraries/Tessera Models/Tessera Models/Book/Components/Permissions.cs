@@ -1,6 +1,21 @@
-﻿namespace Tessera.Models.Book
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Tessera.Models.Book
 {
-    public enum Permissions
+    public class PermissionsEntity
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Permission {  get; set; }
+
+        // Navigation properties
+        // Navigation property for many-to-many with RoleEntity
+        public ICollection<RoleEntity> Roles { get; set; }
+        public ICollection<RolePermissionsEntity> RolePermissions { get; set; }
+    }
+
+
+    public enum PermissionsE
     {
         // USER
         AddUser,

@@ -1,10 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Tessera.Constants;
 using Tessera.Models.Authentication;
 using Tessera.Models.Book;
 using Tessera.Models.Chapter;
+using Microsoft.JSInterop;
 
 namespace Tessera.Core.Services
 {
@@ -14,37 +17,46 @@ namespace Tessera.Core.Services
         Task<(JObject, bool)> RegisterAsync(RegisterDefaultModel model);
         Task<JObject> CreateBookAsync(BookModel model);
         Task<(List<ChapterDto>, string)> GetChapters(string dbName);
+        Task<(JObject, bool)> AddChapter(AddChapterRequest request);
+        Task<bool> ValidateTokenAsync();
     }
 
     public class ApiService : IApiService
     {
         private readonly HttpClient _httpClient;
-        
-        public ApiService(HttpClient httpClient)
+        private readonly IJSRuntime _jsRuntime;
+
+        public ApiService(HttpClient httpClient, IJSRuntime jsRuntime)
         {
             _httpClient = httpClient;
+            _jsRuntime = jsRuntime;
         }
 
+
         /***************************************************
-         * LOGIN
+         * LOGIN ASYNC
          * *************************************************/
         public async Task<(JObject, bool)> LoginAsync(LoginDefaultModel model)
         {
+            await UpdateHttpClientAsync();
             var response = await _httpClient.PostAsJsonAsync("api/Api/Login", model);
-            //
-            // LOGIN SUCCESS
-            //
+            var result = await response.Content.ReadAsStringAsync();
+
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsStringAsync();
                 if (result != null)
                 {
                     JObject jsonObject = JObject.Parse(result);
-                    if (jsonObject != null)
+
+                    // Store the access token in local storage
+                    var token = jsonObject["token"]?.ToString();
+                    if (!string.IsNullOrEmpty(token))
                     {
-                        return jsonObject["result"]?.ToString() == Keys.API_LOGIN_SUCC ? 
-                            (jsonObject, true) : (jsonObject, false);
+                        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "accessToken", token);
                     }
+
+                    return jsonObject["result"]?.ToString() == Keys.API_LOGIN_SUCC ?
+                        (jsonObject, true) : (jsonObject, false);
                 }
 
                 return (new JObject { ["result"] = Keys.API_GENERIC_SUCC }, false);
@@ -54,17 +66,16 @@ namespace Tessera.Core.Services
             //
             else
             {
-                var errorResult = await response.Content.ReadAsStringAsync();
-                if (errorResult != null)
+                if (result != null)
                 {
                     JObject jsonObject;
                     try
                     {
-                        jsonObject = JObject.Parse(errorResult);
+                        jsonObject = JObject.Parse(result);
                     }
                     catch (Newtonsoft.Json.JsonException)
                     {
-                        jsonObject = new JObject { ["errors"] = errorResult };
+                        jsonObject = new JObject { ["errors"] = result };
                     }
                     if (jsonObject != null)
                     {
@@ -79,10 +90,21 @@ namespace Tessera.Core.Services
 
 
         /***************************************************
+         * CHECKOUT BOOK
+         **************************************************/
+        public async Task<(JObject, bool)> CheckoutBookAsync(RegisterDefaultModel model)
+        {
+            await UpdateHttpClientAsync();
+            return (null, false);
+        }
+
+
+        /***************************************************
          * REGISTER
          * *************************************************/
         public async Task<(JObject, bool)> RegisterAsync(RegisterDefaultModel model)
         {
+            await UpdateHttpClientAsync();
             var response = await _httpClient.PostAsJsonAsync("api/Api/Register", model);
 
             //
@@ -133,10 +155,11 @@ namespace Tessera.Core.Services
 
 
         /***************************************************
-         * CREATE ORGANIZATION
+         * CREATE BOOK
          * *************************************************/
         public async Task<JObject> CreateBookAsync(BookModel model)
         {
+            await UpdateHttpClientAsync();
             var response = await _httpClient.PostAsJsonAsync("api/Api/CreateBook", model);
             if (response.IsSuccessStatusCode)
             {
@@ -183,6 +206,7 @@ namespace Tessera.Core.Services
         public async Task<(List<ChapterDto>, string)> GetChapters(string dbName)
         {
             List<ChapterDto> chapters = null;
+            await UpdateHttpClientAsync();
 
             try
             {
@@ -193,6 +217,10 @@ namespace Tessera.Core.Services
                     var content = await response.Content.ReadAsStringAsync();
                     chapters = JsonConvert.DeserializeObject<List<ChapterDto>>(content);
                     return (chapters, null);
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return (new List<ChapterDto>(), null);
                 }
                 else
                 {
@@ -206,6 +234,59 @@ namespace Tessera.Core.Services
                 return (null, $"Error fetching chapters: {ex.Message}");
             }
         }
-    }
 
+        /***************************************************
+         * GET CHAPTERS
+         * *************************************************/
+        public async Task<(JObject, bool)> AddChapter(AddChapterRequest request)
+        {
+            await UpdateHttpClientAsync();
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/Api/AddChapter", request);
+                var result = await response.Content.ReadAsStringAsync();
+                if (result != null)
+                {
+                    JObject jsonObject = JObject.Parse(result);
+                    if (jsonObject != null)
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return (new JObject { ["result"] = jsonObject["result"] }, true);
+                        }
+                        else
+                        {
+                            return (new JObject { ["errors"] = jsonObject["errors"] }, false);
+                        }
+                    }
+                }
+
+                return (null, false);
+            }
+            catch (Exception ex)
+            {
+                return (null, false);
+            }
+        }
+
+        public async Task<bool> ValidateTokenAsync()
+        {
+            await UpdateHttpClientAsync();
+
+
+            // Custom logic to validate the token, possibly making a request to an API
+            var response = await _httpClient.PostAsync("api/Api/ValidateToken", null);
+            return response.IsSuccessStatusCode;
+        }
+
+        private async Task UpdateHttpClientAsync()
+        {
+            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "accessToken");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+        }
+    }
 }

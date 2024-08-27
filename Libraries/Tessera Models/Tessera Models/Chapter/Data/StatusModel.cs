@@ -3,15 +3,14 @@
     public class StatusModel
     {
         public string Name { get; set; }
-        public Status Open {  get; set; }
-        public List<Status> Status { get; set; } = new List<Status>();
-        public Status Closed { get; set; }
+        public StatusDto Open {  get; set; }
+        public List<StatusDto> Status { get; set; } = new List<StatusDto>();
+        public StatusDto Closed { get; set; }
     }
 
-    public class Status
+    public class StatusDto
     {
         public string Name { get; set; }
         public string Color { get; set; }
-
     }
 }

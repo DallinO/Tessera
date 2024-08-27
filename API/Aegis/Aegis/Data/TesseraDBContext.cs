@@ -12,34 +12,27 @@ namespace Aegis.Data
         {
         }
 
-        public DbSet<Preface> Library { get; set; }
+        public DbSet<BookEntity> Library { get; set; }
         public DbSet<Catalog> Catalog { get; set; }
-
-
-        // DbSet properties for your application's entities if needed
-        // Example:
-        // public DbSet<SomeEntity> SomeEntities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            // Customize the ASP.NET Identity model and override defaults if needed
-            // For example, you can rename the default ASP.NET Identity tables
-
             // Configure the many-to-many relationship
             builder.Entity<Catalog>()
-                .HasKey(uo => new { uo.ScribeId, uo.BookId });
+                .HasKey(c => new { c.ScribeId, c.BookId });
 
             builder.Entity<Catalog>()
-                .HasOne(uo => uo.Scribe)
-                .WithMany()
-                .HasForeignKey(uo => uo.ScribeId);
+                .HasOne(c => c.Scribe)
+                .WithMany(s => s.Catalogs) // Configure Scribe to have a collection of Catalogs
+                .HasForeignKey(c => c.ScribeId);
 
             builder.Entity<Catalog>()
-                .HasOne(uo => uo.Preface)
-                .WithMany()
-                .HasForeignKey(uo => uo.BookId);
+                .HasOne(c => c.BookEntity)
+                .WithMany(b => b.Catalogs) // Configure BookEntity to have a collection of Catalogs
+                .HasForeignKey(c => c.BookId);
         }
     }
+
 }

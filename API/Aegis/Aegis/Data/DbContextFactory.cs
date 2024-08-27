@@ -12,9 +12,9 @@ namespace Aegis.Data
             _configuration = configuration;
         }
 
-        public BookDbContext CreateDbContext(string dbName)
+        public BookDbContext CreateDbContext(string connectionStringName)
         {
-            string connectionString = Keys.SQL_SERVER_ROOT + $"Database = {dbName}; Trusted_Connection = True; Encrypt = False;";
+            string connectionString = _configuration.GetConnectionString("TesseraPM");
 
             var optionsBuilder = new DbContextOptionsBuilder<BookDbContext>();
             optionsBuilder.UseSqlServer(connectionString);
