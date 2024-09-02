@@ -1,14 +1,17 @@
-﻿using Tessera.Models.Authentication;
-using Tessera.Models.Book;
+﻿using Aegis.Services;
 using Microsoft.AspNetCore.Mvc;
-using Tessera.Constants;
-using System.Security.Claims;
-using Aegis.Services;
-using Tessera.Models.Chapter;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Tessera.Constants;
+using Tessera.Models.Authentication;
+using Tessera.Models.Book;
+using Tessera.Models.Chapter;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using Aegis.Data;
 
 namespace Aegis.Controllers
 {
@@ -18,15 +21,23 @@ namespace Aegis.Controllers
     {
         private readonly AuthService _authService;
         private readonly BookService _bookService;
+        private readonly UserManager<Scribe> _userManager;
+        private readonly SignInManager<Scribe> _signInManager;
+        private readonly TesseraDbContext _dbContext;
         private readonly JwtSecurityTokenHandler _tokenHandler;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<ApiController> _logger;
 
-        public ApiController(AuthService authService, BookService bookService, IConfiguration configuration)
+        public ApiController(AuthService authService, BookService bookService, IConfiguration configuration, ILogger<ApiController> logger, UserManager<Scribe> userManager, SignInManager<Scribe> signInManager, TesseraDbContext dbContext)
         {
             _authService = authService;
             _bookService = bookService;
             _configuration = configuration;
             _tokenHandler = new JwtSecurityTokenHandler();
+            _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _dbContext = dbContext;
         }
 
 
@@ -35,25 +46,35 @@ namespace Aegis.Controllers
          * - Verify user credentials.
          ***************************************************/
         [HttpPost("Login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginDefaultModel model)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponse))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
+            _logger.LogInformation("Login called");
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
             // Call the LoginAsync method
-            var (result, token) = await _authService.LoginAsync(model);
-
-            if (result.Succeeded)
+            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                // Return the success response along with the JWT token
-                var response = new Dictionary<string, object>
-                {
-                    { "result", Keys.API_LOGIN_SUCC },
-                    { "token", token }
-                };
-
-                return Ok(response);
+                return Unauthorized();
             }
 
-            return Unauthorized("Invalid login attempt");
+            JwtSecurityToken token = GenerateJwt(model.Email);
+            var refreshToken = GenerateRefreshToken();
+                
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddMinutes(1);
+            await _userManager.UpdateAsync(user);
+
+            _logger.LogInformation("Login succeeded");
+
+            return Ok(new LoginResponse
+            {
+                JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = token.ValidTo,
+                RefreshToken = refreshToken
+            });
         }
 
         /***************************************************
@@ -311,6 +332,39 @@ namespace Aegis.Controllers
                 return Unauthorized("Authorization header is missing.");
             }
             return Ok();
+        }
+
+        private JwtSecurityToken GenerateJwt(string username)
+        {
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                _configuration["JWT:Secret"] ?? throw new InvalidOperationException("Secret not configured")));
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
+                expires: DateTime.UtcNow.AddSeconds(30),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+                );
+
+            return token;
+        }
+
+        private static string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+
+            using var generator = RandomNumberGenerator.Create();
+
+            generator.GetBytes(randomNumber);
+
+            return Convert.ToBase64String(randomNumber);
         }
     }
 }

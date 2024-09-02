@@ -8,6 +8,8 @@ namespace Tessera.Models.Authentication
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Database { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiry { get; set; }
 
         // Navigation Properties
         public ICollection<Catalog> Catalogs { get; set; } // From Scribe to Catalog

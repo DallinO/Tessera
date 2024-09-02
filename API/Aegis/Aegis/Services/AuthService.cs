@@ -52,24 +52,27 @@ namespace Aegis.Services
          * LOGIN ASYNC
          * - Verify user credentials.
          ***************************************************/
-        public async Task<(SignInResult Result, string Token)> LoginAsync(LoginDefaultModel model)
+        public async Task<(SignInResult, Scribe)> LoginAsync(LoginRequest model)
         {
             // Attempt to sign in the user
-            var signInResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+            var signInResult = await _signInManager.PasswordSignInAsync(
+                model.Email, 
+                model.Password, 
+                model.RememberMe, 
+                lockoutOnFailure: false );
 
             if (signInResult.Succeeded)
             {
+
                 // Get the user from the database
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
-                    return (SignInResult.Failed, null);
+                    return (signInResult, user);
                 }
                 else
                 {
-                    // Generate JWT token
-                    var token = GenerateJwtToken(user);
-                    return (SignInResult.Success, token);
+                    return (signInResult, user);
                 }
             }
 

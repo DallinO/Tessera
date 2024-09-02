@@ -54,61 +54,80 @@ namespace Tessera.Core.Services
             _jwtCache = null;
         }
 
+
+
         /***************************************************
          * LOGIN ASYNC
          * *************************************************/
         public async Task<(JObject, bool)> LoginAsync(LoginRequest model)
         {
             await UpdateHttpClientAsync();
+
+
             var response = await _httpClient.PostAsJsonAsync("api/Api/Login", model);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadFromJsonAsync<LoginResponse>();
+            if (!response.IsSuccessStatusCode)
+                throw new UnauthorizedAccessException("Login failed.");
 
-                if (content != null)
-                {
-                    await _sss.SetItemAsync(JWT_KEY, content.JwtToken);
+            var content = await response.Content.ReadFromJsonAsync<LoginResponse>();
+
+            if (content == null)
+                throw new InvalidDataException();
+
+            await _sss.SetItemAsync(JWT_KEY, content.JwtToken);
+            await _sss.SetItemAsync(REFRESH_KEY, content.RefreshToken);
+
+            LoginChange?.Invoke(GetUsername(content.JwtToken));
+
+            return content.Expiration;
+
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var content = await response.Content.ReadFromJsonAsync<LoginResponse>();
+
+            //    if (content != null)
+            //    {
+            //        await _sss.SetItemAsync(JWT_KEY, content.JwtToken);
 
 
-                    //// Store the access token in local storage
-                    //var token = jsonObject["token"]?.ToString();
-                    //if (!string.IsNullOrEmpty(token))
-                    //{
-                    //    await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "accessToken", token);
-                    //}
+            //        //// Store the access token in local storage
+            //        //var token = jsonObject["token"]?.ToString();
+            //        //if (!string.IsNullOrEmpty(token))
+            //        //{
+            //        //    await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "accessToken", token);
+            //        //}
 
-                    //return jsonObject["result"]?.ToString() == Keys.API_LOGIN_SUCC ?
-                    //    (jsonObject, true) : (jsonObject, false);
-                }
+            //        //return jsonObject["result"]?.ToString() == Keys.API_LOGIN_SUCC ?
+            //        //    (jsonObject, true) : (jsonObject, false);
+            //    }
 
-                return (new JObject { ["result"] = Keys.API_GENERIC_SUCC }, false);
-            }
-            //
-            // LOGIN FAIL
-            //
-            else
-            {
-                if (result != null)
-                {
-                    JObject jsonObject;
-                    try
-                    {
-                        jsonObject = JObject.Parse(result);
-                    }
-                    catch (Newtonsoft.Json.JsonException)
-                    {
-                        jsonObject = new JObject { ["errors"] = result };
-                    }
-                    if (jsonObject != null)
-                    {
-                        return (jsonObject, false);
+            //    return (new JObject { ["result"] = Keys.API_GENERIC_SUCC }, false);
+            //}
+            ////
+            //// LOGIN FAIL
+            ////
+            //else
+            //{
+            //    if (result != null)
+            //    {
+            //        JObject jsonObject;
+            //        try
+            //        {
+            //            jsonObject = JObject.Parse(result);
+            //        }
+            //        catch (Newtonsoft.Json.JsonException)
+            //        {
+            //            jsonObject = new JObject { ["errors"] = result };
+            //        }
+            //        if (jsonObject != null)
+            //        {
+            //            return (jsonObject, false);
 
-                    }
-                }
+            //        }
+            //    }
 
-                return (new JObject { ["result"] = Keys.API_GENERIC_FAIL }, false);
-            }
+            //    return (new JObject { ["result"] = Keys.API_GENERIC_FAIL }, false);
+            //}
         }
 
 
