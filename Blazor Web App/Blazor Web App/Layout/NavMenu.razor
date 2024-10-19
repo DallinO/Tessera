@@ -1,0 +1,71 @@
+﻿@namespace Tessera.Web.Layout
+
+@inject ILibraryService Library
+@inject IApiService Api
+@inject IViewService View
+
+<div class="ts-top-row ts-sidebar-top">
+    <div class="ts-sidebar-top-content">
+        <div class="ts-sidebar-top-content-item">
+            <BookButton OpenModal="OpenAddChapterModal"/>
+        </div>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="ts-nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="ts-nav-column">
+        <div class="ts-nav-scrollable-item">
+            @for(int i = 0; i < Library.Chapters.Count; i++)
+            {
+                ChapterDto chapter = Library.Chapters[i];
+
+                <ChapterButton 
+                    ButtonId="@View.ButtonIdGen()"
+                    ChapterIndex="i" 
+                    OnOpenAddMenu="OpenAddLeafModal" 
+                    Title="@chapter.Title"
+                    Description="@chapter.Description"
+                    />
+            }
+        </div>
+    </nav>
+</div>
+
+<AddLeaf @ref="addLeafModal" OnAddLeaf="AddLeaf"/>
+<AddChapter @ref="addChapterModal" OnAddChapter="AddChapter" />
+
+@code {
+
+    private AddLeaf addLeafModal;
+    private AddChapter addChapterModal;
+
+    private void OpenAddLeafModal()
+    {
+        addLeafModal.OpenModal();
+    }
+    
+    private void OpenAddChapterModal()
+    {
+        addChapterModal.OpenModal();
+    }
+
+    private void AddLeaf(LeafDto leaf)
+    {
+        if (leaf != null)
+        {
+            Library.SelectedChapter.Contents.Add(leaf);
+            StateHasChanged();
+        }
+    }
+
+    private void AddChapter(ChapterDto chapter)
+    {
+        if (chapter != null)
+        {
+            //Api.AddChapterAsync(chapter);
+            StateHasChanged();
+        }
+    }
+}

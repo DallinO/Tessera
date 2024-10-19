@@ -1,3 +1,72 @@
-﻿@inherits LayoutComponentBase
+﻿@namespace Tessera.Web.Layout
 
-@Body
+@inherits LayoutComponentBase
+
+@inject ILibraryService Library
+@inject IApiService Api
+@inject NavigationManager Navigation
+
+<div class="page">
+@* 
+    @if (isLoading)
+    {
+        <h1>Loading</h1>
+    }
+    else
+    {
+        @if (Library == null)
+        {
+            <h1>Library Is Null</h1>
+        }
+        else if (!Library.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/home");
+        }
+        else
+        { *@
+
+            <div class="ts-sidebar">
+                <NavMenu />
+            </div>
+
+            <main>
+                <div class="ts-top-row ts-utility ts-border">
+                    <div calss="ts-utility-root">
+                        
+                    </div>
+                    <div class="ts-utility-search">
+                    </div>
+                    <div class="ts-utility-account-container">
+                        <button class="ts-account-button">
+                            
+                        </button>
+                    </div>
+                </div>
+                <div class="ts-content ts-border">
+                    @Body
+                </div>
+            </main>
+    @*     }
+    }
+ *@
+</div>
+
+
+@code {
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Library.IsAuthenticated = await Api.IsAuthenticatedAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception during authentication: {ex.Message}");
+            // Optionally: Display an error message to the user or log the error
+        }
+
+        isLoading = false;
+    }
+}

@@ -26,14 +26,94 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Layout/MainLayout.razor]
-build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/AddAddress.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBZGRBZGRyZXNzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/AddChapter.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBZGRDaGFwdGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/AddCustomer.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBZGRDdXN0b21lci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/AddLeaf.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBZGRMZWFmLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/BookButton.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xCb29rQnV0dG9uLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/ChapterButton.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDaGFwdGVyQnV0dG9uLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/ChapterSettings.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDaGFwdGVyU2V0dGluZ3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/CreateBook.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDcmVhdGVCb29rLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/Customers.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDdXN0b21lcnMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/Dropdown.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xEcm9wZG93bi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/DropdownB.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xEcm9wZG93bkIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/LeafButton.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMZWFmQnV0dG9uLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/LeafSettings.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMZWFmU2V0dGluZ3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/LeafViewer.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMZWFmVmlld2VyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/Register.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSZWdpc3Rlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/SelectBook.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTZWxlY3RCb29rLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Pages/Startup.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhcnR1cC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Layout/DefaultLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XERlZmF1bHRMYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-r7nysfp81j
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-30phqv7l2e
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-ljo3r8wvsv

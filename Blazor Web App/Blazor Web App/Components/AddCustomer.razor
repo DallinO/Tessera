@@ -1,0 +1,108 @@
+﻿@namespace Tessera.Web
+
+@if (isVisible)
+{
+    <div class="ts-modal-overlay">
+        <div class="ts-modal-content">
+            <div class="ts-modal-body">
+                <div class="ts-modal-body-section">
+                    @* FIRST NAME *@
+                    <div class="ts-label-container">
+                        <label for="cus-first-name-input" class="ts-label">First Name</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input "type="text" id="cus-first-name-input" @bind="firstName" />
+                    </div>
+                    @* LAST NAME *@
+                    <div class="ts-label-container">
+                        <label for="cus-last-name-input" class="ts-label">Last Name</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input " type="text" id="cus-last-name-input" @bind="lastName" />
+                    </div>
+                    @* HOUSING *@
+                    <div class="ts-label-container">
+                        <label for="cus-housing-input" class="ts-label">Housing</label>
+                    </div>
+                    <div class="ts-dropdown-container">
+                        <button class="ts-primary-input" @onclick="OpenHousingModal">@housing</button>
+                        <DropdownB @ref="dropdownB"
+                            TItem="HousingType"
+                            Items="Enum.GetValues(typeof(HousingType))
+                                .Cast<HousingType>()
+                                .ToList()"
+                            SelectedValue="HousingType.Owner"
+                            SelectedValueChanged="OnHousingTypeChanged" />
+                    </div>
+                    @* HOME NUMBER *@
+                    <div class="ts-label-container">
+                        <label for="cus-home-num-input" class="ts-label">Home Number</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input " type="text" id="cus-home-num-input" @bind="homeNumber" />
+                    </div>
+                    @* WOEK NUMBER *@
+                    <div class="ts-label-container">
+                        <label for="cus-work-num-input" class="ts-label">Work Number</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input " type="text" id="cus-work-num-input" @bind="workNumber" />
+                    </div>
+                    @* CELL NUMBER *@
+                    <div class="ts-label-container">
+                        <label for="cus-home-num-input" class="ts-label">Home Number</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input " type="text" id="cus-home-num-input" @bind="homeNumber" />
+                    </div>
+                </div>
+            </div>
+            <div class="ts-modal-footer">
+                <button @onclick="CloseModal" class="ts-secondary-btn ts-modal-button-left">Cancel</button>
+                <button @onclick="Submit" class="ts-primary-btn ts-modal-button-right">Submit</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public Action<CustomerDto> OnAddCustomer { get; set; }
+
+    private DropdownB<HousingType> dropdownB;
+    private bool isVisible = false;
+    private string firstName;
+    private string lastName;
+    private string homeNumber;
+    private string workNumber;
+    private string cellNumber;
+    private HousingType housing;
+
+    public void CloseModal()
+    {
+        isVisible = false;
+        StateHasChanged();
+    }
+
+    public void OpenModal()
+    {
+        isVisible = true;
+        StateHasChanged();
+    }
+
+    private void OpenHousingModal()
+    {
+        dropdownB.IsOpen = true;
+    }
+
+    private void OnHousingTypeChanged(HousingType newValue)
+    {
+        housing = newValue;
+    }
+
+    private void Submit()
+    {
+
+        OnAddCustomer?.Invoke(new CustomerDto());
+        CloseModal();
+    }
+}

@@ -1,0 +1,115 @@
+﻿@namespace Tessera.Web
+
+@inject IViewService ViewService
+@inject ILibraryService Library
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<button class="ts-basic-button" id="@ButtonId" @onclick="ToggleColor">
+    <div class="ts-inner-button-container">
+        <button class="ts-inner-button" @onclick="ToggleLeaves">
+            <img src="caret_right_fill.svg" alt="caret right" />
+        </button>
+    </div>
+    <div class="ts-basic-button-text">@Title</div>
+    <div class="ts-filler"></div>
+    <div class="ts-inner-button-container">
+        <button class="ts-inner-button" @onclick="OpenSettings">
+            <img src="three_dots_horizontal.svg" alt="three dots" />
+        </button>
+        <button class="ts-inner-button" @onclick="OpenAddMenu">
+            <img src="plus_lg.svg" alt="plus" />
+        </button>
+    </div>
+</button>
+@if (showLeaves)
+{
+    <div class="ts-leaf-container">
+        @if (Library.Chapters[ChapterIndex].Contents.Count > 0)
+        {
+            @foreach (LeafDto leaf in Library.Chapters[ChapterIndex].Contents)
+            {
+                try
+                {
+                    var leafType = leaf switch
+                    {
+                        CustomerListDto _ => LeafType.Customer,
+                        ListDto _ => LeafType.List,
+                        DocumentDto _ => LeafType.Document
+                    };
+                    <LeafButton LeafName="@leaf.Name"  LeftIcon="@BuildIconPath(leaf.Name)" Type="@leafType" OnShowLeafViewer="ShowLeafViewer" />
+
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    // Display Error Message
+                }
+            }
+        }
+    </div>
+
+}
+
+<ChapterSettings @ref="chapterSettings" 
+    Title="@Title" 
+    Description="@Description" 
+    OnOpenSettings="OpenSettings"
+    />
+
+@code {
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Description { get; set; }
+    [Parameter] public int ChapterIndex { get; set; }
+    [Parameter] public Action OnOpenAddMenu { get; set; }
+    [Parameter] public string ChapterIcon { get; set; }
+    [Parameter] public string ButtonId { get; set; }
+
+    private ChapterSettings chapterSettings;
+
+    private bool showLeaves = false;
+
+    private void OpenAddMenu()
+    {
+        Library.SelectedChapter = Library.Chapters[ChapterIndex];
+        OnOpenAddMenu.Invoke();
+    }
+
+    private void OpenSettings()
+    {
+        Library.SelectedChapter = Library.Chapters[ChapterIndex];
+        chapterSettings.isVisible = true;
+    }
+
+    private void ToggleLeaves()
+    {
+        if (showLeaves) showLeaves = false;
+        else showLeaves = true;
+    }
+
+    private void ShowLeafViewer(LeafType type)
+    {
+        Type componentType = null;
+        switch (type)
+        {
+            case LeafType.Customer:
+                componentType = typeof(Customers);
+                break;
+        }
+        if (componentType != null)
+        {
+            ViewService.DynamicComponentType = componentType;
+            ViewService.Parameters["CustomerList"] = new CustomerListDto();
+            Navigation.NavigateTo("/leaf-viewer");
+        }
+    }
+
+    private async Task ToggleColor()
+    {
+        await JS.InvokeVoidAsync("toggleButtonColor", ButtonId);
+    }
+
+    private string BuildIconPath(string leafName)
+    {
+        return $"{leafName.ToLower()}.svg";
+    }
+}

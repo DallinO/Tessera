@@ -1,7 +1,52 @@
-﻿@page "/"
+﻿@namespace Tessera.Web.Pages
+
+@page "/"
+
+@inject NavigationManager Navigation
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="ts-home-page">
+    <div class="ts-home-header">
+        <button class="ts-primary-btn" @onclick="OnLogin">
+            Login
+        </button>
+    </div>
+    <div class="ts-home-main">
+        <h1>
+            Tessera
+        </h1>
+    </div>
+</div>
 
-Welcome to your new app.
+@code {
+
+    private void OnLogin()
+    {
+        Navigation.NavigateTo("/login");
+    }
+
+}
+
+<style>
+    .ts-home-page {
+
+    }
+
+    .ts-home-header {
+        display: flex;
+        flex-direction: row-reverse;
+        border: 2px solid red;
+        background-color: green;
+        padding: 10px;
+        width: 100vw;
+    }
+
+
+    .ts-home-main {
+        display: flex;
+        width: 100vw;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>

@@ -1,0 +1,41 @@
+﻿@namespace Tessera.Web
+
+@typeparam TItem
+@if (IsOpen)
+{
+    <div class="ts-dropdown-overlay">
+        <div class="ts-dropdown-content">
+            <div class="ts-dropdown-body">
+                @if (IsOpen)
+                {
+                    @foreach (var item in Items)
+                    {
+                        <button class="ts-dropdown-item" @onclick="() => SelectItem(item)">
+                            @item.ToString()
+                        </button>
+                    }
+                }
+            </div>
+        </div>
+    </div>    
+}
+
+@code {
+    [Parameter] public List<TItem> Items { get; set; }
+    [Parameter] public TItem SelectedValue { get; set; }
+    [Parameter] public EventCallback<TItem> SelectedValueChanged { get; set; }
+    [Parameter] public string Placeholder { get; set; } = "Select an option";
+
+    public bool IsOpen { get; set; } = false;
+
+    private void ToggleDropdown()
+    {
+        IsOpen = !IsOpen;
+    }
+
+    private async Task SelectItem(TItem item)
+    {
+        IsOpen = false;
+        await SelectedValueChanged.InvokeAsync(item);
+    }
+}

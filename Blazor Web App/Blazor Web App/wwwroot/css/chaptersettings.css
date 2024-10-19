@@ -1,0 +1,19 @@
+﻿/***********************************************************
+    CHAPTER SETTINGS
+***********************************************************/
+
+.ts-chapter-settings-header {
+}
+
+.ts-chapter-settings-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.ts-chapter-settings-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.ts-chapter-settings-item {
+}

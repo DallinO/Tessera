@@ -1,7 +1,44 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\web api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|solutionrelative:web api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\web api\\data\\dbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|solutionrelative:web api\\data\\dbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\web api\\data\\bookdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|solutionrelative:web api\\data\\bookdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\web api\\controllers\\librarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|solutionrelative:web api\\controllers\\librarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\web api\\controllers\\authenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|solutionrelative:web api\\controllers\\authenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\web api\\services\\bookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|solutionrelative:web api\\services\\bookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\web api\\data\\tesseradbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|solutionrelative:web api\\data\\tesseradbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\web api\\swagger endpoint tests\\endpointtests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|solutionrelative:web api\\swagger endpoint tests\\endpointtests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\web api\\tessera api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{6E0710F2-059F-4381-B4CE-CFD2DCC7F338}|Web API\\Tessera API.csproj|solutionrelative:web api\\tessera api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,8 +46,125 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 4,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BookService.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Services\\BookService.cs",
+              "RelativeDocumentMoniker": "Web API\\Services\\BookService.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Services\\BookService.cs",
+              "RelativeToolTip": "Web API\\Services\\BookService.cs",
+              "ViewState": "AQIAACUAAAAAAAAAAADwvwkAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-13T03:34:27.076Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TesseraDBContext.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Data\\TesseraDBContext.cs",
+              "RelativeDocumentMoniker": "Web API\\Data\\TesseraDBContext.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Data\\TesseraDBContext.cs",
+              "RelativeToolTip": "Web API\\Data\\TesseraDBContext.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAYAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-13T03:31:08.057Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DbContextFactory.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Data\\DbContextFactory.cs",
+              "RelativeDocumentMoniker": "Web API\\Data\\DbContextFactory.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Data\\DbContextFactory.cs",
+              "RelativeToolTip": "Web API\\Data\\DbContextFactory.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-13T03:30:56.422Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BookDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Data\\BookDbContext.cs",
+              "RelativeDocumentMoniker": "Web API\\Data\\BookDbContext.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Data\\BookDbContext.cs",
+              "RelativeToolTip": "Web API\\Data\\BookDbContext.cs",
+              "ViewState": "AQIAAEkAAAAAAAAAAAAowAUAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-13T03:30:44.199Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Program.cs",
+              "RelativeDocumentMoniker": "Web API\\Program.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Program.cs",
+              "RelativeToolTip": "Web API\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-13T03:23:38.411Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AuthenticationController.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Controllers\\AuthenticationController.cs",
+              "RelativeDocumentMoniker": "Web API\\Controllers\\AuthenticationController.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Controllers\\AuthenticationController.cs",
+              "RelativeToolTip": "Web API\\Controllers\\AuthenticationController.cs",
+              "ViewState": "AQIAABIAAAAAAAAAAAAhwA0AAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-13T03:23:11.118Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LibraryController.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Controllers\\LibraryController.cs",
+              "RelativeDocumentMoniker": "Web API\\Controllers\\LibraryController.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Controllers\\LibraryController.cs",
+              "RelativeToolTip": "Web API\\Controllers\\LibraryController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-13T03:22:53.217Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Tessera API",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Tessera API.csproj",
+              "RelativeDocumentMoniker": "Web API\\Tessera API.csproj",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Tessera API.csproj",
+              "RelativeToolTip": "Web API\\Tessera API.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-10-13T03:22:23.505Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "EndpointTests.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Swagger Endpoint Tests\\EndpointTests.cs",
+              "RelativeDocumentMoniker": "Web API\\Swagger Endpoint Tests\\EndpointTests.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Web API\\Swagger Endpoint Tests\\EndpointTests.cs",
+              "RelativeToolTip": "Web API\\Swagger Endpoint Tests\\EndpointTests.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-13T03:21:27.16Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
@@ -34,6 +188,20 @@
           ]
         }
       ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "80b33f40-4706-4f08-b507-bf1912dd4150",
+        "Display": 1,
+        "X": 95,
+        "Y": 28,
+        "Width": 1656,
+        "Height": 965,
+        "WindowState": 0
+      },
+      "DocumentGroups": []
     }
   ]
 }

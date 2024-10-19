@@ -1,0 +1,91 @@
+﻿@namespace Tessera.Web
+
+@inject ILibraryService Library
+@inject IApiService Api
+@inject NavigationManager Navigation
+
+
+<div class="ts-auth-container">
+    <div class="ts-input-container">
+        <input type="text" id="input" required="" @bind="Name">
+        <label for="input" class="label">Name</label>
+        <div class="underline"></div>
+    </div>
+    <div class="ts-input-container">
+        <input type="text" id="input" required="" @bind="ConfirmName">
+        <label for="input" class="label">Confirm Name</label>
+        <div class="underline"></div>
+    </div>
+    <button class="ts-primary-btn" @onclick="CreateBookAsync">Create Book</button>
+    <button class="ts-secondary-btn" @onclick="OnSwitchToLogin">Return To Login</button>
+    <p class="ts-login-errors">@Errors</p>
+</div>
+
+
+@code {
+    [Parameter] public EventCallback OnSwitchToLogin { get; set; }
+    [Parameter] public EventCallback OnSwitchToSelectOrg { get; set; }
+
+    private string Name{ get; set; } = "Test Book One";
+    private string ConfirmName { get; set; } = "Test Book One";
+    private MarkupString Errors { get; set; }
+
+    private async Task CreateBookAsync()
+    {
+        var model = new BookModel
+        {
+            Name = Name,
+            ConfirmName = ConfirmName
+        };
+
+        var create = await Api.CreateBookAsync(model);
+
+        if (create.Success)
+        {
+            var result = await Api.CheckoutBooksAsync();
+            Library.Books = result.Books;
+
+            switch (Library.Books.Count)
+            {
+                case 0:
+                    Errors = new MarkupString("Book Created. Failed To Retrieve Books Data.");
+                    break;
+
+                case 1:
+                    await SwitchToSelectBook();
+                    break;
+
+                default:
+                    await SwitchToSelectBook(); // Redirect to dashboard or another page on successful login
+                    break;
+            }
+            
+        }
+        else
+        {
+            StringBuilder errorMessage = new();
+            foreach (string error in create.Errors)
+            {
+                errorMessage.AppendLine(string.Join("<br />", error));
+                errorMessage.Append("<br />");
+            }
+            Errors = new MarkupString(errorMessage.ToString());
+        }
+    }
+
+    private async Task SwitchToLogin()
+    {
+        if (OnSwitchToLogin.HasDelegate)
+        {
+            await OnSwitchToLogin.InvokeAsync(null);
+        }
+    }
+
+    private async Task SwitchToSelectBook()
+    {
+        if (OnSwitchToSelectOrg.HasDelegate)
+        {
+            await OnSwitchToSelectOrg.InvokeAsync(null);
+        }
+    }
+}

@@ -1,0 +1,74 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\aegis.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\aegis.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Aegis",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Aegis.csproj",
+              "RelativeDocumentMoniker": "Aegis\\Aegis.csproj",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Aegis.csproj",
+              "RelativeToolTip": "Aegis\\Aegis.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB0AAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-10-16T19:36:06.837Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Program.cs",
+              "RelativeDocumentMoniker": "Aegis\\Program.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Program.cs",
+              "RelativeToolTip": "Aegis\\Program.cs",
+              "ViewState": "AQIAAE8AAAAAAAAAAAAAAF8AAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-16T19:30:04.277Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

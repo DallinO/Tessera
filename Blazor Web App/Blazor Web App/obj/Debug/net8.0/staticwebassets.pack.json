@@ -9,8 +9,84 @@
       "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js.gz"
     },
     {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Blazor Web App.styles.css",
+      "PackagePath": "staticwebassets\\Blazor Web App.styles.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\appsettings.json",
+      "PackagePath": "staticwebassets\\appsettings.json"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\caret_right_fill.svg",
+      "PackagePath": "staticwebassets\\caret_right_fill.svg"
+    },
+    {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\app.css",
       "PackagePath": "staticwebassets\\css\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\authentication.css",
+      "PackagePath": "staticwebassets\\css\\authentication.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\buttons.css",
+      "PackagePath": "staticwebassets\\css\\buttons.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\chaptersettings.css",
+      "PackagePath": "staticwebassets\\css\\chaptersettings.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\containers.css",
+      "PackagePath": "staticwebassets\\css\\containers.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\customerpage.css",
+      "PackagePath": "staticwebassets\\css\\customerpage.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\home.css",
+      "PackagePath": "staticwebassets\\css\\home.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\inputfields.css",
+      "PackagePath": "staticwebassets\\css\\inputfields.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\mainlayout.css",
+      "PackagePath": "staticwebassets\\css\\mainlayout.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\modal.css",
+      "PackagePath": "staticwebassets\\css\\modal.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\selectfield.css",
+      "PackagePath": "staticwebassets\\css\\selectfield.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\text.css",
+      "PackagePath": "staticwebassets\\css\\text.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\customers.svg",
+      "PackagePath": "staticwebassets\\customers.svg"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\document.svg",
+      "PackagePath": "staticwebassets\\document.svg"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
     },
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\icon-192.png",
@@ -19,6 +95,30 @@
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\list.svg",
+      "PackagePath": "staticwebassets\\list.svg"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\plus.svg",
+      "PackagePath": "staticwebassets\\plus.svg"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\plus_lg.svg",
+      "PackagePath": "staticwebassets\\plus_lg.svg"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\switch.svg",
+      "PackagePath": "staticwebassets\\switch.svg"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\three_dots_horizontal.svg",
+      "PackagePath": "staticwebassets\\three_dots_horizontal.svg"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\trash_fill.svg",
+      "PackagePath": "staticwebassets\\trash_fill.svg"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Blazor Web App.Microsoft.AspNetCore.StaticWebAssets.props",

@@ -1,0 +1,73 @@
+﻿/******************************************************************************
+    GENERAL
+******************************************************************************/
+
+.ts-top-row {
+    height: 50px;
+}
+
+.ts-border {
+    border-left: 0.0vh solid #85929e;
+}
+
+/******************************************************************************
+    NAV SECTION
+******************************************************************************/
+.ts-sidebar {
+    background-color: #34495e;
+    height: 100vh;
+    width: 15vw;
+}
+
+.ts-sidebar-top {
+    background-color: #283747;
+}
+
+.ts-sidebar-top-content {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+
+.ts-sidebar-top-content-item {
+    width: 100%;
+    display: inherit;
+    justify-content: center;
+}
+
+.ts-nav-column {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    width: 100%;
+}
+
+.ts-nav-scrollable-item {
+    width: 100%;
+}
+
+/******************************************************************************
+    MAIN CONTENT
+******************************************************************************/
+
+.ts-utility {
+    background-color: #d5d8dc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ts-utility-account-container {
+    margin: 10px;
+}
+
+.ts-content {
+    background-color: #eaecee;
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+}

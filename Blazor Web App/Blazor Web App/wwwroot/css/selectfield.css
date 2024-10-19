@@ -1,0 +1,80 @@
+/***********************************************************
+    Select Field
+***********************************************************/
+.ts-select-container {
+    border: 2px solid red;
+    border-radius: 12px;
+    width: 200px;
+}
+
+.ts-select-body {
+    border: 2px solid yellow;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ts-select-display {
+    border: 2px solid green;
+    color: white;
+    width: 100%;
+}
+
+
+
+/***********************************************************
+    DROPDOWN
+***********************************************************/
+
+.ts-dropdown-overlay {
+    position: absolute;
+    top: 120%; /* This makes the dropdown appear below the input */
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4000; /* Ensure it appears above other content */
+}
+
+.ts-dropdown-content {
+    background: #d5d8dc;
+    border-radius: 5px;
+    min-width: 200px;
+    max-width: 1200px;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.ts-dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.ts-dropdown-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.ts-dropdown-item {
+    border: none;
+    padding-top: 7.5px;
+    padding-bottom: 7.5px;
+    background-color: transparent;
+}
+
+    .ts-dropdown-item:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+.ts-dropdown-body-section {
+}
+
+.ts-dropdown-footer {
+    display: flex;
+    justify-content: space-between;
+}
