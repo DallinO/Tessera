@@ -1,7 +1,49 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E75A3D07-C94D-4720-8128-40B100786647}|..\\Tessera Models\\Tessera Models\\Tessera Models.csproj|c:\\users\\olson\\documents\\github\\tessera\\tessera models\\tessera models\\chapter\\data\\leaf.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|c:\\users\\olson\\documents\\github\\tessera\\blazor web app\\blazor web app\\pages\\register.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|solutionrelative:blazor web app\\pages\\register.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E75A3D07-C94D-4720-8128-40B100786647}|..\\Tessera Models\\Tessera Models\\Tessera Models.csproj|c:\\users\\olson\\documents\\github\\tessera\\tessera models\\tessera models\\services\\apiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|c:\\users\\olson\\documents\\github\\tessera\\blazor web app\\blazor web app\\wwwroot\\css\\authentication.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|solutionrelative:blazor web app\\wwwroot\\css\\authentication.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|c:\\users\\olson\\documents\\github\\tessera\\blazor web app\\blazor web app\\pages\\bookoverview.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|solutionrelative:blazor web app\\pages\\bookoverview.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|c:\\users\\olson\\documents\\github\\tessera\\blazor web app\\blazor web app\\wwwroot\\css\\modal.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|solutionrelative:blazor web app\\wwwroot\\css\\modal.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|c:\\users\\olson\\documents\\github\\tessera\\blazor web app\\blazor web app\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|solutionrelative:blazor web app\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E75A3D07-C94D-4720-8128-40B100786647}|..\\Tessera Models\\Tessera Models\\Tessera Models.csproj|c:\\users\\olson\\documents\\github\\tessera\\tessera models\\tessera models\\authentication\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|c:\\users\\olson\\documents\\github\\tessera\\blazor web app\\blazor web app\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|solutionrelative:blazor web app\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|c:\\users\\olson\\documents\\github\\tessera\\blazor web app\\blazor web app\\components\\chapterbutton.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|solutionrelative:blazor web app\\components\\chapterbutton.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|c:\\users\\olson\\documents\\github\\tessera\\blazor web app\\blazor web app\\pages\\startup.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{9EC2A72B-C25D-4754-BBF3-FDED387FEDBF}|Blazor Web App\\Blazor Web App.csproj|solutionrelative:blazor web app\\pages\\startup.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,8 +51,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Leaf.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\Chapter\\Data\\Leaf.cs",
+              "RelativeDocumentMoniker": "..\\Tessera Models\\Tessera Models\\Chapter\\Data\\Leaf.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\Chapter\\Data\\Leaf.cs",
+              "RelativeToolTip": "..\\Tessera Models\\Tessera Models\\Chapter\\Data\\Leaf.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-27T05:56:50.663Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
@@ -30,6 +85,136 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Register.razor",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Pages\\Register.razor",
+              "RelativeDocumentMoniker": "Blazor Web App\\Pages\\Register.razor",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Pages\\Register.razor",
+              "RelativeToolTip": "Blazor Web App\\Pages\\Register.razor",
+              "ViewState": "AQIAAGsAAAAAAAAAAAAAAIYAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-27T05:25:38.52Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "authentication.css",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\authentication.css",
+              "RelativeDocumentMoniker": "Blazor Web App\\wwwroot\\css\\authentication.css",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\authentication.css",
+              "RelativeToolTip": "Blazor Web App\\wwwroot\\css\\authentication.css",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-10-27T05:25:03.35Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "modal.css",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\modal.css",
+              "RelativeDocumentMoniker": "Blazor Web App\\wwwroot\\css\\modal.css",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\modal.css",
+              "RelativeToolTip": "Blazor Web App\\wwwroot\\css\\modal.css",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-10-27T05:23:10.937Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ChapterButton.razor",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Components\\ChapterButton.razor",
+              "RelativeDocumentMoniker": "Blazor Web App\\Components\\ChapterButton.razor",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Components\\ChapterButton.razor",
+              "RelativeToolTip": "Blazor Web App\\Components\\ChapterButton.razor",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAcwBsAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-27T04:55:42.001Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ApiResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\Authentication\\ApiResponse.cs",
+              "RelativeDocumentMoniker": "..\\Tessera Models\\Tessera Models\\Authentication\\ApiResponse.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\Authentication\\ApiResponse.cs",
+              "RelativeToolTip": "..\\Tessera Models\\Tessera Models\\Authentication\\ApiResponse.cs",
+              "ViewState": "AQIAACMAAAAAAAAAAAAQwC0AAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-27T03:15:23.407Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "NavMenu.razor",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Layout\\NavMenu.razor",
+              "RelativeDocumentMoniker": "Blazor Web App\\Layout\\NavMenu.razor",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Layout\\NavMenu.razor",
+              "RelativeToolTip": "Blazor Web App\\Layout\\NavMenu.razor",
+              "ViewState": "AQIAACYAAAAAAAAAAAAAADEAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-27T03:01:45.12Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BookOverview.razor",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Pages\\BookOverview.razor",
+              "RelativeDocumentMoniker": "Blazor Web App\\Pages\\BookOverview.razor",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Pages\\BookOverview.razor",
+              "RelativeToolTip": "Blazor Web App\\Pages\\BookOverview.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-27T03:00:40.101Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApiService.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\Services\\ApiService.cs",
+              "RelativeDocumentMoniker": "..\\Tessera Models\\Tessera Models\\Services\\ApiService.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\Services\\ApiService.cs",
+              "RelativeToolTip": "..\\Tessera Models\\Tessera Models\\Services\\ApiService.cs",
+              "ViewState": "AQIAALkAAAAAAAAAAAAAAMIAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-27T02:50:38.242Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Login.razor",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Pages\\Login.razor",
+              "RelativeDocumentMoniker": "Blazor Web App\\Pages\\Login.razor",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Pages\\Login.razor",
+              "RelativeToolTip": "Blazor Web App\\Pages\\Login.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-27T02:37:59.107Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Startup.razor",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Pages\\Startup.razor",
+              "RelativeDocumentMoniker": "Blazor Web App\\Pages\\Startup.razor",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\Pages\\Startup.razor",
+              "RelativeToolTip": "Blazor Web App\\Pages\\Startup.razor",
+              "ViewState": "AQIAACcAAAAAAAAAAAAAAA4AAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-27T02:34:57.521Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -36,71 +36,6 @@ namespace Aegis.Controllers
             _dbContext = dbContext;
         }
 
-
-        /***************************************************
-         * CHECKOUT BOOKS HTTP GET
-         * - Get books and author data from the database.
-         ***************************************************/
-        [Authorize]
-        [HttpGet("CheckoutBooks")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CheckoutBooks()
-        {
-            _logger.LogInformation("CHECKOUT BOOKS CALLED");
-            var email = User.FindFirst(ClaimTypes.Email)?.Value;
-            if (email == null)
-            {
-                _logger.LogWarning("UNAUTHORIZED");
-                return BadRequest(new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>
-                    {
-                        "400 Bad Request: Email Claim Missing Or Incorrectly Formatted"
-                    }
-                });
-            }
-
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                _logger.LogWarning("NOT FOUND");
-                return NotFound(new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>
-                    {
-                        "404 Not Found: User Does Not Exist"
-                    }
-                });
-            }
-
-            // Check if the scribe has any organizations assigned
-            var books = await (from cl in _dbContext.Catalog
-                               join bk in _dbContext.Library
-                               on cl.BookId equals bk.Id
-                               where cl.ScribeId == user.Id
-                               select new BookDto
-                               {
-                                   Id = bk.Id,
-                                   Title = bk.Title,
-                                   IsOwner = cl.IsOwner
-                               })
-                               .ToListAsync();
-
-            _logger.LogInformation("BOOKS CHECKED OUT");
-            return Ok(new ApiBookReceipt
-            {
-                Success = true,
-                Books = books
-            });
-
-        }
-
-
         /***************************************************
          * CREATE BOOK HTTP POST
          * - Verify scribe credentials.
@@ -157,24 +92,10 @@ namespace Aegis.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateBook([FromBody] BookModel model)
+        public async Task<IActionResult> CreateBook()
         {
             Console.WriteLine("CREATE BOOK CALLED");
-            // Check if model state is valid
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("INVALID MODEL STATE");
-                return BadRequest(new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>
-                    {
-                        "400 Rad Request"
-                    }
-                });
-            }
-
-
+            
             // Get scribe id
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (string.IsNullOrEmpty(email))
@@ -232,7 +153,6 @@ namespace Aegis.Controllers
                 var book = new BookEntity
                 {
                     Id = bookId,
-                    Title = model.Name,
                     ScribeId = scribe.Id,
                     Database = "tessera-pm-01"
                 };
@@ -242,19 +162,8 @@ namespace Aegis.Controllers
                     _dbContext.Library.Add(book);
                     await _dbContext.SaveChangesAsync();
 
-                    // Create the entry in the UserOrganization join table
-                    var catalogEntry = new Catalog
-                    {
-                        ScribeId = scribe.Id,
-                        BookId = book.Id,
-                        IsOwner = true
-                    };
-
-                    _dbContext.Catalog.Add(catalogEntry);
-                    await _dbContext.SaveChangesAsync();
-
                     _logger.LogInformation("BOOK CREATED");
-                    return Ok(new ApiBookReceipt
+                    return Ok(new ApiResponse
                     {
                         Success = true
                     });
@@ -278,10 +187,133 @@ namespace Aegis.Controllers
 
         }
 
+        /***************************************************
+         * CHECKOUT BOOKS HTTP GET
+         * - Get books and author data from the database.
+         ***************************************************/
+        [Authorize]
+        [HttpGet("getbookid")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CheckoutBooks()
+        {
+            _logger.LogInformation("CHECKOUT BOOKS CALLED");
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (email == null)
+            {
+                _logger.LogWarning("UNAUTHORIZED");
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "400 Bad Request: Email Claim Missing Or Incorrectly Formatted"
+                    }
+                });
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                _logger.LogWarning("NOT FOUND");
+                return NotFound(new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "404 Not Found: User Does Not Exist"
+                    }
+                });
+            }
+
+            // Check if the scribe has any organizations assigned
+            var bookId = await _dbContext.Library
+                .Where(book => book.ScribeId == user.Id)
+                .Select(book => book.Id)
+                .FirstOrDefaultAsync();
+
+            _logger.LogInformation("BOOKS CHECKED OUT");
+            return Ok(new ApiBookResponse
+            {
+                Success = true,
+                BookId = bookId
+            });
+
+        }
 
 
         [Authorize]
-        [HttpGet("FetchChapters")]
+        [HttpDelete("deletebook")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteBook([FromQuery] int bookId)
+        {
+            // Log the request
+            _logger.LogInformation($"DeleteBook called with bookId: {bookId}");
+
+            // Validate the bookId
+            if (bookId <= 0)
+            {
+                return BadRequest(new ApiResponse 
+                    { 
+                        Success = false,
+                        Errors = new List<string>()
+                        { 
+                            "Invalid book ID." 
+                        } 
+                    });
+            }
+
+            try
+            {
+                // Find the book in the database
+                var book = await _dbContext.Library.FindAsync(bookId);
+
+                if (book == null)
+                {
+                    // If the book does not exist, return a 404 Not Found
+                    return NotFound(new ApiResponse { 
+                        Success = false,
+                        Errors = new List<string>()
+                        { 
+                            "Book not found." 
+                        } 
+                    });
+                }
+
+                // Remove the book from the context
+                _dbContext.Library.Remove(book);
+                await _dbContext.SaveChangesAsync(); // Commit the changes to the database
+
+                // Return a success response
+                return Ok(new ApiResponse
+                {
+                    Success = true
+                });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and return a 500 Internal Server Error
+                _logger.LogError($"Error deleting book: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>()
+                    {
+                        $"Error occured while deleting the book: {bookId}."
+                    }
+                });
+            }
+        }
+
+
+
+        [Authorize]
+        [HttpGet("getchapters")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -330,6 +362,61 @@ namespace Aegis.Controllers
                 Success = true,
                 Chapters = chapters
             });
+        }
+
+
+        [Authorize]
+        [HttpGet("getchapterbody")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> FetchChapters([FromQuery] int bookId, int chapterId)
+        {
+            _logger.LogInformation("GET CHAPTER CALLED");
+
+            var book = await _dbContext.Library
+                .FirstOrDefaultAsync(b => b.Id == bookId);
+
+            if (book == null)
+            {
+                _logger.LogWarning("BOOK IS NULL");
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new ApiResponse
+                    {
+                        Success = false,
+                        Errors = new List<string>
+                        {
+                            "500 Internal Server Error: Failed To Retrieve Book Data"
+                        }
+
+                    });
+            }
+
+            var chapter = await _bookService.GetChapterAsync(book.Database, book.Id);
+            if (chapter == null)
+            {
+                _logger.LogWarning("CHAPTERS NOT FOUND");
+                return NotFound(new ApiChapterIndex
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "404 Not Found: No Chapters Associated With Book"
+                    }
+
+                });
+            }
+            else
+            {
+                _logger.LogInformation("CHAPTERS RETURNED");
+                return Ok(new ApiChapterResponse
+                {
+                    Success = true,
+                    Chapter = chapter
+                });
+            }
         }
 
 

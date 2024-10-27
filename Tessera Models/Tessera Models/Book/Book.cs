@@ -8,11 +8,9 @@ namespace Tessera.Models.Book
     public class BookEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Database { get; set; }
         public string ScribeId { get; set; }
+        public string Database { get; set; }
 
         // Navigation Properties
         public ICollection<Catalog> Catalogs { get; set; } // From BookEntity to Catalog

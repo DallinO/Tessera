@@ -3,6 +3,7 @@
 @inject ILibraryService Library
 @inject IApiService Api
 @inject IViewService View
+@inject NavigationManager Navigation
 
 <div class="ts-top-row ts-sidebar-top">
     <div class="ts-sidebar-top-content">
@@ -17,17 +18,15 @@
 <div class="ts-nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="ts-nav-column">
         <div class="ts-nav-scrollable-item">
-            @for(int i = 0; i < Library.Chapters.Count; i++)
+            @for (int i = 0; i < Library.Chapters.Count; i++)
             {
                 ChapterDto chapter = Library.Chapters[i];
 
-                <ChapterButton 
-                    ButtonId="@View.ButtonIdGen()"
-                    ChapterIndex="i" 
-                    OnOpenAddMenu="OpenAddLeafModal" 
-                    Title="@chapter.Title"
-                    Description="@chapter.Description"
-                    />
+                <ChapterButton ButtonId="@View.ButtonIdGen()"
+                               ChapterIndex="i"
+                               OnOpenAddMenu="OpenAddLeafModal"
+                               Title="@chapter.Title"
+                               Description="@chapter.Description" />
             }
         </div>
     </nav>
@@ -37,9 +36,33 @@
 <AddChapter @ref="addChapterModal" OnAddChapter="AddChapter" />
 
 @code {
-
+    private List<ChapterDto> _chapters;
+    private int _bookId;
     private AddLeaf addLeafModal;
     private AddChapter addChapterModal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var bookResponse = await Api.GetBookIdAsync();
+        if (bookResponse.Success)
+        {
+            _bookId = bookResponse.BookId;
+            var chapterResponse = await Api.GetChaptersAsync(_bookId);
+            if (chapterResponse.Success)
+            {
+                _chapters = chapterResponse.Chapters;
+            }
+            else
+            {
+                Navigation.NavigateTo("/login");
+            }
+        }
+        else
+        {
+            Navigation.NavigateTo("/login");
+        }
+    }
 
     private void OpenAddLeafModal()
     {

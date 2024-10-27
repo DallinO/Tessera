@@ -105,10 +105,10 @@ namespace Aegis.Controllers
             try
             {
                 var result = await _userManager.CreateAsync(user, model.Password);
-
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("REGISTER SUCCEEDED");
+                    
                     return Ok(new ApiResponse
                     {
                         Success = true
@@ -148,7 +148,7 @@ namespace Aegis.Controllers
          * LOGIN HTTP POST
          * - Verify scribe credentials.
          ***************************************************/
-        [HttpPost("CheckIn")]
+        [HttpPost("Login")]
         [AllowAnonymous]
         [SwaggerRequestExample(typeof(LoginRequest), typeof(CheckInRequestExample))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiLoginResponse))]

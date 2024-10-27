@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Blazor Web App",
   "resources": {
-    "hash": "sha256-yz7EYU0NH3IxG+/0k5T3Kqo4mTUzfAcEaI9RZYpImdk=",
+    "hash": "sha256-f+cLQ86+bFE+FU/xDSMpGEYF9XzABB1puk6FrSsTb/M=",
     "jsModuleNative": {
       "dotnet.native.8.0.5.7c8i5zyw9q.js": "sha256-boyHe+0RMZDkzBKGhsrnXPhPg3oZ6UqJnTUzngJPjNY="
     },
@@ -230,12 +230,12 @@
       "mscorlib.wasm": "sha256-XvLAB5IyfVSmj5aaGnPwgVFaaZz8jXmbN8WmeopiPBM=",
       "netstandard.wasm": "sha256-TbMssdnuTiKq1gjTPkpgROAuWN0uhvPnagvWR+wAgNs=",
       "System.Private.CoreLib.wasm": "sha256-sscg+Efk8ROPq+q4IVmhShzITuoOYvB8Bsc+Mp9vcSM=",
-      "Tessera Models.wasm": "sha256-9G6gIjpjfTmVMBBdWi7a1IvgF5WUaEEbuQ/13Wlq6HM=",
-      "Blazor Web App.wasm": "sha256-+/QaGOeOGTuzsFsrkn5BxqLy//xxsHbsS6BsR2ksJ9s="
+      "Tessera Models.wasm": "sha256-nSlXAKBaCjGIfcC0LHMm3lGKduyrvf1+TQfdPzQHzIM=",
+      "Blazor Web App.wasm": "sha256-8RfHDQMlWAyJn659ower15XJ5lGkq/y6F5suFQFdaVA="
     },
     "pdb": {
-      "Tessera Models.pdb": "sha256-Ov/6OUeyVmbADHT38Kw8C4LGEuaiJfqHGYxWojThwZI=",
-      "Blazor Web App.pdb": "sha256-9i8bHsT3dg+C4qcjUL5jf9C7+O73YAH43lE4SOIpCaY="
+      "Tessera Models.pdb": "sha256-huJUxkDBnUVtgSXy6GG2XSW59i9A0OCbO8AWtG1c3Es=",
+      "Blazor Web App.pdb": "sha256-T3oABRLFCywdsx5JQtbFvu0IHLXkUgA4oSA/6goGlws="
     }
   },
   "cacheBootResources": true,

@@ -15,7 +15,7 @@
 }
 
 .ts-modal-content {
-    background: var(--theme-1-primary);
+    background-color: gray;
     border-radius: 5px;
     width: fit-content;
     min-width: 250px;

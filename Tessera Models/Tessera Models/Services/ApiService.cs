@@ -26,10 +26,11 @@ namespace Tessera.Web.Services
         Task<bool> RefreshAsync();
         Task<bool> IsAuthenticatedAsync();
 
-        
-        Task<ApiBookReceipt> CheckoutBooksAsync();
-        Task<ApiResponse> CreateBookAsync(BookModel model);
+
+        Task<ApiBookResponse> GetBookIdAsync();
+        Task<ApiResponse> CreateBookAsync();
         Task<ApiChapterIndex> GetChaptersAsync(int bookId);
+        Task<ApiChapterData> GetChaperDataAsync(int bookId, int chapterId);
         Task<ApiResponse> AddChapter(AddChapterRequest request);
     }
 
@@ -80,7 +81,6 @@ namespace Tessera.Web.Services
         {
             var response = await _factory.CreateClient("ServerApi").DeleteAsync("api/Authentication/Revoke");
 
-            // Remove cookies using JavaScript Interop
             await _jsRuntime.InvokeVoidAsync("deleteCookie", "JWT");
             await _jsRuntime.InvokeVoidAsync("deleteCookie", "RefreshToken");
 
@@ -89,19 +89,6 @@ namespace Tessera.Web.Services
             await Console.Out.WriteLineAsync($"Revoke gave response {response.StatusCode}");
 
             LoginChange?.Invoke(null);
-
-            /* OLD CODE
-            var response = await _factory.CreateClient("ServerApi").DeleteAsync("api/Authentication/Revoke");
-
-            await _sss.RemoveItemAsync(JWT_KEY);
-            await _sss.RemoveItemAsync(REFRESH_KEY);
-
-            _jwtCache = null;
-
-            await Console.Out.WriteLineAsync($"Revoke gave response {response.StatusCode}");
-
-            LoginChange?.Invoke(null);
-            */
         }
 
 
@@ -111,7 +98,7 @@ namespace Tessera.Web.Services
         public async Task<ApiLoginResponse> LoginAsync(LoginRequest model)
         {
 
-            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/Authentication/CheckIn", model);
+            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/Authentication/Login", model);
 
             var content = await response.Content.ReadFromJsonAsync<ApiLoginResponse>();
 
@@ -137,59 +124,6 @@ namespace Tessera.Web.Services
 
             //return content.Expiration; // -- may need this in order to set up a session time.
             return content;
-
-
-
-            /*
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadFromJsonAsync<ApiLoginResponse>();
-
-                if (content != null)
-                {
-                    await _sss.SetItemAsync(JWT_KEY, content.JwtToken);
-
-
-                    //// Store the access token in local storage
-                    //var token = jsonObject["token"]?.ToString();
-                    //if (!string.IsNullOrEmpty(token))
-                    //{
-                    //    await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "accessToken", token);
-                    //}
-
-                    //return jsonObject["result"]?.ToString() == Keys.API_LOGIN_SUCC ?
-                    //    (jsonObject, true) : (jsonObject, false);
-                }
-
-                return (new JObject { ["result"] = Keys.API_GENERIC_SUCC }, false);
-            }
-            //
-            // LOGIN FAIL
-            //
-            else
-            {
-                if (result != null)
-                {
-                    JObject jsonObject;
-                    try
-                    {
-                        jsonObject = JObject.Parse(result);
-                    }
-                    catch (Newtonsoft.Json.JsonException)
-                    {
-                        jsonObject = new JObject { ["errors"] = result };
-                    }
-                    if (jsonObject != null)
-                    {
-                        return (jsonObject, false);
-
-                    }
-                }
-
-                return (new JObject { ["result"] = Keys.API_GENERIC_FAIL }, false);
-            }
-        }
-            */
         }
 
 
@@ -217,53 +151,6 @@ namespace Tessera.Web.Services
             {
                 return content;
             }
-
-            /* OLD CODE
-            //
-            // REGISTER SUCCESS
-            //
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadAsStringAsync();
-                if (result != null)
-                {
-                    JObject jsonObject = JObject.Parse(result);
-                    if (jsonObject != null)
-                    {
-                        return jsonObject["result"]?.ToString() == Keys.API_REG_SUCC ?
-                            (jsonObject, true) : (jsonObject, false);
-
-                    }
-                }
-
-                return (new JObject { ["result"] = Keys.API_GENERIC_SUCC }, false);
-            }
-            //
-            // REGISTER FAIL
-            //
-            else
-            {
-                var errorResult = await response.Content.ReadAsStringAsync();
-                if (errorResult != null)
-                {
-                    JObject jsonObject;
-                    try
-                    {
-                        jsonObject = JObject.Parse(errorResult);
-                    }
-                    catch (Newtonsoft.Json.JsonException)
-                    {
-                        jsonObject = new JObject { ["errors"] = errorResult };
-                    }
-                    if (jsonObject != null)
-                    {
-                        return (jsonObject, false);
-                    }
-                }
-
-                return (new JObject { ["errors"] = Keys.API_GENERIC_FAIL }, false);
-            }
-            */
         }
 
 
@@ -275,14 +162,14 @@ namespace Tessera.Web.Services
         /***************************************************
          * CHECKOUT BOOK
          **************************************************/
-        public async Task<ApiBookReceipt> CheckoutBooksAsync()
+        public async Task<ApiBookResponse> GetBookIdAsync()
         {
-            var response = await _factory.CreateClient("ServerApi").GetAsync("api/Library/CheckoutBooks");
+            var response = await _factory.CreateClient("ServerApi").GetAsync("api/Library/GetBookId");
 
-            var content = await response.Content.ReadFromJsonAsync<ApiBookReceipt>();
+            var content = await response.Content.ReadFromJsonAsync<ApiBookResponse>();
             if (content == null)
             {
-                return new ApiBookReceipt()
+                return new ApiBookResponse()
                 {
                     Success = false,
                     Errors = new List<string>()
@@ -301,9 +188,9 @@ namespace Tessera.Web.Services
         /***************************************************
          * CREATE BOOK
          * *************************************************/
-        public async Task<ApiResponse> CreateBookAsync(BookModel model)
+        public async Task<ApiResponse> CreateBookAsync()
         {
-            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/Library/CreateBook", model);
+            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/Library/CreateBook", new { });
             var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
             if (content == null)
             {
@@ -329,13 +216,37 @@ namespace Tessera.Web.Services
         public async Task<ApiChapterIndex> GetChaptersAsync(int bookId)
         {
             var client = _factory.CreateClient("ServerApi");
-            var url = $"api/Library/FetchChapters?bookId={bookId}";
+            var url = $"api/Library/GetChapters?bookId={bookId}";
             var response = await client.GetAsync(url);
 
             var content = await response.Content.ReadFromJsonAsync<ApiChapterIndex>();
             if (content == null)
             {
                 return new ApiChapterIndex()
+                {
+                    Success = false,
+                    Errors = new List<string>()
+                    {
+                        "Null Api Response"
+                    }
+                };
+            }
+            else
+            {
+                return content;
+            }
+        }
+
+        public async Task<ApiChapterData> GetChaperDataAsync(int bookId, int chapterId)
+        {
+            var client = _factory.CreateClient("ServerApi");
+            var url = $"api/Library/GetChapter?bookId={bookId}";
+            var response = await client.GetAsync(url);
+
+            var content = await response.Content.ReadFromJsonAsync<ApiChapterData>();
+            if (content == null)
+            {
+                return new ApiChapterData()
                 {
                     Success = false,
                     Errors = new List<string>()

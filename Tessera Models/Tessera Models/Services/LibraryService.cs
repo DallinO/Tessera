@@ -24,9 +24,9 @@ namespace Tessera.Web.Services
         //Task<ApiLoginResponse> LoginAsync(LoginRequest model);
         //Task<ApiResponse> RegisterAsync(RegisterRequest model);
 
-        //Task<ApiBookReceipt> CheckoutBooksAsync();
+        //Task<ApiBookResponse> GetBookId();
         //Task<ApiResponse> CreateBookAsync(BookModel model);
-        //Task<ApiChapterIndex> GetChaptersAsync();
+        //Task<ApiChapterIndex> GetChapterIdsAsync();
         //Task<ApiResponse> AddChapterAsync(ChapterDto chapter);
         //Task<JObject> RemoveChapterAsync(string chapterName);
         //Task<JObject> AddRowAsync(int chapterIndex);
@@ -189,9 +189,9 @@ namespace Tessera.Web.Services
         /***************************************************
         * CREATE BOOK ASYNC
         ***************************************************/
-        //public async Task<ApiBookReceipt> CheckoutBooksAsync()
+        //public async Task<ApiBookResponse> GetBookId()
         //{
-        //    var response = await _apiService.CheckoutBooksAsync();
+        //    var response = await _apiService.GetBookId();
         //    if (response != null)
         //    {
         //        if (response.Success)
@@ -208,7 +208,7 @@ namespace Tessera.Web.Services
         //            "Null Api Response"
         //        };
 
-        //        return new ApiBookReceipt(errors)
+        //        return new ApiBookResponse(errors)
         //        {
         //            Success = false,
         //            Errors = errors
@@ -244,9 +244,9 @@ namespace Tessera.Web.Services
         /***************************************************
          * GET CHAPTERS ASYNC
          ***************************************************/
-        //public async Task<ApiChapterIndex> GetChaptersAsync()
+        //public async Task<ApiChapterIndex> GetChapterIdsAsync()
         //{
-        //    var result = await _apiService.GetChaptersAsync(CurrBook.Title);
+        //    var result = await _apiService.GetChapterIdsAsync(CurrBook.Title);
         //    if (result == null)
         //    {
         //        return new ApiChapterIndex()

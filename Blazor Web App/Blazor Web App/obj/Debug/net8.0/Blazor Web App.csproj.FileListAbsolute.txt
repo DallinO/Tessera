@@ -913,7 +913,6 @@ C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Blazor Web App.props
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\staticwebassets.pack.json
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\scopedcss\Layout\DefaultLayout.razor.rz.scp.css
-C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\scopedcss\Layout\MainLayout.razor.rz.scp.css
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\scopedcss\Layout\NavMenu.razor.rz.scp.css
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\scopedcss\bundle\Blazor Web App.styles.css
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\scopedcss\projectbundle\Blazor Web App.bundle.scp.css
@@ -1150,3 +1149,4 @@ C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\refint\Blazor Web App.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\Blazor Web App.pdb
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\ref\Blazor Web App.dll
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\scopedcss\Layout\BookLayout.razor.rz.scp.css

@@ -4,8 +4,8 @@
     public abstract class LeafEntity
     {
         public int Id { get; set; }
-        public int ParentId { get; set; }
-        public string ParentTable { get; set; }
+        public int ChapterId { get; set; }
+        public string Type { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }

@@ -28,12 +28,12 @@ namespace Tessera.Models.Authentication
     }
 
 
-    public class ApiBookReceipt : ApiResponse
+    public class ApiBookResponse : ApiResponse
     {
-        public List<BookDto> Books { get; set; }
+        public int BookId { get; set; }
 
-        public ApiBookReceipt() { }
-        public ApiBookReceipt(List<string> errors) : base(errors) { }
+        public ApiBookResponse() { }
+        public ApiBookResponse(List<string> errors) : base(errors) { }
     }
 
     public class ApiChapterIndex : ApiResponse
@@ -42,4 +42,12 @@ namespace Tessera.Models.Authentication
         public ApiChapterIndex() { }
         public ApiChapterIndex(List<string> errors) : base(errors) { }
     }
+
+    public class ApiChapterData : ApiResponse
+    {
+        public ChapterDto Chapter { get; set; }
+        public ApiChapterData() { }
+        public ApiChapterData(List<string> errors) : base(errors) { }
+    }
+
 }

@@ -9,6 +9,7 @@ using Tessera.Models.Book;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Tessera.CodeGenerators;
+using System.Net;
 
 namespace Aegis.Services
 {
@@ -49,7 +50,7 @@ namespace Aegis.Services
         }
 
 
-        
+
 
         /***************************************************
          * GET CHAPTERS ASYNC
@@ -86,6 +87,32 @@ namespace Aegis.Services
             }
         }
 
+        public async Task<ChapterDto> GetChapterAsync(string connectionStringName, int chapterId)
+        {
+            using (var dbContext = _dbFactory.CreateDbContext(connectionStringName))
+            {
+                try
+                {
+                    // Query for chapter IDs filtered by bookId
+                    var chapter = await dbContext.Chapters
+                        .Where(ch => ch.Id == chapterId)
+                        .Select(ch => new ChapterDto // Use a lambda expression here
+                        { 
+                            Title = ch.Title,
+                            Description = ch.Description
+                        })
+                        .FirstOrDefaultAsync(); // Fix the method name spelling
+
+                    return chapter;
+                }
+                catch (Exception ex)
+                {
+                    // Log exception
+                    Console.WriteLine($"Error fetching chapter IDs: {ex.Message}");
+                    return null;
+                }
+            }
+        }
 
         /***************************************************
          * ADD CHAPTERS ASYNC

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Tellus.Models.Business;
 using Tessera.Models.Book;
 using Tessera.Models.Chapter;
 using Tessera_Models.Chapter.Data;
@@ -10,16 +11,10 @@ namespace Aegis.Data
         public DbSet<ChapterEntity> Chapters { get; set; }
         public DbSet<ScholarEntity> Scholars { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
-        public DbSet<PermissionsEntity> Permissions { get; set; }
-        public DbSet<RolePermissionsEntity> RolePermissions { get; set; }
-        public DbSet<RoleCollectionEntity> RoleCollections { get; set; }
-        public DbSet<RoleCollectionRoles> RoleCollectionRole { get; set; }
-        public DbSet<StatusEntity> Statuses { get; set; }
-        public DbSet<StatusCollectionEntity> StatusCollections { get; set; }
-        public DbSet<StatusCollectionStatuses> StatusCollectionStatuses { get; set; }
         public DbSet<ListEntity> Lists { get; set; }
         public DbSet<ColumnEntity> Columns { get; set; }
         public DbSet<DataEntity> Data { get; set; }
+
 
         public BookDbContext(DbContextOptions<BookDbContext> options)
             : base(options) { }

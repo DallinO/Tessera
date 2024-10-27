@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Tellus\Tellus\Tellus.Models\Tellus.Models.csproj" />
     <ProjectReference Include="..\..\Tessera Models\Tessera Models\Tessera Models.csproj" />
   </ItemGroup>
 
