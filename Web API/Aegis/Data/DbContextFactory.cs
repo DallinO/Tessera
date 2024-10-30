@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Tessera.Constants;
 
 namespace Aegis.Data
 {

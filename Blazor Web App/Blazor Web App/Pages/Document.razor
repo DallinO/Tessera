@@ -1,0 +1,24 @@
+﻿@namespace Tessera.Web.Pages
+
+@page "/b/{BookId:int}/d/{DocId:int}"
+
+@layout BookLayout
+@inject NavigationManager Navigation
+@inject BookService Book
+
+<PageTitle>Tessera | Overview</PageTitle>
+
+<div>
+    Document
+</div>
+
+@code {
+    public int DocId { get; set; }
+    private ChapterDto _chapter;
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+        
+    }
+}

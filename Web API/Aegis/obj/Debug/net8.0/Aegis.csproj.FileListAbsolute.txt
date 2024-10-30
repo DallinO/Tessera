@@ -911,9 +911,6 @@ C:\Users\Olson\Documents\GitHub\Tessera\API\Aegis\Aegis\obj\Debug\net8.0\refint\
 C:\Users\Olson\Documents\GitHub\Tessera\API\Aegis\Aegis\obj\Debug\net8.0\Aegis.pdb
 C:\Users\Olson\Documents\GitHub\Tessera\API\Aegis\Aegis\obj\Debug\net8.0\Aegis.genruntimeconfig.cache
 C:\Users\Olson\Documents\GitHub\Tessera\API\Aegis\Aegis\obj\Debug\net8.0\ref\Aegis.dll
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.dll
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\refint\Aegis.dll
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.pdb
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\appsettings.json
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\MvcTestingAppManifest.json
@@ -929,10 +926,8 @@ C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Micr
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Authentication.Core.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Authentication.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Authentication.OAuth.dll
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Authorization.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Authorization.Policy.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Components.Authorization.dll
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Components.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Components.Endpoints.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Components.Forms.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Components.Server.dll
@@ -965,7 +960,6 @@ C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Micr
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Identity.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Localization.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Localization.Routing.dll
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Metadata.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Mvc.Abstractions.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Mvc.ApiExplorer.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Mvc.Core.dll
@@ -1370,5 +1364,11 @@ C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\staticweb
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\staticwebassets.pack.json
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\scopedcss\bundle\Aegis.styles.css
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.csproj.Up2Date
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.dll
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\refint\Aegis.dll
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.pdb
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.genruntimeconfig.cache
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\ref\Aegis.dll
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Authorization.dll
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Components.dll
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\refs\Microsoft.AspNetCore.Metadata.dll

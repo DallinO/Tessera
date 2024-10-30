@@ -53,7 +53,7 @@ namespace Aegis.Controllers
          * REGISTER HTTP POST
          * - Register new scribe.
          ***************************************************/
-        [HttpPost("Register")]
+        [HttpPost("register")]
         [SwaggerRequestExample(typeof(RegisterRequest), typeof(RegisterRequestExample))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

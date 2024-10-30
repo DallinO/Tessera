@@ -1,6 +1,6 @@
 ﻿@namespace Tessera.Web
 
-@inject ILibraryService Library
+@inject IBookService Library
 @inject IApiService Api
 @inject NavigationManager Navigation
 
@@ -70,13 +70,13 @@
     {
         if (Library.HasBook)
         {
-            if (Library.CurrBook.Id != BookId)
+            if (Library.BookId.Id != BookId)
             {
                 foreach (BookDto book in Library.Books)
                 {
                     if (book.Id == BookId)
                     {
-                        Library.CurrBook = book;
+                        Library.BookId = book;
                     }
                 }
             }

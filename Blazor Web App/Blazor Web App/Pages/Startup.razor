@@ -1,7 +1,7 @@
 ﻿@namespace Tessera.Web.Pages
 
 @page "/startup"
-@inject ILibraryService LibraryService
+@inject IBookService LibraryService
 @inject NavigationManager Navigation
 
 @if (!LibraryService.IsAuthenticated || !LibraryService.HasBook)

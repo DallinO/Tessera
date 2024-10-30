@@ -398,7 +398,7 @@ namespace Aegis.Controllers
             if (chapter == null)
             {
                 _logger.LogWarning("CHAPTERS NOT FOUND");
-                return NotFound(new ApiChapterIndex
+                return NotFound(new ApiChapterData
                 {
                     Success = false,
                     Errors = new List<string>
@@ -411,7 +411,7 @@ namespace Aegis.Controllers
             else
             {
                 _logger.LogInformation("CHAPTERS RETURNED");
-                return Ok(new ApiChapterResponse
+                return Ok(new ApiChapterData
                 {
                     Success = true,
                     Chapter = chapter

@@ -23,7 +23,7 @@ namespace Aegis.SwaggerTest
         {
             return new RegisterRequest
             {
-                FirstName = "Test Dummy",
+                FirstName = "TestDummy",
                 LastName = "Nine",
                 Email = "td9@test.com",
                 ConfirmEmail = "td9@test.com",

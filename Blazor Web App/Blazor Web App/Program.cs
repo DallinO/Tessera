@@ -19,7 +19,7 @@ builder.Services.AddHttpClient("ServerApi")
                 .AddHttpMessageHandler<AuthenticationHandler>();
 
 
-builder.Services.AddSingleton<ILibraryService, LibraryService>();
+builder.Services.AddSingleton<IBookService, BookService>();
 builder.Services.AddSingleton<IApiService, ApiService>();
 builder.Services.AddSingleton<IViewService, ViewService>();
 

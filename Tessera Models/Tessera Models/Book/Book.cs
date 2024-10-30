@@ -11,16 +11,12 @@ namespace Tessera.Models.Book
         public int Id { get; set; }
         public string ScribeId { get; set; }
         public string Database { get; set; }
-
-        // Navigation Properties
-        public ICollection<Catalog> Catalogs { get; set; } // From BookEntity to Catalog
     }
 
     public class BookDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public bool IsOwner { get; set; }
         public string Database { get; set; }
     }
 

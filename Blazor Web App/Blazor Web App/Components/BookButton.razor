@@ -1,9 +1,9 @@
 ﻿@namespace Tessera.Web
 
-@inject ILibraryService Library
+@inject IBookService Library
 
 <button class="ts-basic-button">
-    <span class="ts-basic-button-text">@Library.CurrBook.Title</span>
+    <span class="ts-basic-button-text">@Library.BookId.Title</span>
     <div class="ts-inner-button-container">
         <button class="ts-inner-button">
             <img src="switch.svg" alt="switch book" />

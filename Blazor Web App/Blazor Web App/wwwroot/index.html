@@ -106,6 +106,21 @@
             });
         };
 
+        window.quillFunctions = {
+            initialize: function (editorId) {
+                const editor = new Quill(`#${editorId}`, {
+                    theme: 'snow'
+                });
+                return editor;
+            },
+            getContent: function (editor) {
+                return editor.root.innerHTML;
+            },
+            setContent: function (editor, content) {
+                editor.root.innerHTML = content;
+            }
+        };
+
 
     </script>
 </body>

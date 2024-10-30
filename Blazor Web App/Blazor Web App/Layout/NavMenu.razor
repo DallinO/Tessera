@@ -1,6 +1,6 @@
 ﻿@namespace Tessera.Web.Layout
 
-@inject ILibraryService Library
+@inject IBookService Book
 @inject IApiService Api
 @inject IViewService View
 @inject NavigationManager Navigation
@@ -18,15 +18,14 @@
 <div class="ts-nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="ts-nav-column">
         <div class="ts-nav-scrollable-item">
-            @for (int i = 0; i < Library.Chapters.Count; i++)
+            @for (int i = 0; i < Book.Chapters.Count; i++)
             {
-                ChapterDto chapter = Library.Chapters[i];
+                ChapterDto chapter = Book.Chapters[i];
 
                 <ChapterButton ButtonId="@View.ButtonIdGen()"
+                               Chapter="chapter"
                                ChapterIndex="i"
-                               OnOpenAddMenu="OpenAddLeafModal"
-                               Title="@chapter.Title"
-                               Description="@chapter.Description" />
+                               OnOpenAddMenu="OpenAddLeafModal" />
             }
         </div>
     </nav>
@@ -36,8 +35,6 @@
 <AddChapter @ref="addChapterModal" OnAddChapter="AddChapter" />
 
 @code {
-    private List<ChapterDto> _chapters;
-    private int _bookId;
     private AddLeaf addLeafModal;
     private AddChapter addChapterModal;
 
@@ -47,11 +44,11 @@
         var bookResponse = await Api.GetBookIdAsync();
         if (bookResponse.Success)
         {
-            _bookId = bookResponse.BookId;
-            var chapterResponse = await Api.GetChaptersAsync(_bookId);
+            Book.BookId = bookResponse.BookId;
+            var chapterResponse = await Api.GetChaptersAsync(Book.BookId);
             if (chapterResponse.Success)
             {
-                _chapters = chapterResponse.Chapters;
+                Book.Chapters = chapterResponse.Chapters;
             }
             else
             {
@@ -78,7 +75,7 @@
     {
         if (leaf != null)
         {
-            Library.SelectedChapter.Contents.Add(leaf);
+            Book.SelectedChapter.Contents.Add(leaf);
             StateHasChanged();
         }
     }
