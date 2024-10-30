@@ -1,4 +1,8 @@
 # Tessera
  BYUI Senior Project
 ### Overview
-The Tessera Daily Planner is a simple personal task management software patterned after large project management software such as QlickUp and Jira, but tailored to individuals as opposed to teams. It was developed as my senior project over the course of a semester under the mentorship and direction of my professor and other faculty. Tessera was built as a Blazor Web Assembly App using ASP.NET Core. I utilized Entity Framework to perform database queries using a DBContext with DBSet properties to navigate tables and their relationships. I utilized IdentityUser to create and manage user authentication, coupled with JWT tokens. 
+Tessera Daily Planner is a personal task management application inspired by leading project management tools like ClickUp and Jira, but tailored specifically for individual users rather than teams. Developed as my senior capstone project over the course of a semester, I completed this project under the guidance and mentorship of my professor and other faculty advisors.
+
+Tessera was built as a Blazor WebAssembly application with ASP.NET Core as the backend framework. I leveraged Entity Framework Core to streamline database interactions, using a DbContext with DbSet properties to effectively model and manage the database tables and their relationships. User authentication was implemented using IdentityUser in combination with JWT tokens, providing secure, token-based authentication.
+
+With a focus on intuitive usability, I designed a clean and responsive user interface, making it easy for users to track tasks, set priorities, and manage their personal schedules. To ensure reliability and functionality, I created and executed automated tests using xUnit, reinforcing the robustness of the application through thorough testing practices.
