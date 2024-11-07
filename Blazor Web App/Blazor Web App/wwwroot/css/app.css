@@ -102,6 +102,16 @@ code {
     color: #c02d76;
 }
 
+.ts-page {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.ts-page-content {
+    width: 100%;
+}
+
 :root {
     --theme-1-primary: #1c2833;
     --theme-1-secondary: #2ecc71;

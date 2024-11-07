@@ -34,14 +34,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBZGRDaGFwdGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/AddCustomer.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBZGRDdXN0b21lci5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/AddLeaf.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBZGRMZWFmLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/BookButton.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xCb29rQnV0dG9uLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -52,10 +44,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/ChapterSettings.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDaGFwdGVyU2V0dGluZ3MucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/Customers.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDdXN0b21lcnMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/Dropdown.razor]
@@ -72,10 +60,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/LeafSettings.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMZWFmU2V0dGluZ3MucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/LeafViewer.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMZWFmVmlld2VyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Pages/BookOverview.razor]
@@ -96,10 +80,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Pages/Register.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXIucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Pages/Startup.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhcnR1cC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/_Imports.razor]

@@ -88,23 +88,6 @@ namespace Aegis.Api
                 };
             });
 
-            // Configure JWT authentication
-            //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddJwtBearer(options =>
-            //    {
-            //        options.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //            ValidateIssuer = true,
-            //            ValidateAudience = true,
-            //            ValidateLifetime = true,
-            //            ValidateIssuerSigningKey = true,
-            //            ValidIssuer = "http://localhost",
-            //            ValidAudience = "http://localhost",
-            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("@Andromeda1789&Sagittarius0476&Centuarus247")),
-            //            ClockSkew = TimeSpan.Zero // Optional: Adjust if needed
-            //        };
-            //    });
-
             builder.Services.AddScoped<DbContextFactory>();
             builder.Services.AddScoped<TokenService>();
             builder.Services.AddScoped<BookService>();
@@ -115,7 +98,7 @@ namespace Aegis.Api
                 options.AddPolicy("AllowBlazorApp",
                     builder =>
                     {
-                        builder.WithOrigins("https://localhost:7021") // The URL of your Blazor app
+                        builder.WithOrigins("https://localhost:7094") // The URL of your Blazor app
                                .AllowAnyHeader()
                                .AllowAnyMethod()
                                .AllowCredentials(); // Include if credentials are needed

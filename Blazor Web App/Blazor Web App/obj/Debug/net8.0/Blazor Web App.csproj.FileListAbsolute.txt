@@ -1150,3 +1150,8 @@ C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\Blazor Web App.pdb
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\ref\Blazor Web App.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\scopedcss\Layout\BookLayout.razor.rz.scp.css
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\System.Web.Cors.wasm
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\System.Web.Cors.wasm.gz
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\System.Web.Cors.dll
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\webcil\System.Web.Cors.wasm
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\compressed\oy6h83gfzb.gz

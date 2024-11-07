@@ -18,7 +18,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aegis.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -148,7 +148,7 @@ namespace Aegis.Controllers
          * LOGIN HTTP POST
          * - Verify scribe credentials.
          ***************************************************/
-        [HttpPost("Login")]
+        [HttpPost("login")]
         [AllowAnonymous]
         [SwaggerRequestExample(typeof(LoginRequest), typeof(CheckInRequestExample))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiLoginResponse))]
@@ -256,8 +256,7 @@ namespace Aegis.Controllers
          * REVOKE HTTP DELETE
          * - Generates a Jwt token.
          ***************************************************/
-        [Authorize]
-        [HttpDelete("BanishScribe")]
+        [HttpDelete("deleteuser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

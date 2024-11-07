@@ -1,8 +1,9 @@
 .page {
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
+
 
 main {
     flex: 1;

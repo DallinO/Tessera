@@ -6,49 +6,27 @@
 @inject IApiService Api
 @inject NavigationManager Navigation
 
-<div class="page">
-@* 
-    @if (isLoading)
-    {
-        <h1>Loading</h1>
-    }
-    else
-    {
-        @if (Library == null)
-        {
-            <h1>Library Is Null</h1>
-        }
-        else if (!Library.IsAuthenticated)
-        {
-            Navigation.NavigateTo("/home");
-        }
-        else
-        { *@
+<div class="ts-page">
+    <div class="ts-sidebar">
+        <NavMenu />
+    </div>
 
-            <div class="ts-sidebar">
-                <NavMenu />
+    <main class="ts-page-content">
+        <div class="ts-top-row ts-utility ts-border">
+            <div class="ts-utility-root">      
             </div>
-
-            <main>
-                <div class="ts-top-row ts-utility ts-border">
-                    <div calss="ts-utility-root">
-                        
-                    </div>
-                    <div class="ts-utility-search">
-                    </div>
-                    <div class="ts-utility-account-container">
-                        <button class="ts-account-button">
+            <div class="ts-utility-search">
+            </div>
+            <div class="ts-utility-account-container">
+                <button class="ts-account-button">
                             
-                        </button>
-                    </div>
-                </div>
-                <div class="ts-content ts-border">
-                    @Body
-                </div>
-            </main>
-    @*     }
-    }
- *@
+                </button>
+            </div>
+        </div>
+        <div>
+            @Body
+        </div>
+    </main>
 </div>
 
 
@@ -57,16 +35,20 @@
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            Library.IsAuthenticated = await Api.IsAuthenticatedAsync();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception during authentication: {ex.Message}");
-            // Optionally: Display an error message to the user or log the error
-        }
+        // try
+        // {
+        //     Library.IsAuthenticated = await Api.IsAuthenticatedAsync();
+        // }
+        // catch (Exception ex)
+        // {
+        //     Console.WriteLine($"Exception during authentication: {ex.Message}");
+        //     // Optionally: Display an error message to the user or log the error
+        // }
 
-        isLoading = false;
+        // isLoading = false;
     }
 }
+
+<style>
+
+</style>

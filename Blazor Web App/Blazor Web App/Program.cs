@@ -5,6 +5,7 @@ using Blazored.SessionStorage;
 using Blazor_Web_App;
 using Tessera.Web.Services;
 
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");

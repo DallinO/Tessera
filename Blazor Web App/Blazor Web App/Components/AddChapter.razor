@@ -1,5 +1,7 @@
 ﻿@namespace Tessera.Web
 
+@inject IBookService Book
+
 @if (isVisible)
 {
     <div class="ts-modal-overlay">
@@ -21,7 +23,7 @@
 }
 
 @code {
-    [Parameter] public Action<ChapterDto> OnAddChapter { get; set; }
+    [Parameter] public EventCallback<AddChapterRequest> OnAddChapter { get; set; }
 
     private bool isVisible = false;
     private string name;
@@ -39,11 +41,12 @@
         StateHasChanged();
     }
 
-    private void Submit()
+    private async Task Submit()
     {
-        OnAddChapter?.Invoke(
-            new ChapterDto() 
+        await OnAddChapter.InvokeAsync(
+            new AddChapterRequest() 
             { 
+                BookId = Book.BookId,
                 Title = name, 
                 Description = description 
             });

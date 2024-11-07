@@ -31,7 +31,7 @@ namespace Tessera.Web.Services
         Task<ApiResponse> CreateBookAsync();
         Task<ApiChapterIndex> GetChaptersAsync(int bookId);
         Task<ApiChapterData> GetChaperDataAsync(int bookId, int chapterId);
-        Task<ApiResponse> AddChapter(AddChapterRequest request);
+        Task<ApiResponse> CreateChapterAsync(AddChapterRequest request);
     }
 
     public class ApiService : IApiService
@@ -98,7 +98,7 @@ namespace Tessera.Web.Services
         public async Task<ApiLoginResponse> LoginAsync(LoginRequest model)
         {
 
-            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/Authentication/Login", model);
+            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/auth/login", model);
 
             var content = await response.Content.ReadFromJsonAsync<ApiLoginResponse>();
 
@@ -117,12 +117,7 @@ namespace Tessera.Web.Services
             await _jsRuntime.InvokeVoidAsync("setCookie", "JWT", content.JwtToken, 1);
             await _jsRuntime.InvokeVoidAsync("setCookie", "RefreshToken", content.RefreshToken, 1);
 
-            //await _sss.SetItemAsync(JWT_KEY, content.JwtToken);
-            //await _sss.SetItemAsync(REFRESH_KEY, content.RefreshToken);
-
-            LoginChange?.Invoke(GetUsername(content.JwtToken)); // -- What is the purpose of this?
-
-            //return content.Expiration; // -- may need this in order to set up a session time.
+            LoginChange?.Invoke(GetUsername(content.JwtToken));
             return content;
         }
 
@@ -132,7 +127,7 @@ namespace Tessera.Web.Services
          * *************************************************/
         public async Task<ApiResponse> RegisterAsync(RegisterRequest model)
         {
-            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/Authentication/Register", model);
+            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/auth/register", model);
 
             var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
             if (content == null)
@@ -164,7 +159,7 @@ namespace Tessera.Web.Services
          **************************************************/
         public async Task<ApiBookResponse> GetBookIdAsync()
         {
-            var response = await _factory.CreateClient("ServerApi").GetAsync("api/Library/GetBookId");
+            var response = await _factory.CreateClient("ServerApi").GetAsync("api/library/getbookid");
 
             var content = await response.Content.ReadFromJsonAsync<ApiBookResponse>();
             if (content == null)
@@ -190,7 +185,7 @@ namespace Tessera.Web.Services
          * *************************************************/
         public async Task<ApiResponse> CreateBookAsync()
         {
-            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/Library/CreateBook", new { });
+            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/library/createbook", new { });
             var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
             if (content == null)
             {
@@ -264,9 +259,9 @@ namespace Tessera.Web.Services
         /***************************************************
          * GET CHAPTERS
          * *************************************************/
-        public async Task<ApiResponse> AddChapter(AddChapterRequest request)
+        public async Task<ApiResponse> CreateChapterAsync(AddChapterRequest request)
         {
-            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/Library/AddChapter", request);
+            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/library/createchapter", request);
             var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
             if (content == null)
             {

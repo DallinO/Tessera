@@ -41,7 +41,6 @@
     private string Password { get; set; } = "Test@123";
     private MarkupString LoginError { get; set; }
 
-
     private async Task LoginAsync()
     {
         var model = new LoginRequest
@@ -55,22 +54,36 @@
 
         if (login.Success)
         {
-            Navigation.NavigateTo("/bookoverview");
+            var book = await Api.GetBookIdAsync();
+            if (book.Success)
+            {
+                Library.BookId = book.BookId;
+                Navigation.NavigateTo($"/b/{book.BookId}");
+            }
+            else
+            {
+                DisplayErrors(book.Errors);
+            }
         }
         else
         {
-            StringBuilder errorMessage = new();
-            foreach (string error in login.Errors)
-            {
-                errorMessage.AppendLine(string.Join("<br />", error));
-                errorMessage.Append("<br />");
-            }
-            LoginError = new MarkupString(errorMessage.ToString());
+            DisplayErrors(login.Errors);
         }
     }
 
     private void SwitchToRegister()
     {
         Navigation.NavigateTo("/register");
+    }
+
+    private void DisplayErrors(List<string> errors)
+    {
+        StringBuilder errorMessage = new();
+        foreach (string error in errors)
+        {
+            errorMessage.AppendLine(string.Join("<br />", error));
+            errorMessage.Append("<br />");
+        }
+        LoginError = new MarkupString(errorMessage.ToString());
     }
 }

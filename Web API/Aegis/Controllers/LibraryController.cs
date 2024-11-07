@@ -13,7 +13,7 @@ using Tessera.Models.Chapter;
 
 namespace Aegis.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/library")]
     [ApiController]
     public class LibraryController : ControllerBase
     {
@@ -84,8 +84,8 @@ namespace Aegis.Controllers
         /// </item>
         /// </list>
         /// </returns>
-        [Authorize]
-        [HttpPost("CreateBook")]
+        
+        [HttpPost("createbook")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -111,6 +111,7 @@ namespace Aegis.Controllers
                 });
             }
 
+            // Get Scribe object
             var scribe = await _userManager.FindByEmailAsync(email);
             if (scribe == null)
             {
@@ -125,12 +126,13 @@ namespace Aegis.Controllers
                 });
             }
 
+            // Generate unique book code
             int count = 0;
             bool bookIdExists = false;
             int bookId;
             do
             {
-                bookId = int.Parse(CodeGen.GenerateTenDigitId());
+                bookId = int.Parse(CodeGen.GenerateNineDigitId());
                 bookIdExists = await _dbContext.Library.AnyAsync(o => o.Id == bookId);
                 count++;
             }
@@ -342,18 +344,20 @@ namespace Aegis.Controllers
             }
 
             var chapters = await _bookService.GetChaptersAsync(book.Database, book.Id);
-            if (chapters == null || chapters.Count == 0)
+            if (chapters == null)
             {
                 _logger.LogWarning("CHAPTERS NOT FOUND");
-                return NotFound(new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new ApiResponse
                     {
-                        "404 Not Found: No Chapters Associated With Book"
-                    }
+                        Success = false,
+                        Errors = new List<string>
+                        {
+                            "500 Internal Server Error: Failed To Retrieve Chapter Data"
+                        }
 
-                });
+                    });
             }
 
             _logger.LogInformation("CHAPTERS RETURNED");
@@ -425,7 +429,7 @@ namespace Aegis.Controllers
          * - Verify scribe credentials.
          ***************************************************/
         [Authorize]
-        [HttpPost("AddChapter")]
+        [HttpPost("createchapter")]
         public async Task<IActionResult> AddChapter([FromBody] AddChapterRequest chapter)
         {
             if (string.IsNullOrEmpty(chapter.Title))

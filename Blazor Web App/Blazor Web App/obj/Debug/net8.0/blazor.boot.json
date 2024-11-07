@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Blazor Web App",
   "resources": {
-    "hash": "sha256-f+cLQ86+bFE+FU/xDSMpGEYF9XzABB1puk6FrSsTb/M=",
+    "hash": "sha256-2+9wHw82f/gkzyhq8ey/dONVmA/wvHONO1hXoCbgzSI=",
     "jsModuleNative": {
       "dotnet.native.8.0.5.7c8i5zyw9q.js": "sha256-boyHe+0RMZDkzBKGhsrnXPhPg3oZ6UqJnTUzngJPjNY="
     },
@@ -18,6 +18,7 @@
     },
     "assembly": {
       "Blazored.SessionStorage.wasm": "sha256-nQXuCGHos7iwp2WxRUgarKmWgJYChaVQp2NajgNU3V8=",
+      "System.Web.Cors.wasm": "sha256-TPZovhnQnnLfLM9l2sG+Sv5lPE07cZj3KYoW8r6Pc4I=",
       "Microsoft.AspNetCore.Authorization.wasm": "sha256-s9GVXwxk54dQl2rDy/ceilSgKRA2EsurG8PqOvE9j9A=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-QDdAFHZWZ/UsudNs8fYrsueTzmJNzeNELylbUY6lkrA=",
       "Microsoft.AspNetCore.Components.Forms.wasm": "sha256-akzgy1uAnRG/g4YlT0MwG1bOtrv61SEGE6Sr+AiIkCE=",
@@ -230,12 +231,12 @@
       "mscorlib.wasm": "sha256-XvLAB5IyfVSmj5aaGnPwgVFaaZz8jXmbN8WmeopiPBM=",
       "netstandard.wasm": "sha256-TbMssdnuTiKq1gjTPkpgROAuWN0uhvPnagvWR+wAgNs=",
       "System.Private.CoreLib.wasm": "sha256-sscg+Efk8ROPq+q4IVmhShzITuoOYvB8Bsc+Mp9vcSM=",
-      "Tessera Models.wasm": "sha256-nSlXAKBaCjGIfcC0LHMm3lGKduyrvf1+TQfdPzQHzIM=",
-      "Blazor Web App.wasm": "sha256-8RfHDQMlWAyJn659ower15XJ5lGkq/y6F5suFQFdaVA="
+      "Tessera Models.wasm": "sha256-oCiYmu2YEMhvD0vtPRKXpkrEN87X0bXmJazcgUAMbAk=",
+      "Blazor Web App.wasm": "sha256-F8yGLK29Oki+gkuFut96OpjAaTo9mPNmqxQsiHnO3RQ="
     },
     "pdb": {
-      "Tessera Models.pdb": "sha256-huJUxkDBnUVtgSXy6GG2XSW59i9A0OCbO8AWtG1c3Es=",
-      "Blazor Web App.pdb": "sha256-T3oABRLFCywdsx5JQtbFvu0IHLXkUgA4oSA/6goGlws="
+      "Tessera Models.pdb": "sha256-dnoeg89OiKO52JZFFQBHGJ7w21KjB1SlC6/JeNP2nXc=",
+      "Blazor Web App.pdb": "sha256-fHXJ+H/xxl5SGvjZgZubrw7Dt52JzVImoHANjPSCRVk="
     }
   },
   "cacheBootResources": true,

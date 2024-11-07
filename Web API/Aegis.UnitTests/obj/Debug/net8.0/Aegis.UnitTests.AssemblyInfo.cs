@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Aegis.UnitTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d819bbf44b7e62e267257b60f6114873054be3b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+179aac5e2b612dea45f4308593284ad8db0df2f2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Aegis.UnitTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Aegis.UnitTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

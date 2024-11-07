@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "sUhxtpUUhHn5nGnKHNEJ1FgUwUCwZISFRjOftT0Ewyk=",
+  "Hash": "jE3LKVlbGd0PXnTxmL7WQyyIZvLtEfsoY9nNa70W60E=",
   "Source": "Blazor Web App",
   "BasePath": "/",
   "Mode": "Root",
@@ -4064,6 +4064,25 @@
       "OriginalItemSpec": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\obj\\Debug\\net8.0\\webcil\\System.wasm"
     },
     {
+      "Identity": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\bin\\Debug\\net8.0\\wwwroot\\_framework\\System.Web.Cors.wasm",
+      "SourceId": "Blazor Web App",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\bin\\Debug\\net8.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/System.Web.Cors.wasm",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "WasmResource",
+      "AssetTraitValue": "runtime",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\obj\\Debug\\net8.0\\webcil\\System.Web.Cors.wasm"
+    },
+    {
       "Identity": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\bin\\Debug\\net8.0\\wwwroot\\_framework\\System.Web.HttpUtility.wasm",
       "SourceId": "Blazor Web App",
       "SourceType": "Computed",
@@ -7482,6 +7501,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\bin\\Debug\\net8.0\\wwwroot\\_framework\\System.Private.Xml.Linq.wasm"
+    },
+    {
+      "Identity": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\obj\\Debug\\net8.0\\compressed\\oy6h83gfzb.gz",
+      "SourceId": "Blazor Web App",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\bin\\Debug\\net8.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/System.Web.Cors.wasm.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\bin\\Debug\\net8.0\\wwwroot\\_framework\\System.Web.Cors.wasm",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\bin\\Debug\\net8.0\\wwwroot\\_framework\\System.Web.Cors.wasm"
     },
     {
       "Identity": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\obj\\Debug\\net8.0\\compressed\\ozzuvxat07.gz",

@@ -13,8 +13,6 @@
     </div>
 </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
 <div class="ts-nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="ts-nav-column">
         <div class="ts-nav-scrollable-item">
@@ -25,35 +23,37 @@
                 <ChapterButton ButtonId="@View.ButtonIdGen()"
                                Chapter="chapter"
                                ChapterIndex="i"
-                               OnOpenAddMenu="OpenAddLeafModal" />
+                               />
             }
         </div>
     </nav>
 </div>
 
-<AddLeaf @ref="addLeafModal" OnAddLeaf="AddLeaf"/>
 <AddChapter @ref="addChapterModal" OnAddChapter="AddChapter" />
 
 @code {
-    private AddLeaf addLeafModal;
     private AddChapter addChapterModal;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var bookResponse = await Api.GetBookIdAsync();
-        if (bookResponse.Success)
+        if (Book.BookId == 0)
         {
-            Book.BookId = bookResponse.BookId;
-            var chapterResponse = await Api.GetChaptersAsync(Book.BookId);
-            if (chapterResponse.Success)
+            var bookResponse = await Api.GetBookIdAsync();
+            if (bookResponse.Success)
             {
-                Book.Chapters = chapterResponse.Chapters;
+                Book.BookId = bookResponse.BookId;
             }
             else
             {
                 Navigation.NavigateTo("/login");
             }
+        }
+        
+        var chapterResponse = await Api.GetChaptersAsync(Book.BookId);
+        if (chapterResponse.Success)
+        {
+            Book.Chapters = chapterResponse.Chapters;
         }
         else
         {
@@ -61,11 +61,7 @@
         }
     }
 
-    private void OpenAddLeafModal()
-    {
-        addLeafModal.OpenModal();
-    }
-    
+      
     private void OpenAddChapterModal()
     {
         addChapterModal.OpenModal();
@@ -80,11 +76,11 @@
         }
     }
 
-    private void AddChapter(ChapterDto chapter)
+    private void AddChapter(AddChapterRequest chapter)
     {
         if (chapter != null)
         {
-            //Api.AddChapterAsync(chapter);
+            var response = Api.CreateChapterAsync(chapter);
             StateHasChanged();
         }
     }

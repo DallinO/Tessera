@@ -3,46 +3,27 @@
   "WorkspaceRootPath": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DBDB410D-25B8-470B-8B96-824235363A5B}|Aegis.UnitTests\\Aegis.UnitTests.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis.unittests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DBDB410D-25B8-470B-8B96-824235363A5B}|Aegis.UnitTests\\Aegis.UnitTests.csproj|solutionrelative:aegis.unittests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75A55286-19C5-4123-B1E3-9969599D5F4B}|..\\Tessera Models\\Tessera Models\\Tessera Models.csproj|c:\\users\\olson\\documents\\github\\tessera\\tessera models\\tessera models\\book\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\data\\bookdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\data\\bookdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{75A55286-19C5-4123-B1E3-9969599D5F4B}|..\\Tessera Models\\Tessera Models\\Tessera Models.csproj|c:\\users\\olson\\documents\\github\\tessera\\tessera models\\tessera models\\authentication\\scribe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\controllers\\librarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\controllers\\librarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\controllers\\authenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\controllers\\authenticationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\data\\dbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\data\\dbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\services\\bookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\services\\bookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\data\\tesseradbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\data\\tesseradbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{75A55286-19C5-4123-B1E3-9969599D5F4B}|..\\Tessera Models\\Tessera Models\\Tessera Models.csproj|c:\\users\\olson\\documents\\github\\tessera\\tessera models\\tessera models\\codegenerators.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\swagger endpoint tests\\endpointtests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\swagger endpoint tests\\endpointtests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\controllers\\librarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\controllers\\librarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis\\services\\bookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{49AD942E-44EF-4587-8197-9E4A5FF023F7}|Aegis\\Aegis.csproj|solutionrelative:aegis\\services\\bookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DBDB410D-25B8-470B-8B96-824235363A5B}|Aegis.UnitTests\\Aegis.UnitTests.csproj|c:\\users\\olson\\documents\\github\\tessera\\web api\\aegis.unittests\\authunittests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DBDB410D-25B8-470B-8B96-824235363A5B}|Aegis.UnitTests\\Aegis.UnitTests.csproj|solutionrelative:aegis.unittests\\authunittests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -52,7 +33,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -76,146 +57,76 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Program.cs",
-              "RelativeDocumentMoniker": "Aegis\\Program.cs",
-              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Program.cs",
-              "RelativeToolTip": "Aegis\\Program.cs",
-              "ViewState": "AQIAAJYAAAAAAAAAAAAAAKIAAAAGAAAA",
+              "DocumentIndex": 3,
+              "Title": "CodeGenerators.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\CodeGenerators.cs",
+              "RelativeDocumentMoniker": "..\\Tessera Models\\Tessera Models\\CodeGenerators.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\CodeGenerators.cs",
+              "RelativeToolTip": "..\\Tessera Models\\Tessera Models\\CodeGenerators.cs",
+              "ViewState": "AQIAABwAAAAAAAAAAAAgwCgAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-28T00:59:24.108Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "UnitTest1.cs",
-              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis.UnitTests\\UnitTest1.cs",
-              "RelativeDocumentMoniker": "Aegis.UnitTests\\UnitTest1.cs",
-              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis.UnitTests\\UnitTest1.cs",
-              "RelativeToolTip": "Aegis.UnitTests\\UnitTest1.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAqwCEAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-28T00:55:52.406Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "DbContextFactory.cs",
-              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Data\\DbContextFactory.cs",
-              "RelativeDocumentMoniker": "Aegis\\Data\\DbContextFactory.cs",
-              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Data\\DbContextFactory.cs",
-              "RelativeToolTip": "Aegis\\Data\\DbContextFactory.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAkAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-28T00:47:35.025Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "EndpointTests.cs",
-              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Swagger Endpoint Tests\\EndpointTests.cs",
-              "RelativeDocumentMoniker": "Aegis\\Swagger Endpoint Tests\\EndpointTests.cs",
-              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Swagger Endpoint Tests\\EndpointTests.cs",
-              "RelativeToolTip": "Aegis\\Swagger Endpoint Tests\\EndpointTests.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAYwBYAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-27T22:52:54.262Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "TesseraDBContext.cs",
-              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Data\\TesseraDBContext.cs",
-              "RelativeDocumentMoniker": "Aegis\\Data\\TesseraDBContext.cs",
-              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Data\\TesseraDBContext.cs",
-              "RelativeToolTip": "Aegis\\Data\\TesseraDBContext.cs",
-              "ViewState": "AQIAAAIAAAAAAAAAAIAxwBAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-27T03:39:12.044Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-03T04:28:35.613Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Book.cs",
-              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\Book\\Book.cs",
-              "RelativeDocumentMoniker": "..\\Tessera Models\\Tessera Models\\Book\\Book.cs",
-              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\Book\\Book.cs",
-              "RelativeToolTip": "..\\Tessera Models\\Tessera Models\\Book\\Book.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABAAAAAFAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-27T03:38:37.43Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Scribe.cs",
-              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\Authentication\\Scribe.cs",
-              "RelativeDocumentMoniker": "..\\Tessera Models\\Tessera Models\\Authentication\\Scribe.cs",
-              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Tessera Models\\Tessera Models\\Authentication\\Scribe.cs",
-              "RelativeToolTip": "..\\Tessera Models\\Tessera Models\\Authentication\\Scribe.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAwAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-27T03:37:50.432Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "AuthenticationController.cs",
-              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Controllers\\AuthenticationController.cs",
-              "RelativeDocumentMoniker": "Aegis\\Controllers\\AuthenticationController.cs",
-              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Controllers\\AuthenticationController.cs",
-              "RelativeToolTip": "Aegis\\Controllers\\AuthenticationController.cs",
-              "ViewState": "AQIAADgAAAAAAAAAAAAqwGAAAAAhAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-27T02:51:23.524Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "BookDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Data\\BookDbContext.cs",
-              "RelativeDocumentMoniker": "Aegis\\Data\\BookDbContext.cs",
-              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Data\\BookDbContext.cs",
-              "RelativeToolTip": "Aegis\\Data\\BookDbContext.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-21T01:34:44.893Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
               "Title": "BookService.cs",
               "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Services\\BookService.cs",
               "RelativeDocumentMoniker": "Aegis\\Services\\BookService.cs",
               "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Services\\BookService.cs",
               "RelativeToolTip": "Aegis\\Services\\BookService.cs",
-              "ViewState": "AQIAADcAAAAAAAAAAAAUwEYAAAAmAAAA",
+              "ViewState": "AQIAAJsAAAAAAAAAAAAAAKIAAAAUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-21T01:25:58.74Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-03T04:28:27.163Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 4,
+              "Title": "EndpointTests.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Swagger Endpoint Tests\\EndpointTests.cs",
+              "RelativeDocumentMoniker": "Aegis\\Swagger Endpoint Tests\\EndpointTests.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Swagger Endpoint Tests\\EndpointTests.cs",
+              "RelativeToolTip": "Aegis\\Swagger Endpoint Tests\\EndpointTests.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAzwBYAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-27T22:52:54.262Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AuthenticationController.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Controllers\\AuthenticationController.cs",
+              "RelativeDocumentMoniker": "Aegis\\Controllers\\AuthenticationController.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Controllers\\AuthenticationController.cs",
+              "RelativeToolTip": "Aegis\\Controllers\\AuthenticationController.cs",
+              "ViewState": "AQIAAB0BAAAAAAAAAAAAAFIAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-27T02:51:23.524Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "LibraryController.cs",
               "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Controllers\\LibraryController.cs",
               "RelativeDocumentMoniker": "Aegis\\Controllers\\LibraryController.cs",
               "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis\\Controllers\\LibraryController.cs",
               "RelativeToolTip": "Aegis\\Controllers\\LibraryController.cs",
-              "ViewState": "AQIAAKEBAAAAAAAAAAAAAKABAAAlAAAA",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAA4AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-21T01:06:05.938Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AuthUnitTests.cs",
+              "DocumentMoniker": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis.UnitTests\\AuthUnitTests.cs",
+              "RelativeDocumentMoniker": "Aegis.UnitTests\\AuthUnitTests.cs",
+              "ToolTip": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Web API\\Aegis.UnitTests\\AuthUnitTests.cs",
+              "RelativeToolTip": "Aegis.UnitTests\\AuthUnitTests.cs",
+              "ViewState": "AQIAAE8AAAAAAAAAAAAAAEEAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-03T00:56:52.411Z"
             }
           ]
         }

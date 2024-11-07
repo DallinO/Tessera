@@ -2,8 +2,9 @@
 .page[b-qqqqd6yyje] {
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
+
 
 main[b-qqqqd6yyje] {
     flex: 1;

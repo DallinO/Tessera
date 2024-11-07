@@ -30,7 +30,7 @@ namespace Tessera.CodeGenerators
 
         //    int year = DateTime.Now.Year % 100;
 
-        public static string GenerateTenDigitId()
+        public static string GenerateNineDigitId()
         {
             string number;
             do
@@ -44,10 +44,10 @@ namespace Tessera.CodeGenerators
         private static string GenerateNumber()
         {
             char[] digits = "123456789".ToCharArray(); // Start with digits 1-9
-            char[] result = new char[10];
+            char[] result = new char[9];
             result[0] = digits[_random.Next(digits.Length)]; // Ensure it doesn't start with 0
 
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 9; i++)
             {
                 char nextDigit;
                 do

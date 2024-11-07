@@ -56,7 +56,7 @@ namespace Aegis.Services
          * GET CHAPTERS ASYNC
          * - 
          ***************************************************/
-        public async Task<List<ChapterDto>> GetChaptersAsync(string connectionStringName, int? bookId)
+        public async Task<List<ChapterDto>> GetChaptersAsync(string connectionStringName, int bookId)
         {
             // Create a DbContext instance using the provided connection string
             using (var dbContext = _dbFactory.CreateDbContext(connectionStringName))
@@ -73,7 +73,6 @@ namespace Aegis.Services
                     {
                         Title = chapter.Title,
                         Description = chapter.Description,
-                        //Contents = new List<LeafDto>() // If needed, populate this as well
                     }).ToList();
 
                     return chapterDtos;
@@ -127,7 +126,7 @@ namespace Aegis.Services
                 int chapterId;
                 do
                 {
-                    chapterId = int.Parse(CodeGen.GenerateTenDigitId());
+                    chapterId = int.Parse(CodeGen.GenerateNineDigitId());
                     chapterIdExists = await dbContext.Chapters.AnyAsync(c => c.Id == chapterId);
                     count++;
                 }
