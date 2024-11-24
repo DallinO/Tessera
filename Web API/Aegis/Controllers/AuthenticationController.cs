@@ -194,7 +194,7 @@ namespace Aegis.Controllers
                 }
 
                 // Generate tokens
-                JwtSecurityToken token = _tokenService.GenerateJwt(model.Email);
+                JwtSecurityToken token = _tokenService.GenerateJwt(user.Id);
                 var refreshToken = TokenService.GenerateRefreshToken();
             
                 // Set scribe tokens
@@ -403,9 +403,12 @@ namespace Aegis.Controllers
 
             var principal = _tokenService.GetPrincipalFromExpiredToken(model.AccessToken);
 
-            if (principal?.Identity?.Name is null)
+            // Retrieve the user ID from the token’s claims instead of using Name
+            var userId = principal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
             {
-                _logger.LogWarning("UNAUTHORIZED");
+                _logger.LogWarning("UNAUTHORIZED: User ID not found in token");
                 return Unauthorized(new ApiLoginResponse
                 {
                     Success = false,
@@ -416,22 +419,22 @@ namespace Aegis.Controllers
                 });
             }
 
-            var user = await _userManager.FindByNameAsync(principal.Identity.Name);
-
-            if (user is null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiry < DateTime.UtcNow)
+            // Validate the user with their ID
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null || 
+                user.RefreshToken != model.RefreshToken ||
+                user.RefreshTokenExpiry < DateTime.UtcNow)
             {
-                _logger.LogWarning("UNAUTHORIZED");
+                _logger.LogWarning("UNAUTHORIZED: Invalid refresh token or token expired");
                 return Unauthorized(new ApiLoginResponse
                 {
                     Success = false,
-                    Errors = new List<string>
-                    {
-                        "401 Unauthorized"
-                    }
+                    Errors = new List<string> { "401 Unauthorized" }
                 });
             }
 
-            var token = _tokenService.GenerateJwt(principal.Identity.Name);
+            // Pass the user ID to GenerateJwt
+            var token = _tokenService.GenerateJwt(userId);
 
             _logger.LogInformation("REFRESH SUCCEEDED");
 

@@ -1,5 +1,4 @@
-﻿using Tessera.Models.Book;
-using Tessera.Models.Chapter;
+﻿using Tessera.Models.Chapter;
 
 namespace Tessera.Models.Authentication
 {
@@ -49,5 +48,14 @@ namespace Tessera.Models.Authentication
         public ApiChapterData() { }
         public ApiChapterData(List<string> errors) : base(errors) { }
     }
+
+    public class ApiDocumentResponse : ApiResponse
+    {
+        public DocumentDto Document { get; set; }
+        public ApiDocumentResponse() { }
+        public ApiDocumentResponse(List<string> errors) : base(errors) { }
+    }
+
+
 
 }

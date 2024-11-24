@@ -30,13 +30,19 @@
         <div class="ts-auth-container-btn-container">
             <button class="ts-secondary-btn" @onclick="SwitchToRegister">Register</button>
         </div>
-        <div class="ts-auth-container-item">
-            <p class="ts-auth-errors">@LoginError</p>
-        </div>
+        @if (ShowErrors)
+        {
+            <div class="ts-auth-container-item-bottom">
+                <p class="ts-auth-errors @(ShowErrors ? "visible" : "")">
+                    @LoginError
+                </p>
+            </div>
+        }
     </div>
 </div>
 
 @code {
+    private bool ShowErrors { get; set; } = false;
     private string Email { get; set; } = "td1@test.com";
     private string Password { get; set; } = "Test@123";
     private MarkupString LoginError { get; set; }
@@ -59,6 +65,7 @@
             {
                 Library.BookId = book.BookId;
                 Navigation.NavigateTo($"/b/{book.BookId}");
+                ResetErrors();
             }
             else
             {
@@ -76,8 +83,15 @@
         Navigation.NavigateTo("/register");
     }
 
+    private void ResetErrors()
+    {
+        ShowErrors = false;
+        LoginError = new MarkupString();
+    }
+
     private void DisplayErrors(List<string> errors)
     {
+        ResetErrors();
         StringBuilder errorMessage = new();
         foreach (string error in errors)
         {
@@ -85,5 +99,7 @@
             errorMessage.Append("<br />");
         }
         LoginError = new MarkupString(errorMessage.ToString());
+        ShowErrors = true;
+        StateHasChanged();
     }
 }

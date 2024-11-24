@@ -14,6 +14,25 @@
           "lib/net7.0/Blazored.SessionStorage.dll": {}
         }
       },
+      "Blazored.TextEditor/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "3.1.0",
+          "Microsoft.AspNetCore.Components.Web": "3.1.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Blazored.TextEditor.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Blazored.TextEditor.dll": {}
+        },
+        "build": {
+          "buildTransitive/Blazored.TextEditor.props": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/Blazored.TextEditor.props": {}
+        }
+      },
       "Microsoft.AspNet.Cors/5.3.0": {
         "type": "package",
         "compile": {
@@ -929,6 +948,25 @@
           "lib/net7.0/Blazored.SessionStorage.dll": {}
         }
       },
+      "Blazored.TextEditor/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "3.1.0",
+          "Microsoft.AspNetCore.Components.Web": "3.1.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Blazored.TextEditor.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Blazored.TextEditor.dll": {}
+        },
+        "build": {
+          "buildTransitive/Blazored.TextEditor.props": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/Blazored.TextEditor.props": {}
+        }
+      },
       "Microsoft.AspNet.Cors/5.3.0": {
         "type": "package",
         "compile": {
@@ -1839,6 +1877,25 @@
         "icon.png",
         "lib/net6.0/Blazored.SessionStorage.dll",
         "lib/net7.0/Blazored.SessionStorage.dll"
+      ]
+    },
+    "Blazored.TextEditor/1.1.0": {
+      "sha512": "f2aC1vQlYCYmRXkXr66XF9B8i/QpODtbq7GR1AWmRVcY1NR7HgN7jvgPOObzfu6r8IDod6B3YDkH+KSEh+QiUg==",
+      "type": "package",
+      "path": "blazored.texteditor/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "blazored.texteditor.1.1.0.nupkg.sha512",
+        "blazored.texteditor.nuspec",
+        "build/Blazored.TextEditor.props",
+        "build/Microsoft.AspNetCore.StaticWebAssets.props",
+        "buildMultiTargeting/Blazored.TextEditor.props",
+        "buildTransitive/Blazored.TextEditor.props",
+        "icon.png",
+        "lib/netstandard2.0/Blazored.TextEditor.dll",
+        "staticwebassets/Blazored-BlazorQuill.js",
+        "staticwebassets/quill-blot-formatter.min.js"
       ]
     },
     "Microsoft.AspNet.Cors/5.3.0": {
@@ -3438,6 +3495,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "Blazored.SessionStorage >= 2.4.0",
+      "Blazored.TextEditor >= 1.1.0",
       "Microsoft.AspNet.Cors >= 5.3.0",
       "Microsoft.AspNetCore.Components.WebAssembly >= 8.0.6",
       "Microsoft.AspNetCore.Components.WebAssembly.DevServer >= 8.0.6",
@@ -3510,6 +3568,10 @@
           "Blazored.SessionStorage": {
             "target": "Package",
             "version": "[2.4.0, )"
+          },
+          "Blazored.TextEditor": {
+            "target": "Package",
+            "version": "[1.1.0, )"
           },
           "Microsoft.AspNet.Cors": {
             "target": "Package",

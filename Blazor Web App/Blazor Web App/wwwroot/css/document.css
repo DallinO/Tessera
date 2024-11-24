@@ -1,0 +1,18 @@
+﻿.ts-document-header {
+    background-color: #d5d8dc;
+    display: flex;
+    align-items: center;
+    height: 60px;
+}
+
+.ql-toolbar.ql-snow{
+    padding: 0 !important;
+}
+
+.ts-document-body {
+    border: 2px solid red;
+}
+
+.ts-document-header-item {
+    margin: 10px;
+}

@@ -1,12 +1,14 @@
 ﻿@namespace Tessera.Web
 
+@inject IBookService Book
+
 @if (isVisible)
 {
     <div class="ts-modal-overlay">
         <div class="ts-modal-content">
             <div class="ts-chapter-settings-header">
-                <input class="ts-basic-input-field" type="text" @bind="Title" />
-                <input type="text" @bind="Description" />
+                <input class="ts-basic-input-field" type="text" @bind="Book.Chapters[ChapterIndex].Title" />
+                <input type="text" @bind="Book.Chapters[ChapterIndex].Description" />
             </div>
             <div class="ts-modal-body">
                 <button class="ts-secondary-btn">
@@ -24,8 +26,7 @@
 }
 
 @code {
-    [Parameter] public string Title { get; set; }
-    [Parameter] public string Description { get; set; }
+    [Parameter] public int ChapterIndex { get; set; }
     [Parameter] public EventCallback OnOpenSettings { get; set; }
     public bool isVisible = false;
 

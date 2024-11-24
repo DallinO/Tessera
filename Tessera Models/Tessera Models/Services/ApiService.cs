@@ -30,7 +30,8 @@ namespace Tessera.Web.Services
         Task<ApiBookResponse> GetBookIdAsync();
         Task<ApiResponse> CreateBookAsync();
         Task<ApiChapterIndex> GetChaptersAsync(int bookId);
-        Task<ApiChapterData> GetChaperDataAsync(int bookId, int chapterId);
+        Task<ApiDocumentResponse> GetDocumentDataAsync(int bookId, int chapterId);
+        Task<ApiResponse> SaveDocumentDataAsync(SaveDocumentRequest request);
         Task<ApiResponse> CreateChapterAsync(AddChapterRequest request);
     }
 
@@ -97,28 +98,38 @@ namespace Tessera.Web.Services
          * *************************************************/
         public async Task<ApiLoginResponse> LoginAsync(LoginRequest model)
         {
-
-            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/auth/login", model);
-
-            var content = await response.Content.ReadFromJsonAsync<ApiLoginResponse>();
-
-            if (content == null)
+            try
             {
-                return new ApiLoginResponse()
+                var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/auth/login", model);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiLoginResponse>();
+
+                if (content == null)
+                {
+                    return new ApiLoginResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Null Api Response"
+                        }
+                    };
+                }
+
+                await _jsRuntime.InvokeVoidAsync("setCookie", "JWT", content.JwtToken, 1);
+                await _jsRuntime.InvokeVoidAsync("setCookie", "RefreshToken", content.RefreshToken, 1);
+
+                LoginChange?.Invoke(GetUsername(content.JwtToken));
+                return content;
+            }
+            catch (Exception ex)
+            {
+                return new ApiLoginResponse
                 {
                     Success = false,
-                    Errors = new List<string>()
-                    {
-                        "Null Api Response"
-                    }
+                    Errors = new List<string> { $"{ex.Message}" }
                 };
             }
-
-            await _jsRuntime.InvokeVoidAsync("setCookie", "JWT", content.JwtToken, 1);
-            await _jsRuntime.InvokeVoidAsync("setCookie", "RefreshToken", content.RefreshToken, 1);
-
-            LoginChange?.Invoke(GetUsername(content.JwtToken));
-            return content;
         }
 
 
@@ -127,24 +138,35 @@ namespace Tessera.Web.Services
          * *************************************************/
         public async Task<ApiResponse> RegisterAsync(RegisterRequest model)
         {
-            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/auth/register", model);
+            try 
+            { 
+                var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/auth/register", model);
 
-            var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
-            if (content == null)
-            {
-                List<string> errors = new List<string>()
+                var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (content == null)
                 {
-                    "Null Api Response"
-                };
+                    List<string> errors = new List<string>()
+                    {
+                        "Null Api Response"
+                    };
 
-                return new ApiResponse(errors)
+                    return new ApiResponse(errors)
+                    {
+                        Success = false
+                    };
+                }
+                else
                 {
-                    Success = false
-                };
+                    return content;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return content;
+                return new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
             }
         }
 
@@ -211,7 +233,7 @@ namespace Tessera.Web.Services
         public async Task<ApiChapterIndex> GetChaptersAsync(int bookId)
         {
             var client = _factory.CreateClient("ServerApi");
-            var url = $"api/Library/GetChapters?bookId={bookId}";
+            var url = $"api/library/getchapterlist?bookId={bookId}";
             var response = await client.GetAsync(url);
 
             var content = await response.Content.ReadFromJsonAsync<ApiChapterIndex>();
@@ -232,16 +254,17 @@ namespace Tessera.Web.Services
             }
         }
 
-        public async Task<ApiChapterData> GetChaperDataAsync(int bookId, int chapterId)
-        {
-            var client = _factory.CreateClient("ServerApi");
-            var url = $"api/Library/GetChapter?bookId={bookId}";
-            var response = await client.GetAsync(url);
 
-            var content = await response.Content.ReadFromJsonAsync<ApiChapterData>();
+        /***************************************************
+        * SAVE CHAPTERS
+        * *************************************************/
+        public async Task<ApiResponse> SaveDocumentDataAsync(SaveDocumentRequest request)
+        {
+            var response = await _factory.CreateClient("ServerApi").PatchAsJsonAsync("api/library/savedocument", request);
+            var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
             if (content == null)
             {
-                return new ApiChapterData()
+                return new ApiResponse()
                 {
                     Success = false,
                     Errors = new List<string>()
@@ -253,6 +276,42 @@ namespace Tessera.Web.Services
             else
             {
                 return content;
+            }
+        }
+
+
+        public async Task<ApiDocumentResponse> GetDocumentDataAsync(int bookId, int chapterId)
+        {
+            try
+            {
+                var client = _factory.CreateClient("ServerApi");
+                var url = $"api/library/getdocument?bookId={bookId}&chapterId={chapterId}";
+                var response = await client.GetAsync(url);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiDocumentResponse>();
+                if (content == null)
+                {
+                    return new ApiDocumentResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Null Api Response"
+                        }
+                    };
+                }
+                else
+                {
+                    return content;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiDocumentResponse()
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
             }
         }
 
@@ -279,21 +338,6 @@ namespace Tessera.Web.Services
                 return content;
             }
         }
-
-
-        /****************************************
-         * UPDATE HTTP CLIENT ASCYNC
-         ***************************************
-        private async Task UpdateHttpClientAsync()
-        {
-            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "accessToken");
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                _factory.CreateClient("ServerApi").DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            }
-        }
-        */
 
 
         /****************************************
@@ -332,35 +376,7 @@ namespace Tessera.Web.Services
 
             return true;
 
-            /* OLD CODE
-            var model = new RefreshModel
-            {
-                AccessToken = await _sss.GetItemAsync<string>(JWT_KEY),
-                RefreshToken = await _sss.GetItemAsync<string>(REFRESH_KEY)
-            };
-
-            var response = await _factory.CreateClient("ServerApi").PostAsync("api/Authentication/Refresh",
-                                                        JsonContent.Create(model));
-
-            if (!response.IsSuccessStatusCode)
-            {
-                await LogoutAsync();
-
-                return false;
-            }
-
-            var content = await response.Content.ReadFromJsonAsync<ApiLoginResponse>();
-
-            if (content == null)
-                throw new InvalidDataException();
-
-            await _sss.SetItemAsync(JWT_KEY, content.JwtToken);
-            await _sss.SetItemAsync(REFRESH_KEY, content.RefreshToken);
-
-            _jwtCache = content.JwtToken;
-
-            return true;
-            */
+           
         }
 
 

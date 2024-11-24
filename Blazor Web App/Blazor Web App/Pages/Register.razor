@@ -2,71 +2,79 @@
 
 @inject IApiService Api
 @inject NavigationManager Navigation
+@inject IBookService Book
 
 @page "/register"
 
-<div class="ts-auth-container">
-    <p class="ts-auth-errors @(string.IsNullOrWhiteSpace(FirstNameError.ToString()) ? "" : "visible")">@FirstNameError</p>
-    <div class="ts-auth-container-item">
-        <div class="ts-label-container">
-            <label for="fn-input" class="ts-label">First Name</label>
+<div class="ts-auth-page">
+    <div class="ts-auth-container">
+        <div class="ts-auth-container-item">
+            <div class="ts-label-container">
+                <label for="fn-input" class="ts-label">First Name</label>
+            </div>
+            <div class="ts-input-container">
+                <input class="ts-primary-input" type="text" id="fn-input" required="" @bind="FirstName">
+            </div>
         </div>
-        <div class="ts-input-container">
-            <input class="ts-primary-input" type="text" id="fn-input" required="" @bind="FirstName">
+        <div class="ts-auth-container-item">
+            <div class="ts-label-container">
+                <label for="ln-input" class="ts-label">Last Name</label>
+            </div>
+            <div class="ts-input-container">
+                <input class="ts-primary-input" type="text" id="ln-input" required="" @bind="LastName">
+            </div>
         </div>
+        <div class="ts-auth-container-item">
+            <div class="ts-label-container">
+                <label for="em-input" class="ts-label">Email</label>
+            </div>
+            <div class="ts-input-container">
+                <input class="ts-primary-input" type="text" id="em-input" required="" @bind="Email">
+            </div>
+        </div>
+        <div class="ts-auth-container-item">
+            <div class="ts-label-container">
+                <label for="ce-input" class="ts-label">Confirm Email</label>
+            </div>
+            <div class="ts-input-container">
+                <input class="ts-primary-input" type="text" id="ce-input" required="" @bind="ConfirmEmail">
+            </div>
+        </div>
+        <div class="ts-auth-container-item">
+            <div class="ts-label-container">
+                <label for="pw-input" class="ts-label">Password</label>
+            </div>
+            <div class="ts-input-container">
+                <input class="ts-primary-input" type="text" id="pw-input" required="" @bind="Password">
+            </div>
+        </div>
+        <div class="ts-auth-container-item">
+            <div class="ts-label-container">
+                <label for="cp-input" class="ts-label">Confirm Password</label>
+            </div>
+            <div class="ts-input-container">
+                <input class="ts-primary-input" type="text" id="cp-input" required="" @bind="ConfirmPassword">
+            </div>
+        </div>
+        <div class="ts-auth-container-item">
+            <button class="ts-primary-btn" @onclick="RegisterAsync">Register</button>
+        </div>
+        <div class="ts-auth-container-btn-container">
+            <button class="ts-secondary-btn" @onclick="SwitchToLogin">Back To Login</button>
+        </div>
+        @if (ShowErrors)
+        {
+            <div class="ts-auth-container-item-bottom">
+                <p class="ts-auth-errors @(ShowErrors ? "visible" : "")">
+                    @RegisterError
+                </p>
+            </div>
+        }
     </div>
-    <p class="ts-auth-errors @(string.IsNullOrWhiteSpace(LastNameError.ToString()) ? "" : "visible")">@LastNameError</p>
-    <div class="ts-auth-container-item">
-        <div class="ts-label-container">
-            <label for="ln-input" class="ts-label">Last Name</label>
-        </div>
-        <div class="ts-input-container">
-            <input class="ts-primary-input" type="text" id="ln-input" required="" @bind="LastName">
-        </div>
-    </div>
-    <p class="ts-auth-errors @(string.IsNullOrWhiteSpace(EmailError.ToString()) ? "" : "visible")">@EmailError</p>
-    <div class="ts-auth-container-item">
-        <div class="ts-label-container">
-            <label for="em-input" class="ts-label">Email</label>
-        </div>
-        <div class="ts-input-container">
-            <input class="ts-primary-input" type="text" id="em-input" required="" @bind="Email">
-        </div>
-    </div>
-    <p class="ts-auth-errors ">@ConfirmEmailError</p>
-    <div class="ts-auth-container-item">
-        <div class="ts-label-container">
-            <label for="ce-input" class="ts-label">Confirm Email</label>
-        </div>
-        <div class="ts-input-container">
-            <input class="ts-primary-input" type="text" id="ce-input" required="" @bind="ConfirmEmail">
-        </div>
-    </div>
-    <p class="ts-auth-errors">@PasswordError</p>
-    <div class="ts-auth-container-item">
-        <div class="ts-label-container">
-            <label for="pw-input" class="ts-label">Password</label>
-        </div>
-        <div class="ts-input-container">
-            <input class="ts-primary-input" type="text" id="pw-input" required="" @bind="Password">
-        </div>
-    </div>
-    <p class="ts-auth-errors">@ConfirmPasswordError</p>
-    <div class="ts-auth-container-item">
-        <div class="ts-label-container">
-            <label for="cp-input" class="ts-label">Confirm Password</label>
-        </div>
-        <div class="ts-input-container">
-            <input class="ts-primary-input" type="text" id="cp-input" required="" @bind="ConfirmPassword">
-        </div>
-    </div>
-    <p class="ts-auth-errors">@GenericError</p>
-    <button class="ts-primary-btn" @onclick="RegisterAsync">Register</button>
-    <button class="ts-secondary-btn" @onclick="SwitchToLogin">Back To Login</button>
 </div>
 
 @code {
-    string test = "visisble";
+    private bool ShowErrors { get; set; } = false;
 
     // RegisterDefualtModel Inputs
     private string FirstName { get; set; } = "TestDummy";
@@ -76,28 +84,19 @@
     private string Password { get; set; } = "Test@123";
     private string ConfirmPassword { get; set; } = "Test@123";
 
-    // Error Messages
-    private MarkupString FirstNameError { get; set; }
-    private MarkupString LastNameError { get; set; }
-    private MarkupString EmailError { get; set; }
-    private MarkupString ConfirmEmailError { get; set; }
-    private MarkupString PasswordError { get; set; }
-    private MarkupString ConfirmPasswordError { get; set; }
-    private MarkupString GenericError { get; set; }
+    private MarkupString RegisterError { get; set; }
 
     private async Task RegisterAsync()
     {
         var model = new RegisterRequest
-        {
-            FirstName = FirstName,
-            LastName = LastName,
-            Email = Email,
-            ConfirmEmail = ConfirmEmail,
-            Password = Password,
-            ConfirmPassword = ConfirmPassword
-        };
-
-        ResetErrorMessages();
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                ConfirmEmail = ConfirmEmail,
+                Password = Password,
+                ConfirmPassword = ConfirmPassword
+            };
 
         var result = await Api.RegisterAsync(model);
 
@@ -105,49 +104,54 @@
         {
             if (result.Success)
             {
-                var bookResult = await Api.CreateBookAsync();
-                if (bookResult.Success)
+                var book = await Api.GetBookIdAsync();
+                if (book.Success)
                 {
-                    await SwitchToLogin();
+                    Book.BookId = book.BookId;
+                    Navigation.NavigateTo($"/b/{book.BookId}");
+                    ResetErrors();
                 }
                 else
                 {
-                    await SwitchToLogin(bookResult.Errors);
+                    DisplayErrors(book.Errors);
                 }
             }
             else
             {
-                StringBuilder errorMessage = new();
-                foreach (string error in result.Errors)
-                {
-                    errorMessage.AppendLine(string.Join("<br />", error));
-                    errorMessage.Append("<br />");
-                }
-                GenericError = new MarkupString(errorMessage.ToString());
+                DisplayErrors(result.Errors);
             }
         }
     }
 
     private async Task SwitchToLogin()
     {
-        ResetErrorMessages();
-        Navigation.NavigateTo("/login");
-    }
-    
-    private async Task SwitchToLogin(List<string> errors)
-    {
-        ResetErrorMessages();
+        ResetErrors();
         Navigation.NavigateTo("/login");
     }
 
-    private void ResetErrorMessages()
+    private async Task SwitchToLogin(List<string> errors)
     {
-        FirstNameError = new MarkupString(string.Empty);
-        LastNameError = new MarkupString(string.Empty);
-        EmailError = new MarkupString(string.Empty);
-        ConfirmEmailError = new MarkupString(string.Empty);
-        PasswordError = new MarkupString(string.Empty);
-        ConfirmPasswordError = new MarkupString(string.Empty);
-        GenericError = new MarkupString(string.Empty);
+        ResetErrors();
+        Navigation.NavigateTo("/login");
+    }
+
+    private void ResetErrors()
+    {
+        ShowErrors = false;
+        RegisterError = new MarkupString();
+    }
+
+    private void DisplayErrors(List<string> errors)
+    {
+        ResetErrors();
+        StringBuilder errorMessage = new();
+        foreach (string error in errors)
+        {
+            errorMessage.AppendLine(string.Join("<br />", error));
+            errorMessage.Append("<br />");
+        }
+        RegisterError = new MarkupString(errorMessage.ToString());
+        ShowErrors = true;
+        StateHasChanged();
     }
 }

@@ -25,16 +25,18 @@
 .ts-auth-container-item-top {
 }
 
+.ts-auth-container-item-bottom {
+}
+
 .ts-auth-container-btn-container {
     margin-top: 5px;
 }
 
 .ts-auth-errors {
-    color: indianred;
+    color: var(--theme-1-error-text);
     text-align: center;
     text-transform: uppercase;
     font-size: 12px;
-    border: 2px solid yellow;
     display: none; /* Hide by default */
 }
 

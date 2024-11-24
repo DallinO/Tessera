@@ -2,7 +2,7 @@
 
 @inherits LayoutComponentBase
 
-@inject IBookService Library
+@inject IBookService Book
 @inject IApiService Api
 @inject NavigationManager Navigation
 
@@ -12,17 +12,6 @@
     </div>
 
     <main class="ts-page-content">
-        <div class="ts-top-row ts-utility ts-border">
-            <div class="ts-utility-root">      
-            </div>
-            <div class="ts-utility-search">
-            </div>
-            <div class="ts-utility-account-container">
-                <button class="ts-account-button">
-                            
-                </button>
-            </div>
-        </div>
         <div>
             @Body
         </div>

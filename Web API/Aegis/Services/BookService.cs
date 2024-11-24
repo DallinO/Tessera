@@ -1,6 +1,7 @@
 ﻿using Aegis.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using Tessera.Models.Authentication;
 using Tessera.Models.Chapter;
 using Microsoft.Data.SqlClient;
@@ -10,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Tessera.CodeGenerators;
 using System.Net;
+using System.Reflection.Metadata;
+using Microsoft.Identity.Client;
+using System.Linq.Expressions;
 
 namespace Aegis.Services
 {
@@ -53,26 +57,28 @@ namespace Aegis.Services
 
 
         /***************************************************
-         * GET CHAPTERS ASYNC
+         * GET CHAPTER LIST ASYNC
          * - 
          ***************************************************/
-        public async Task<List<ChapterDto>> GetChaptersAsync(string connectionStringName, int bookId)
+        public async Task<List<ChapterDto>> GetChapterListAsync(string connectionStringName, int bookId)
         {
             // Create a DbContext instance using the provided connection string
             using (var dbContext = _dbFactory.CreateDbContext(connectionStringName))
             {
                 try
                 {
-                    // Query for chapters filtered by bookId
+                    // Query for chapters filtered by bookId.
                     var chapters = await dbContext.Chapters
                         .Where(chapter => chapter.BookId == bookId)
                         .ToListAsync();
 
-                    // Convert to DTOs
+                    // Convert to DTOs.
                     var chapterDtos = chapters.Select(chapter => new ChapterDto
                     {
                         Title = chapter.Title,
+                        ChapterId = chapter.Id,
                         Description = chapter.Description,
+                        Type = (LeafType)chapter.Type
                     }).ToList();
 
                     return chapterDtos;
@@ -86,60 +92,117 @@ namespace Aegis.Services
             }
         }
 
-        public async Task<ChapterDto> GetChapterAsync(string connectionStringName, int chapterId)
+
+
+        /***************************************************
+         * GET CHAPTER DATA ASYNC
+         * - 
+         ***************************************************/
+        public async Task<DocumentDto> GetDocumentDataAsync(string connectionStringName, int bookId, int chapterId)
         {
             using (var dbContext = _dbFactory.CreateDbContext(connectionStringName))
             {
                 try
                 {
-                    // Query for chapter IDs filtered by bookId
-                    var chapter = await dbContext.Chapters
-                        .Where(ch => ch.Id == chapterId)
-                        .Select(ch => new ChapterDto // Use a lambda expression here
-                        { 
-                            Title = ch.Title,
-                            Description = ch.Description
+                    var document = await dbContext.Chapters
+                    .Where(c => c.Id == chapterId)
+                    .Join(
+                        dbContext.Documents,
+                        c => c.Id,          
+                        d => d.ChapterId,   
+                        (c, d) => new DocumentDto
+                        {
+                            DocumentId = d.Id,
+                            Title = c.Title,
+                            Description = c.Description,
+                            Content = d.Content
                         })
-                        .FirstOrDefaultAsync(); // Fix the method name spelling
+                    .FirstOrDefaultAsync();
 
-                    return chapter;
+                    return document;
+
                 }
                 catch (Exception ex)
                 {
                     // Log exception
-                    Console.WriteLine($"Error fetching chapter IDs: {ex.Message}");
+                    Console.WriteLine($"Error fetching document data: {ex.Message}");
                     return null;
                 }
             }
         }
 
         /***************************************************
-         * ADD CHAPTERS ASYNC
+         * SAVE CHAPTER DATA ASYNC
          * - 
          ***************************************************/
-        public async Task<ApiResponse> AddChaptersAsync(string connectionStringName, AddChapterRequest request)
+        public async Task<ApiResponse> SaveDocumentDataAsync(string connectionStringName, SaveDocumentRequest request)
         {
             using (var dbContext = _dbFactory.CreateDbContext(connectionStringName))
             {
-                int count = 0;
-                bool chapterIdExists = false;
-                int chapterId;
-                do
+                try
                 {
-                    chapterId = int.Parse(CodeGen.GenerateNineDigitId());
-                    chapterIdExists = await dbContext.Chapters.AnyAsync(c => c.Id == chapterId);
-                    count++;
-                }
-                while (chapterIdExists && count < 5);
+                    // Retrieve the document using the DocumentId from the request
+                    var document = await dbContext.Documents
+                        .FirstOrDefaultAsync(d => d.Id == request.Document.DocumentId);
 
-                if (chapterIdExists)
+                    if (document == null)
+                    {
+                        return new ApiResponse
+                        {
+                            Success = false,
+                            Errors = new List<string>
+                            {
+                                "404: Document not found."
+                            }
+                        };
+                    }
+
+                    // Update the content of the document
+                    document.Content = request.Document.Content;
+
+                    // Save the changes to the database
+                    await dbContext.SaveChangesAsync();
+                    return new ApiResponse
+                    {
+                        Success = true
+                    };
+                }
+                catch (Exception ex)
                 {
                     return new ApiResponse
                     {
                         Success = false,
                         Errors = new List<string>
                         {
-                            "409 Conflict: Chapter Already Exists"
+                            $"500: Error saving document data: {ex.Message}"
+                        }
+                    };
+                }
+            }
+        }
+
+
+
+        /***************************************************
+         * ADD CHAPTERS ASYNC
+         * - 
+         ***************************************************/
+        public async Task<ApiResponse> AddChaptersAsync(string dbName, AddChapterRequest request)
+        {
+            using (var dbContext = _dbFactory.CreateDbContext(dbName))
+            {
+                // Generate a unique nine digit chapter id. Attempts five time.
+                var (chapterSuccess, chapterId) = await GenerateId<ChapterEntity>(dbContext, async (set, id) => await set.AnyAsync(c => c.Id == id));
+
+                // Check if chapterId generation was successful
+                if (!chapterSuccess)
+                {
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Errors = new List<string>
+                        {
+                            "409 Conflict: ID already exists"
                         }
                     };
                 }
@@ -156,9 +219,50 @@ namespace Aegis.Services
                 // Add the new chapter to the context
                 dbContext.Chapters.Add(newChapter);
 
+                switch (request.Type)
+                {
+                    case LeafType.d:
+                        // Generate a unique nine digit document id. Attempts five time.
+                        var (bookSuccess, bookId) = await GenerateId<DocumentEntity>(dbContext, async (set, id) => await set.AnyAsync(d => d.Id == id));
+
+                        // Check if chapterId generation was successful
+                        if (!bookSuccess)
+                        {
+                            return new ApiResponse
+                            {
+                                Success = false,
+                                Errors = new List<string>
+                                {
+                                    "409 Conflict: ID already exists"
+                                }
+                            };
+                        }
+
+                        // Create new document entity.
+                        var newDocument = new DocumentEntity
+                        {
+                            Id = bookId,
+                            ChapterId = chapterId
+                        };
+
+                        dbContext.Documents.Add(newDocument);
+                        break;
+
+                    default:
+                        return (new ApiResponse
+                        {
+                            Success = false,
+                            Errors = new List<string>()
+                            {
+                                "400 Type Property Is Null"
+                            }
+                        });
+                }
+
+
+                // Save changes to the database
                 try
                 {
-                    // Save changes to the database
                     await dbContext.SaveChangesAsync();
                     return (new ApiResponse
                     {
@@ -177,6 +281,24 @@ namespace Aegis.Services
                     });
                 }
             }
+        }
+
+        public static async Task<(bool, int)> GenerateId<T>(DbContext dbContext, Func<DbSet<T>, int, Task<bool>> checkIdExists)
+        where T : class
+        {
+            int count = 0;
+            bool idExists = false;
+            int id;
+
+            do
+            {
+                id = int.Parse(CodeGen.GenerateNineDigitId());
+                idExists = await checkIdExists(dbContext.Set<T>(), id); // Check if the ID exists in the specified DbSet.
+                count++;
+            }
+            while (idExists && count < 5);
+
+            return idExists ? (false, 0) : (true, id);
         }
     }
 }

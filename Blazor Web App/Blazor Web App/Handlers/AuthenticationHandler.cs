@@ -52,39 +52,7 @@ namespace Tessera.Web.Handlers
             }
 
             return response;
-            /* OLD CODE
-            var jwt = await _apiService.GetJwtAsync();
-            var isToServer = request.RequestUri?.AbsoluteUri.StartsWith(_configuration["ServerUrl"] ?? "") ?? false;
-
-            if (isToServer && !string.IsNullOrEmpty(jwt))
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-
-            var response = await base.SendAsync(request, cancellationToken);
-
-            if (!_refreshing && !string.IsNullOrEmpty(jwt) && response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                try
-                {
-                    _refreshing = true;
-
-                    if (await _apiService.RefreshAsync())
-                    {
-                        jwt = await _apiService.GetJwtAsync();
-
-                        if (isToServer && !string.IsNullOrEmpty(jwt))
-                            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-
-                        response = await base.SendAsync(request, cancellationToken);
-                    }
-                }
-                finally
-                {
-                    _refreshing = false;
-                }
-            }
-
-            return response; 
-            */
+            
         }
     }
 }

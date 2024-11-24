@@ -21,7 +21,6 @@
                 ChapterDto chapter = Book.Chapters[i];
 
                 <ChapterButton ButtonId="@View.ButtonIdGen()"
-                               Chapter="chapter"
                                ChapterIndex="i"
                                />
             }
@@ -65,15 +64,6 @@
     private void OpenAddChapterModal()
     {
         addChapterModal.OpenModal();
-    }
-
-    private void AddLeaf(LeafDto leaf)
-    {
-        if (leaf != null)
-        {
-            Book.SelectedChapter.Contents.Add(leaf);
-            StateHasChanged();
-        }
     }
 
     private void AddChapter(AddChapterRequest chapter)

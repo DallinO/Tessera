@@ -62,8 +62,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMZWFmU2V0dGluZ3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Components/RichTextEditor.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSaWNoVGV4dEVkaXRvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Pages/BookOverview.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQm9va092ZXJ2aWV3LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Pages/Document - Copy.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdW1lbnQgLSBDb3B5LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Olson/Documents/GitHub/Tessera/Blazor Web App/Blazor Web App/Pages/Document.razor]

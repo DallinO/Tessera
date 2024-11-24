@@ -53,6 +53,10 @@
       "PackagePath": "staticwebassets\\css\\customerpage.css"
     },
     {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\document.css",
+      "PackagePath": "staticwebassets\\css\\document.css"
+    },
+    {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\home.css",
       "PackagePath": "staticwebassets\\css\\home.css"
     },

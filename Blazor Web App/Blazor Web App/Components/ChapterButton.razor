@@ -5,11 +5,11 @@
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
 
-<button class="ts-basic-button" id="@ButtonId" @onclick="ToggleColor">
+<button class="ts-basic-button" id="@ButtonId" @onclick="OpenPage">
     <div class="ts-inner-button-container">
         <img src="caret_right_fill.svg" alt="caret right" />
     </div>
-    <div class="ts-basic-button-text">@Chapter.Title</div>
+    <div class="ts-basic-button-text">@Book.Chapters[ChapterIndex].Title</div>
     <div class="ts-filler"></div>
     <div class="ts-inner-button-container">
         <button class="ts-inner-button" @onclick="OpenSettings">
@@ -19,13 +19,11 @@
 </button>
 
 <ChapterSettings @ref="chapterSettings" 
-    Title="@Chapter.Title" 
-    Description="@Chapter.Description" 
+    ChapterIndex="@ChapterIndex"
     OnOpenSettings="OpenSettings"
     />
 
 @code {
-    [Parameter] public ChapterDto Chapter { get; set; }
     [Parameter] public int ChapterIndex { get; set; }
     [Parameter] public Action OnOpenAddMenu { get; set; }
     [Parameter] public string ChapterIcon { get; set; }
@@ -47,10 +45,10 @@
         chapterSettings.isVisible = true;
     }
 
-    private async Task ToggleColor()
+    private async Task OpenPage()
     {
         await JS.InvokeVoidAsync("toggleButtonColor", ButtonId);
-        Navigation.NavigateTo($"/b/{Book.BookId}/d/{Chapter.Id}");
+        Navigation.NavigateTo($"/b/{Book.BookId}/{Book.Chapters[ChapterIndex].Type}/{Book.Chapters[ChapterIndex].ChapterId}");
     }
 
     private string BuildIconPath(string leafName)

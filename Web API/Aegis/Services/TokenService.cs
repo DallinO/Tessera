@@ -31,11 +31,11 @@ namespace Aegis.Services
         }
 
 
-        public JwtSecurityToken GenerateJwt(string username)
+        public JwtSecurityToken GenerateJwt(string userId)
         {
             var authClaims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, username),
+                new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

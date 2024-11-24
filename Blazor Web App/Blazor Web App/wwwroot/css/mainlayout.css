@@ -3,7 +3,7 @@
 ******************************************************************************/
 
 .ts-top-row {
-    height: 50px;
+    height: 60px;
 }
 
 .ts-border {
@@ -55,7 +55,7 @@
 ******************************************************************************/
 
 .ts-utility {
-    background-color: #d5d8dc;
+    background-color: #5d6d7e;
     display: flex;
     justify-content: space-between;
     align-items: center;
