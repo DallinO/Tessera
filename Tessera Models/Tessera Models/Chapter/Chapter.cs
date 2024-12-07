@@ -12,10 +12,9 @@ namespace Tessera.Models.Chapter
         public int BookId { get; set; }
         public int Type { get; set; }
 
-        // References to extended entities
-        //public DocumentEntity? Document { get; set; }
-        //public ListEntity? List { get; set; }
-        //public CalendarEntity? Calendar { get; set; }
+        // Navigation properties
+        public DocumentEntity Document { get; set; }
+        public ICollection<RowEntity> Rows { get; set; }
     }
 
     
@@ -25,15 +24,5 @@ namespace Tessera.Models.Chapter
         public string Title { get; set; }
         public string Description{ get; set; }
         public LeafType Type { get; set; }
-    }
-
-
-    public class AddChapterRequest
-    {
-        public int BookId { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public LeafType Type { get; set; }
-
     }
 }

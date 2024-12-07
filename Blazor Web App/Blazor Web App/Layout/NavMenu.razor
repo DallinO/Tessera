@@ -21,8 +21,7 @@
                 ChapterDto chapter = Book.Chapters[i];
 
                 <ChapterButton ButtonId="@View.ButtonIdGen()"
-                               ChapterIndex="i"
-                               />
+                               ChapterIndex="i"/>
             }
         </div>
     </nav>
@@ -48,7 +47,7 @@
                 Navigation.NavigateTo("/login");
             }
         }
-        
+
         var chapterResponse = await Api.GetChaptersAsync(Book.BookId);
         if (chapterResponse.Success)
         {
@@ -60,18 +59,28 @@
         }
     }
 
-      
+
     private void OpenAddChapterModal()
     {
         addChapterModal.OpenModal();
     }
 
-    private void AddChapter(AddChapterRequest chapter)
+    private async Task AddChapter(ChapterDto chapter)
     {
+        ApiChapterRequest request = new()
+        {
+            BookId = Book.BookId,
+            Chapter = chapter
+        };
+
         if (chapter != null)
         {
-            var response = Api.CreateChapterAsync(chapter);
-            StateHasChanged();
+            var response = await Api.AddChapterAsync(request);
+            if (response.Success)
+            {
+                Book.Chapters.Add(chapter);
+                StateHasChanged();
+            }
         }
     }
 }

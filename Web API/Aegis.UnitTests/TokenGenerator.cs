@@ -11,11 +11,11 @@ namespace Aegis.UnitTests
 {
     public class TokenGenerator
     {
-        public static string GenerateTestJwtToken(string username)
+        public static string GenerateTestJwtToken(string userId)
         {
             var authClaims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, username),
+                new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

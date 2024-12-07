@@ -64,6 +64,5 @@ namespace Aegis.Services
 
             return Convert.ToBase64String(randomNumber);
         }
-
     }
 }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "u+MdFsSGiSwm7TkX+hYweMKwURNsUgzNbKYfQA5sq5g=",
+  "Hash": "8wiq20MTW/7P8h7IieJZnoP0ltf8OxJOQenkcz/b3Ms=",
   "Source": "Blazor Web App",
   "BasePath": "/",
   "Mode": "Root",
@@ -9042,6 +9042,25 @@
       "OriginalItemSpec": "wwwroot\\css\\document.css"
     },
     {
+      "Identity": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\dropdown.css",
+      "SourceId": "Blazor Web App",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "css/dropdown.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\dropdown.css"
+    },
+    {
       "Identity": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\home.css",
       "SourceId": "Blazor Web App",
       "SourceType": "Discovered",
@@ -9078,6 +9097,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\inputfields.css"
+    },
+    {
+      "Identity": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\list.css",
+      "SourceId": "Blazor Web App",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "css/list.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\list.css"
     },
     {
       "Identity": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\mainlayout.css",

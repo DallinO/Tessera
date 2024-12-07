@@ -11,7 +11,7 @@
                     @foreach (var item in Items)
                     {
                         <button class="ts-dropdown-item" @onclick="() => SelectItem(item)">
-                            @item.ToString()
+                            @item
                         </button>
                     }
                 }
@@ -22,13 +22,12 @@
 
 @code {
     [Parameter] public List<TItem> Items { get; set; }
-    [Parameter] public TItem SelectedValue { get; set; }
+    [Parameter] public TItem? SelectedValue { get; set; }
     [Parameter] public EventCallback<TItem> SelectedValueChanged { get; set; }
-    [Parameter] public string Placeholder { get; set; } = "Select an option";
 
     public bool IsOpen { get; set; } = false;
 
-    private void ToggleDropdown()
+    public void ToggleDropdown()
     {
         IsOpen = !IsOpen;
     }

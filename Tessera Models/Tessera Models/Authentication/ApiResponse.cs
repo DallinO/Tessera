@@ -20,7 +20,7 @@ namespace Tessera.Models.Authentication
         public string JwtToken { get; set; }
         public string RefreshToken { get; set; }
         public DateTime Expiration { get; set; }
-        public ScribeDto Author { get; set; }
+        public AppUserDto Author { get; set; }
 
         public ApiLoginResponse() { }
         public ApiLoginResponse(List<string> errors) : base(errors) { }
@@ -54,6 +54,13 @@ namespace Tessera.Models.Authentication
         public DocumentDto Document { get; set; }
         public ApiDocumentResponse() { }
         public ApiDocumentResponse(List<string> errors) : base(errors) { }
+    }
+
+    public class ApiListResponse : ApiResponse
+    {
+        public ListDto List { get; set; }
+        public ApiListResponse() { }
+        public ApiListResponse(List<string> errors) : base(errors) { }
     }
 
 

@@ -6,11 +6,13 @@
 @inject NavigationManager Navigation
 @inject IBookService Book
 @inject IApiService Api
+@inject IJSRuntime JS
 
-<PageTitle>Tessera | Overview</PageTitle>
-
-@if (_document != null)
+@if (_document != null 
+    && !string.IsNullOrEmpty(_content.Value))
 {
+    <PageTitle>@_document.Title</PageTitle>
+
     <div class="ts-top-row ts-utility ts-border">
         <div class="ts-utility-root">
                 @_document.Title
@@ -24,7 +26,7 @@
         </div>
     </div>
     <div>
-        <BlazoredTextEditor @ref="@QuillHtml">
+        <BlazoredTextEditor>
             <ToolbarContent>
                 <div class="ts-document-header">
                     <select class="ql-header">
@@ -63,20 +65,23 @@
         </BlazoredTextEditor>
     </div>
 }
+else
+{
+    <PageTitle>@DocId</PageTitle>
+}
 
 @code {
     [Parameter] public int BookId { get; set; }
     [Parameter] public int DocId { get; set; }
 
-    public BlazoredTextEditor QuillHtml;
-    private RichTextEditor textEditor;
-    private DocumentDto _document;
+    //private BlazoredTextEditor QuillHtml;
+    private DocumentDto? _document;
     private MarkupString _content;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
 
-        var response = await Api.GetDocumentDataAsync(BookId, DocId);
+        var response = await Api.GetDocumentAsync(BookId, DocId);
         if (response != null)
         {
             if(response.Success)
@@ -86,21 +91,29 @@
         }
 
         _content = new MarkupString(_document.Content);
-        await base.OnInitializedAsync();
-        StateHasChanged();
+        await base.OnParametersSetAsync();
+        await Task.Yield();
+        await InvokeAsync(() => StateHasChanged());
     }
 
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (firstRender && QuillHtml != null)
+    //     {
+    //         await JS.InvokeVoidAsync("initializeEditor", QuillHtml);
+    //     }
+    // }
 
     public async void Save()
     {
-        _document.Content = await this.QuillHtml.GetHTML(); ;
+        //_document.Content = await this.QuillHtml.GetHTML(); ;
         SaveDocumentRequest request = new()
         {
             BookId = Book.BookId,
             Document = _document
         };
 
-        var response = await Api.SaveDocumentDataAsync(request);
+        var response = await Api.SaveDocumentAsync(request);
         StateHasChanged();
     }
 }

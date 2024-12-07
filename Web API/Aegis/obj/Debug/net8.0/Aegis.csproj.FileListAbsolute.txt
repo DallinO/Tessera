@@ -911,6 +911,15 @@ C:\Users\Olson\Documents\GitHub\Tessera\API\Aegis\Aegis\obj\Debug\net8.0\refint\
 C:\Users\Olson\Documents\GitHub\Tessera\API\Aegis\Aegis\obj\Debug\net8.0\Aegis.pdb
 C:\Users\Olson\Documents\GitHub\Tessera\API\Aegis\Aegis\obj\Debug\net8.0\Aegis.genruntimeconfig.cache
 C:\Users\Olson\Documents\GitHub\Tessera\API\Aegis\Aegis\obj\Debug\net8.0\ref\Aegis.dll
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.csproj.AssemblyReference.cache
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\MvcTestingAppManifest.json
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.AssemblyInfoInputs.cache
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.AssemblyInfo.cs
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.csproj.CoreCompileInputs.cache
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.sourcelink.json
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\appsettings.json
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\MvcTestingAppManifest.json
@@ -1349,15 +1358,6 @@ C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\runtimes\
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\Tessera Models.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\bin\Debug\net8.0\Tessera Models.pdb
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.csproj.AssemblyReference.cache
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\MvcTestingAppManifest.json
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.AssemblyInfoInputs.cache
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.AssemblyInfo.cs
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.csproj.CoreCompileInputs.cache
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\Aegis.sourcelink.json
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis\obj\Debug\net8.0\staticwebassets\msbuild.Aegis.Microsoft.AspNetCore.StaticWebAssets.props

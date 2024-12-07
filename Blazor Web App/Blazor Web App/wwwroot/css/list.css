@@ -1,0 +1,46 @@
+﻿/******************************************************************************
+    CUSTOMER PAGE
+******************************************************************************/
+
+.ts-customer-page {
+    padding: 10px;
+}
+
+.ts-customer-page-header {
+}
+
+.ts-customer-table-container {
+    padding: 20px;
+    margin-top: 20px;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+}
+
+.ts-customer-table {
+    width: 100%;
+}
+
+    .ts-customer-table tr {
+        border-bottom: 1px solid #ddd; /* Add a bottom border to each row */
+        border-radius: 4px;
+    }
+
+        .ts-customer-table tr.selected {
+            background-color: var(--theme-1-accent-3); /* Change to your preferred selected color */
+        }
+
+        .ts-customer-table tr:not(.selected):hover {
+            background-color: var(--theme-1-accent-2); /* Change to your preferred hover color */
+        }
+
+
+        .ts-customer-table tr:last-child {
+            border-bottom: none; /* Remove the border from the last row */
+        }
+
+.row-test {
+    background-color: green;
+}
+
+.ts-customer-validation-summary {
+}

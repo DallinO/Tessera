@@ -3,9 +3,8 @@
 ***********************************************************/
 .ts-input-container {
     display: flex;
-    padding: 0px 8px 0px 8px;
     height: 35px;
-    width: fit-content;
+    width: 100%;
     border: 2px solid;
     border-radius: 12px;
     background-color: transparent;
@@ -15,6 +14,7 @@
     border: none;
     outline: none;
     background-color: transparent;
+    width: 100%;
 }
 
 .ts-label {

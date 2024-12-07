@@ -57,12 +57,20 @@
       "PackagePath": "staticwebassets\\css\\document.css"
     },
     {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\dropdown.css",
+      "PackagePath": "staticwebassets\\css\\dropdown.css"
+    },
+    {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\home.css",
       "PackagePath": "staticwebassets\\css\\home.css"
     },
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\inputfields.css",
       "PackagePath": "staticwebassets\\css\\inputfields.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\list.css",
+      "PackagePath": "staticwebassets\\css\\list.css"
     },
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\mainlayout.css",

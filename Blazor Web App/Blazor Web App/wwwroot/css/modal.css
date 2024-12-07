@@ -34,9 +34,8 @@
 }
 
 .ts-modal-body {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
+    display: block;
+    width: 100%;
 }
 
 .ts-modal-text {
@@ -44,6 +43,9 @@
 }
 
 .ts-modal-body-section {
+   display: flex;
+   flex-direction: column;
+   gap: 5px;
 }
 
 .ts-modal-footer {

@@ -6,12 +6,28 @@
 {
     <div class="ts-modal-overlay">
         <div class="ts-modal-content">
-            <div>
-                <div class="ts-input-container">
-                    <input type="text" @bind="name" placeholder="Name" />
+            <div class="ts-modal-body">
+                <div class="ts-modal-body-section">
+                    <p class="ts-auth-errors @(ShowErrors ? "visible" : "")">
+                        @errors
+                    </p>
                 </div>
-                <div class="ts-input-container">
-                    <input type="text" @bind="description" placeholder="Description" />
+                <div class="ts-modal-body-section">
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input" type="text" @bind="name" placeholder="Name" />
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input" type="text" @bind="description" placeholder="Description" />
+                    </div>
+                    <div class="ts-dropdown-container">
+                        <button class="ts-primary-input" @onclick="OpenDropdownModal">@type</button>
+                        <DropdownB @ref="dropdown"
+                            TItem="LeafType"
+                            Items="Enum.GetValues(typeof(LeafType))
+                                    .Cast<LeafType>()
+                                    .ToList()"                                                           SelectedValueChanged="OnLeafTypeChanged"
+                            SelectedValue="LeafType.List"/>
+                    </div>
                 </div>
             </div>
             <div class="ts-modal-footer">
@@ -23,11 +39,17 @@
 }
 
 @code {
-    [Parameter] public EventCallback<AddChapterRequest> OnAddChapter { get; set; }
 
+    [Parameter] public EventCallback<ChapterDto> OnAddChapter { get; set; }
+
+    private DropdownB<LeafType> dropdown;
+    private LeafType type = LeafType.List;
     private bool isVisible = false;
-    private string name;
-    private string description;
+    private string? name;
+    private string? description;
+
+    private bool ShowErrors { get; set; } = false;
+    private MarkupString errors;
 
     public void CloseModal()
     {
@@ -41,15 +63,36 @@
         StateHasChanged();
     }
 
+    private void OpenDropdownModal()
+    {
+        dropdown.ToggleDropdown();
+    }
+
+    private void OnLeafTypeChanged(LeafType newValue)
+    {
+        type = newValue;
+    }
+
     private async Task Submit()
     {
-        await OnAddChapter.InvokeAsync(
-            new AddChapterRequest() 
-            { 
-                BookId = Book.BookId,
-                Title = name, 
-                Description = description 
-            });
-        CloseModal();
+        ShowErrors = false;
+
+        if (name != null && description != null)
+        {
+            await OnAddChapter.InvokeAsync(
+                new ChapterDto() 
+                {
+                    Title = name, 
+                    Description = description,
+                    Type = type
+                });
+            CloseModal();
+        }
+        else
+        {
+            errors = new MarkupString("Please enter a name and description for the new Chapter.");
+            ShowErrors = true;
+            StateHasChanged();
+        }
     }
 }

@@ -7,9 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
-using Aegis.SwaggerTest;
 using Swashbuckle.AspNetCore.Filters;
 using Tessera.Models.Authentication;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Aegis.Api
 {
@@ -23,7 +23,7 @@ namespace Aegis.Api
             builder.Services.AddDbContext<TesseraDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddIdentity<Scribe, IdentityRole>(options =>
+            builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
             {
                 // Configure identity options if needed
                 options.Password.RequireDigit = true;
@@ -37,8 +37,8 @@ namespace Aegis.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-                options.ExampleFilters(); // Register example filters
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Aegis", Version = "v1" });
+                //options.ExampleFilters(); // Register example filters
 
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -60,7 +60,7 @@ namespace Aegis.Api
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement { { scheme, Array.Empty<string>() } });
             });
 
-            builder.Services.AddSwaggerExamplesFromAssemblyOf<CheckInRequestExample>();
+            //builder.Services.AddSwaggerExamplesFromAssemblyOf<CheckInRequestExample>();
 
             using var loggerFactory = LoggerFactory.Create(b => b.SetMinimumLevel(LogLevel.Trace).AddConsole());
 
@@ -103,6 +103,28 @@ namespace Aegis.Api
                                .AllowAnyMethod()
                                .AllowCredentials(); // Include if credentials are needed
                     });
+            });
+
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    // Extract errors from ModelState
+                    var errors = context.ModelState
+                        .Where(e => e.Value.Errors.Count > 0)
+                        .SelectMany(e => e.Value.Errors.Select(x => $"{e.Key}: {x.ErrorMessage}"))
+                        .ToList(); // Convert to List<string>
+
+                    // Create a custom response matching ApiResponse format
+                    var apiResponse = new ApiResponse
+                    {
+                        Success = false,
+                        Errors = errors,
+                    };
+
+                    // Return your custom response
+                    return new BadRequestObjectResult(apiResponse);
+                };
             });
 
             var app = builder.Build();

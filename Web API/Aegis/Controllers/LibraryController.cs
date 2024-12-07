@@ -1,20 +1,17 @@
 ﻿using Aegis.Data;
 using Aegis.Services;
-using Aegis.SwaggerTest;
 using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Swashbuckle.AspNetCore.Filters;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using Tessera.CodeGenerators;
-using Tessera.Constants;
 using Tessera.Models.Authentication;
 using Tessera.Models.Book;
-using Tessera.Models.Chapter;
 
 namespace Aegis.Controllers
 {
@@ -23,14 +20,14 @@ namespace Aegis.Controllers
     public class LibraryController : ControllerBase
     {
         private readonly BookService _bookService;
-        private readonly UserManager<Scribe> _userManager;
-        private readonly SignInManager<Scribe> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly TesseraDbContext _dbContext;
         private readonly JwtSecurityTokenHandler _tokenHandler;
         private readonly IConfiguration _configuration;
         private readonly ILogger<LibraryController> _logger;
 
-        public LibraryController(BookService bookService, IConfiguration configuration, ILogger<LibraryController> logger, UserManager<Scribe> userManager, SignInManager<Scribe> signInManager, TesseraDbContext dbContext)
+        public LibraryController(BookService bookService, IConfiguration configuration, ILogger<LibraryController> logger, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TesseraDbContext dbContext)
         {
             _bookService = bookService;
             _configuration = configuration;
@@ -41,100 +38,12 @@ namespace Aegis.Controllers
             _dbContext = dbContext;
         }
 
-        /***************************************************
-         * CHECKOUT BOOKS HTTP GET
-         * - Get books and author data from the database.
-         ***************************************************/
-        [Authorize]
-        [HttpGet("getbookid")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CheckoutBooks()
-        {
-            _logger.LogInformation("CHECKOUT BOOKS CALLED");
+        /* ############### BOOK ############### */
 
-            // Extract user id from token.
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            // Verify user id.
-            if (userId == null)
-            {
-                _logger.LogWarning("UNAUTHORIZED");
-                return BadRequest(new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>
-                    {
-                        "400 Bad Request: Email Claim Missing Or Incorrectly Formatted"
-                    }
-                });
-            }
-
-            // Check if the user has a book.
-            var bookId = await _dbContext.Library
-                .Where(book => book.ScribeId == userId)
-                .Select(book => book.Id)
-                .FirstOrDefaultAsync();
-
-            return Ok(new ApiBookResponse
-            {
-                Success = true,
-                BookId = bookId
-            });
-
-        }
-
-        /***************************************************
-         * CREATE BOOK HTTP POST
-         * - Verify scribe credentials.
-         ***************************************************/
-        /// <summary>
-        /// Creates a new book record in the database. This method performs the following operations:
-        /// <list type="bullet">
-        /// <item>
-        /// <description>Validates the incoming model data.</description>
-        /// </item>
-        /// <item>
-        /// <description>Retrieves the scribe ID from the document context.</description>
-        /// </item>
-        /// <item>
-        /// <description>Builds a <see cref="BookEntity"/> object from the provided model data.</description>
-        /// </item>
-        /// <item>
-        /// <description>Retrieves the scribe's email address from the document context and fetches the associated scribe.</description>
-        /// </item>
-        /// <item>
-        /// <description>Attempts to create the book in the master and PM databases.</description>
-        /// </item>
-        /// <item>
-        /// <description>If successful, retrieves the updated list of books for the scribe.</description>
-        /// </item>
-        /// <item>
-        /// <description>Returns an appropriate HTTP response based on the outcome of the operations, including error messages if applicable.</description>
-        /// </item>
-        /// </list>
-        /// </summary>
-        /// <param name="model">The <see cref="BookModel"/> containing data for the new book.</param>
-        /// <returns>
-        /// An <see cref="IActionResult"/> that represents the outcome of the operation:
-        /// <list type="bullet">
-        /// <item>
-        /// <description>Returns <see cref="BadRequest(ModelState)"/> if the model state is invalid.</description>
-        /// </item>
-        /// <item>
-        /// <description>Returns <see cref="Unauthorized()"/> if the scribe ID cannot be retrieved.</description>
-        /// </item>
-        /// <item>
-        /// <description>Returns <see cref="StatusCode(StatusCodes.Status500InternalServerError, string)"/> if any errors occur during the process, with a detailed error message.</description>
-        /// </item>
-        /// <item>
-        /// <description>Returns <see cref="Ok(object)"/> with the result and books list if the operation is successful.</description>
-        /// </item>
-        /// </list>
-        /// </returns>
-        
+        /****************************************
+         * CREATE BOOK                   (CREATE)
+         * - Create user book.
+         ****************************************/
         [HttpPost("createbook")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -169,7 +78,7 @@ namespace Aegis.Controllers
             int bookId;
             do
             {
-                bookId = int.Parse(CodeGen.GenerateNineDigitId());
+                bookId = int.Parse(CodeGen.GenerateNumberOfLength(9));
                 bookIdExists = await _dbContext.Library.AnyAsync(o => o.Id == bookId);
                 count++;
             }
@@ -227,138 +136,130 @@ namespace Aegis.Controllers
         }
 
 
-
+        /***************************************************
+         * CHECKOUT BOOKS                             (READ)
+         * - Get books and author data from the database.
+         ***************************************************/
         [Authorize]
-        [HttpDelete("deletebook")]
+        [HttpGet("getbookid")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteBook([FromQuery] int bookId)
+        public async Task<IActionResult> CheckoutBooks()
         {
-            // Log the request
-            _logger.LogInformation($"DeleteBook called with bookId: {bookId}");
+            // Get user data.
+            var (userId, response) = await GetUserDataAsync(ClaimsPrincipal.Current);
 
-            // Extract user id from token.
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            // Verify user id.
-            if (userId == null)
+            if (response != null)
             {
-                _logger.LogWarning("UNAUTHORIZED");
-                return BadRequest(new ApiResponse
+                return BadRequest(response);
+            }
+
+            // Check if the user has a book.
+            var bookId = await _dbContext.Library
+                .Where(book => book.ScribeId == userId)
+                .Select(book => book.Id)
+                .FirstOrDefaultAsync();
+
+            if (bookId != 0)
+            {
+                return Ok(new ApiBookResponse
                 {
-                    Success = false,
-                    Errors = new List<string>
-                    {
-                        "400 Bad Request: Email Claim Missing Or Incorrectly Formatted"
-                    }
+                    Success = true,
+                    BookId = bookId
                 });
             }
 
-            bool isOwner = await CheckIsBookOwnerAsync(bookId, userId);
-
-            if (!isOwner)
-            {
-
-            }
-
-            try
-            {
-                // Find the book in the database
-                var book = await _dbContext.Library.FindAsync(bookId);
-
-                if (book == null)
+            return NotFound(new ApiBookResponse()
+            { 
+                Success = false,
+                Errors = new List<string>()
                 {
-                    // If the book does not exist, return a 404 Not Found
-                    return NotFound(new ApiResponse { 
-                        Success = false,
-                        Errors = new List<string>()
-                        { 
-                            "Book not found." 
-                        } 
-                    });
+                    "No book associated with the user id"
                 }
 
-                // Remove the book from the context
-                _dbContext.Library.Remove(book);
-                await _dbContext.SaveChangesAsync(); // Commit the changes to the database
-
-                // Return a success response
-                return Ok(new ApiResponse
-                {
-                    Success = true
-                });
-            }
-            catch (Exception ex)
-            {
-                // Log the exception and return a 500 Internal Server Error
-                _logger.LogError($"Error deleting book: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>()
-                    {
-                        $"Error occured while deleting the book: {bookId}."
-                    }
-                });
-            }
+            });
         }
 
 
 
+
+
+        /* ############# CHAPTER ############## */
+
+        /***************************************************
+         * CREATE CHAPTER                           (CREATE)
+         * - 
+         ***************************************************/
         [Authorize]
-        [HttpGet("getchapterlist")]
+        [HttpPost("createchapter")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddChapter([FromBody] ApiChapterRequest request)
+        {
+            // Get user data.
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, request.BookId);
+
+            if (response != null)
+            {
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            // Create list based on type.
+            var serviceResponse = await _bookService.AddChapterAsync(database, request);
+
+            // Return status based on the saveResponse.
+            if (serviceResponse.Success)
+            {
+                _logger.LogInformation("CHAPTER ADDED");
+                return Ok(serviceResponse);
+            }
+            else
+            {
+                _logger.LogError("INTERNAL SERVER ERROR");
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
+            }
+        }
+
+
+        /***************************************************
+         * GET CHAPTER LIST GET                       (READ)
+         * - Get books and author data from the database.
+         ***************************************************/
+        [Authorize]
+        [HttpGet("getchapters")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetChapterList([FromQuery] int bookId)
         {
-            _logger.LogInformation("FETCH CHAPTERS CALLED");
+            // Get user data.
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
 
-            // Extract user id from token.
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            // Verify user id.
-            if (userId == null)
+            if (response != null)
             {
-                _logger.LogWarning("UNAUTHORIZED");
-                return BadRequest(new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>
-                    {
-                        "400 Bad Request: Email Claim Missing Or Incorrectly Formatted"
-                    }
-                });
-            }
-
-            // Fetch database string.
-            string database = await GetDatabaseAsync(bookId, userId);
-
-            // Verify database string.
-            if (database == null)
-            {
-                _logger.LogWarning("BOOK IS NULL");
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new ApiResponse
-                    {
-                        Success = false,
-                        Errors = new List<string>
-                        {
-                            "500 Internal Server Error: Failed To Retrieve Book Data"
-                        }
-
-                    });
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
             }
 
             // Get request list.
-            var chapters = await _bookService.GetChapterListAsync(database, bookId);
+            var chapters = await _bookService.GetChaptersAsync(database, bookId);
+
             if (chapters == null)
             {
-                _logger.LogWarning("CHAPTERS NOT FOUND");
+                _logger.LogWarning("500 Internal Server Error: Failed to retrieve chapter list -\n" +
+                    $"\tUser Id: {userId}\n" +
+                    $"\tDatabase: {database}\n" +
+                    $"\tBook Id: {bookId}");
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     new ApiResponse
@@ -366,7 +267,7 @@ namespace Aegis.Controllers
                         Success = false,
                         Errors = new List<string>
                         {
-                            "500 Internal Server Error: Failed To Retrieve Chapter Data"
+                            "Internal Server Error"
                         }
 
                     });
@@ -381,6 +282,68 @@ namespace Aegis.Controllers
         }
 
 
+        /***************************************************
+         * DELETE CHAPTER                           (DELETE)
+         * - Delete a chapter.
+         ***************************************************/
+        [Authorize]
+        [HttpDelete("deletechapters")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteChapter([FromQuery] int bookId, int chapterId)
+        {
+            // Get user data.
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
+
+            if (response != null)
+            {
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            var deleteResponse = await _bookService.DeleteChapterAsync(database, bookId, chapterId);
+
+            if (deleteResponse == null)
+            {
+                _logger.LogWarning("500 Internal Server Error: Failed to delete chapter -\n" +
+                    $"\tUser Id: {userId}\n" +
+                    $"\tDatabase: {database}\n" +
+                    $"\tBook Id: {bookId}");
+                return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Internal Server Error"
+                    }
+
+                });
+            }
+
+            _logger.LogInformation("");
+            return Ok(new ApiResponse
+            {
+                Success = true,
+            });
+        }
+
+
+
+
+
+        /* ############# DOCUMENT ############# */
+
+        /****************************************
+         * GET DOCUMENT                    (READ)
+         * - Get books and author data from the
+         * database.
+         ****************************************/
         [Authorize]
         [HttpGet("getdocument")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
@@ -389,50 +352,21 @@ namespace Aegis.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetDocument([FromQuery] int bookId, int chapterId)
         {
-            // Log entry.
-            _logger.LogInformation("GET CHAPTER CALLED");
+            // Get user data.
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
 
-            // Extract user id from token.
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            // Verify user id.
-            if (userId == null)
+            if (response != null)
             {
-                _logger.LogWarning("UNAUTHORIZED");
-                return BadRequest(new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>
-                    {
-                        "400 Bad Request: Email Claim Missing Or Incorrectly Formatted"
-                    }
-                });
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
             }
 
-            // Fetch database string.
-            string database = await GetDatabaseAsync(bookId, userId);
+            // Get list data.
+            var document = await _bookService.GetDocumentAsync(database, chapterId);
 
-            // Verify database string.
-            if (database == null)
-            {
-                _logger.LogWarning("BOOK IS NULL");
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new ApiResponse
-                    {
-                        Success = false,
-                        Errors = new List<string>
-                        {
-                            "500 Internal Server Error: Failed To Retrieve Book Data"
-                        }
-
-                    });
-            }
-
-            // Get document data.
-            var document = await _bookService.GetDocumentDataAsync(database, bookId, chapterId);
-
-            // Verify document
+            // Verify list
             if (document == null)
             {
                 _logger.LogWarning("CHAPTERS NOT FOUND");
@@ -458,47 +392,28 @@ namespace Aegis.Controllers
         }
 
 
+        /****************************************
+         * SAVE DOCUMENT                 (UPDATE)
+         * - 
+         ****************************************/
         [Authorize]
-        [HttpPatch("savedocument")]
+        [HttpPut("savedocument")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SaveDocument([FromBody] SaveDocumentRequest request)
         {
-            // Validate model.
-            if (!ModelState.IsValid)
+            // Get user data.
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, request.BookId);
+
+            if (response != null)
             {
-                _logger.LogWarning("INVALID STATE");
-                return BadRequest(new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>
-                    {
-                        "400 Rad Request"
-                    }
-                });
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
             }
-
-            // Extract user id from token.
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            // Verify user id.
-            if (userId == null)
-            {
-                _logger.LogWarning("UNAUTHORIZED");
-                return BadRequest(new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>
-                    {
-                        "400 Bad Request: Email Claim Missing Or Incorrectly Formatted"
-                    }
-                });
-            }
-
-            // Fetch database string.
-            string database = await GetDatabaseAsync(request.BookId, userId);
 
             // Verify database string.
             if (database == null)
@@ -518,102 +433,226 @@ namespace Aegis.Controllers
             }
 
             // Attempt to save the changes to the database.
-            var response = await _bookService.SaveDocumentDataAsync(database, request);
+            var saveResponse = await _bookService.SaveDocumentAsync(database, request);
 
-            // Return status based on the response.
-            if (response.Success)
+            // Return status based on the saveResponse.
+            if (saveResponse.Success)
             {
                 _logger.LogInformation("CHAPTER ADDED");
-                return Ok(response);
+                return Ok(saveResponse);
             }
             else
             {
                 _logger.LogError("INTERNAL SERVER ERROR");
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
+                return StatusCode(StatusCodes.Status500InternalServerError, saveResponse);
             }
 
         }
 
-        /***************************************************
-         * CREATE CHAPTER HTTP POST
-         * - Verify scribe credentials.
-         ***************************************************/
+
+
+
+
+        /* ############### ROW ################ */
+
+        /****************************************
+         * ADD ROW                       (CREATE)
+         * - 
+         ****************************************/
         [Authorize]
-        [HttpPost("createchapter")]
-        [SwaggerRequestExample(typeof(LoginRequest), typeof(CheckInRequestExample))]
+        [HttpPost("addrow")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddChapter([FromBody] AddChapterRequest request)
+        public async Task<IActionResult> AddRow([FromBody] ApiRowRequest request)
         {
-            // Validate request model.
-            if (string.IsNullOrEmpty(request.Title))
+            // Get user data
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, request.BookId);
+
+            if (response != null)
             {
-                return BadRequest(new ApiResponse
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            // Get list data.
+            var list = await _bookService.AddRowAsync(database, request);
+
+            // Verify list
+            if (list == null)
+            {
+                _logger.LogWarning("CHAPTERS NOT FOUND");
+                return NotFound(new ApiListResponse
                 {
                     Success = false,
                     Errors = new List<string>
                     {
-                        "400 Rad Request: Chapter Title Cannot Be Null Or Empty."
+                        "404 Not Found: No Chapters Associated With Book"
                     }
+
                 });
             }
 
-            // Extract user id from token.
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _logger.LogInformation("CHAPTERS RETURNED");
+            return Ok(list);
+        }
 
-            // Verify user id.
-            if (userId == null)
+        /****************************************
+         * GET ROWS                        (READ)
+         * - 
+         ****************************************/
+        [Authorize]
+        [HttpGet("getrows")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetRows([FromQuery] int bookId, int chapterId)
+        {
+            // Get user data
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
+
+            if (response != null)
             {
-                _logger.LogWarning("UNAUTHORIZED");
-                return BadRequest(new ApiResponse
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            // Get list data.
+            var list = await _bookService.GetRowsAsync(database, chapterId);
+
+            // Verify list
+            if (list == null)
+            {
+                _logger.LogWarning($"404 Not Found - No chapters associated with book: {bookId}");
+                return NotFound(new ApiListResponse
                 {
                     Success = false,
                     Errors = new List<string>
                     {
-                        "400 Bad Request: Email Claim Missing Or Incorrectly Formatted"
+                        "Not Found"
                     }
+
                 });
             }
 
-            // Fetch database string.
-            string database = await GetDatabaseAsync(request.BookId, userId);
+            // Return list.
+            _logger.LogInformation("CHAPTERS RETURNED");
+            return Ok(list);
+        }
 
-            // Verify database string.
-            if (database == null)
+        /****************************************
+         * UPDATE ROW                    (UPDATE)
+         * - 
+         ****************************************/
+        [Authorize]
+        [HttpPut("updaterow")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateRow([FromBody] ApiRowRequest request)
+        {
+            // Get user data
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, request.BookId);
+
+            if (response != null)
             {
-                _logger.LogWarning("BOOK IS NULL");
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new ApiResponse
-                    {
-                        Success = false,
-                        Errors = new List<string>
-                        {
-                            "500 Internal Server Error: Failed To Retrieve Book Data"
-                        }
-
-                    });
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
             }
 
-            // Create document based on type.
-            var response = await _bookService.AddChaptersAsync(database, request);
+            // Get list data.
+            var list = await _bookService.UpdateRowAsync(database, request);
 
-            // Return status based on the response.
-            if (response.Success)
+            // Verify list
+            if (list == null)
             {
-                _logger.LogInformation("CHAPTER ADDED");
-                return Ok(response);
+                _logger.LogWarning("CHAPTERS NOT FOUND");
+                return NotFound(new ApiListResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "404 Not Found: No Chapters Associated With Book"
+                    }
+
+                });
             }
             else
             {
-                _logger.LogError("INTERNAL SERVER ERROR");
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
+                _logger.LogInformation("CHAPTERS RETURNED");
+                return Ok(list);
             }
         }
 
 
+        /****************************************
+         * DELETE ROW                    (DELETE)
+         * - 
+         ****************************************/
+        [Authorize]
+        [HttpDelete("deleterow")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteRow([FromBody] int bookId, int chapterId, int rowId)
+        {
+            // Get user data
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
+
+            if (response != null)
+            {
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            // Get list data.
+            var list = await _bookService.DeleteRowAsync(database, chapterId, rowId);
+
+            // Verify list
+            if (list == null)
+            {
+                _logger.LogWarning("CHAPTERS NOT FOUND");
+                return NotFound(new ApiListResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "404 Not Found: No Chapters Associated With Book"
+                    }
+
+                });
+            }
+            else
+            {
+                _logger.LogInformation("CHAPTERS RETURNED");
+                return Ok(list);
+            }
+
+
+        }
+
+
+
+
+
+        /* ########## HELPER METHODS ########## */
+
+        /****************************************
+         * CHECK IS BOOK OWNER ASYNC
+         * - 
+         ****************************************/
         private async Task<bool> CheckIsBookOwnerAsync(int bookId, string userId)
         {
             var isOwner = await _dbContext.Library
@@ -623,16 +662,74 @@ namespace Aegis.Controllers
         }
 
 
-        private async Task<string?> GetDatabaseAsync(int bookId, string userId)
+        /****************************************
+         * GET USER DATA ASYNC
+         * - 
+         ****************************************/
+        private async Task<(string?, ApiResponse?)> GetUserDataAsync(ClaimsPrincipal user)
         {
-            // Query for the database column property. Verify the user
-            // is the owner of the book.
+            // Extract user id from token.
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Verify user id.
+            if (userId == null)
+            {
+                _logger.LogWarning("400 Bad Request: User id missing or incorrectly formatted.");
+                return (null, new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Bad Request"
+                    }
+                });
+            }
+
+            // Return result.
+            return (userId, null);
+        }
+
+        private async Task<(string?, string?, ApiResponse?)> GetUserDataAsync(ClaimsPrincipal user, int bookId)
+        {
+            // Extract user id from token.
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Verify user id.
+            if (userId == null)
+            {
+                _logger.LogWarning("400 Bad Request: User id missing or incorrectly formatted.");
+                return (null, null, new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Bad Request"
+                    }
+                });
+            }
+
+            // Fetch database string.
             var database = await _dbContext.Library
                .Where(b => b.Id == bookId && b.ScribeId == userId)
                .Select(b => b.Database)
                .FirstOrDefaultAsync();
 
-            return database;
+            // Verify database string.
+            if (database == null)
+            {
+                _logger.LogWarning($"404 Not Found: Database string for {userId} not found.");
+                return (userId, null, new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Not Found"
+                    }
+                });
+            }
+
+            // Return result.
+            return (userId, database, null);
         }
     }
 }

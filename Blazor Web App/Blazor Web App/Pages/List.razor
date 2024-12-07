@@ -1,0 +1,148 @@
+﻿@namespace Tessera.Web.Pages
+
+@page "/b/{BookId:int}/l/{ChapterId:int}"
+
+@layout BookLayout
+@inject NavigationManager Navigation
+@inject IBookService Book
+@inject IApiService Api
+
+<PageTitle>@_list.Title</PageTitle>
+
+@if (_list != null)
+{
+    <div class="ts-top-row ts-utility ts-border">
+        <div class="ts-utility-root">
+                @_list.Title
+        </div>
+        <div class="ts-utility-search">
+        </div>
+        <div class="ts-utility-account-container">
+            <button class="ts-account-button">
+                            
+            </button>
+        </div>
+    </div>
+    <div class="ts-customer-page-header">
+        <button class="ts-primary-btn" @onclick="AddTask">Add Item</button>
+        <button class="ts-primary-btn" @onclick="AddTask">Save</button>
+    </div>
+    <div class="ts-customer-table-container">
+        <table class="ts-customer-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Created</th>
+                    <th>Due</th>
+                    <th>Priority</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (_list == null || _list.Rows.Count == 0)
+                {
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No item data available</td>
+                    </tr>
+                }
+                else
+                {
+                    @for (int i = 0; i < _list.Rows.Count; i++)
+                    {
+                        RowDto row = _list.Rows[i];
+                        var z = i;
+                        <tr id="@i.ToString()"
+                            class="@(IsRowSelected(i) ? "selected-row" : "")"
+                            @onclick="() => SelectRow(i)">
+                            <td>
+                                <input type="text" @bind="row.Name" />
+                            </td>
+                            <td>
+                                <input type="text" @bind="row.Description" />
+                            </td>
+                            <td>
+                                <input type="date" @bind="row.Created" />
+                            </td>
+                            <td>
+                                <input type="date" @bind="row.Due" />
+                            </td>
+                            <td>
+                                <select @bind="row.Priority">
+                                    <option value="@Priority.Low">Low</option>
+                                    <option value="@Priority.Moderate">Moderate</option>
+                                    <option value="@Priority.High">High</option>
+                                </select>
+                            </td>
+                        </tr>
+                    } 
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@* <AddRowItem @ref="addRowItem" OnAddCustomer="AddTask"/> *@
+@* <RowInfo @ref="rowInfo" OnUpdateCustomer="UpdateCustomer"/> *@
+
+@code {
+    [Parameter] public int BookId { get; set; }
+    [Parameter] public int ChapterId { get; set; }
+
+    private ListDto _list = new();
+    private int? _selectedRowIndex; // Tracks the selected row index
+    private RowDto? _selectedRow;  // Tracks the selected row object
+    private MarkupString _errorMsg;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var response = await Api.GetListAsync(BookId, ChapterId);
+        if (response != null)
+        {
+            if(response.Success)
+            {
+                _list = response.List;
+            }
+        }
+
+        await base.OnInitializedAsync();
+        StateHasChanged();
+    }
+
+
+    private void SelectRow(int index)
+    {
+        _selectedRowIndex = index;
+        _selectedRow = _list.Rows[index];
+    }
+
+
+    private bool IsRowSelected(int index)
+    {
+        return _selectedRowIndex == index;
+    }
+
+
+    public async void AddTask()
+    {
+        //var response = await Api.AddRowAsync(BookId, ChapterId);
+        
+        StateHasChanged();
+    }
+
+
+    public async void SaveTask()
+    {
+        if (_selectedRow != null && _selectedRowIndex.HasValue)
+        {
+            
+        }
+    }
+
+
+    public async void RemoveTask()
+    {
+        var response = await Api.DeleteRowAsync(0, 0, 0);
+        StateHasChanged();
+    }
+}

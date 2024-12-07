@@ -20,8 +20,7 @@
 
 <ChapterSettings @ref="chapterSettings" 
     ChapterIndex="@ChapterIndex"
-    OnOpenSettings="OpenSettings"
-    />
+    OnOpenSettings="OpenSettings"/>
 
 @code {
     [Parameter] public int ChapterIndex { get; set; }
@@ -48,7 +47,9 @@
     private async Task OpenPage()
     {
         await JS.InvokeVoidAsync("toggleButtonColor", ButtonId);
-        Navigation.NavigateTo($"/b/{Book.BookId}/{Book.Chapters[ChapterIndex].Type}/{Book.Chapters[ChapterIndex].ChapterId}");
+        Navigation.NavigateTo($"/b/{Book.BookId}" +                             // Book Id
+        $"/{char.ToLower(Book.Chapters[ChapterIndex].Type.ToString()[0])}" +    // Chapter Type
+        $"/{Book.Chapters[ChapterIndex].ChapterId}");                           // Chapter Id
     }
 
     private string BuildIconPath(string leafName)

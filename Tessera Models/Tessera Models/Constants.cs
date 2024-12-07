@@ -44,7 +44,7 @@
 
     public enum LeafType
     {
-        d,  // Document -- 0
-        l   // List -- 1
+        Document,   // 0
+        List        // 1
     }
 }

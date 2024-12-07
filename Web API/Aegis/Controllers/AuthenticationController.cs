@@ -1,21 +1,15 @@
-﻿using Aegis.Services;
+﻿#define Unit_Tests
+
+using Aegis.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using Tessera.Constants;
 using Tessera.Models.Authentication;
-using Tessera.Models.Book;
-using Tessera.Models.Chapter;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using Aegis.Data;
-using Aegis.SwaggerTest;
 using Swashbuckle.AspNetCore.Filters;
-using Microsoft.EntityFrameworkCore;
-
+using Azure.Core;
 namespace Aegis.Controllers
 {
     [Route("api/auth")]
@@ -23,19 +17,22 @@ namespace Aegis.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly TokenService _tokenService;
-        private readonly UserManager<Scribe> _userManager;
-        private readonly SignInManager<Scribe> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly TesseraDbContext _dbContext;
         private readonly JwtSecurityTokenHandler _tokenHandler;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthenticationController> _logger;
 
+#if Unit_Tests
+        private static int _testUserId = 1;
+#endif
 
         public AuthenticationController(
             IConfiguration configuration, 
             ILogger<AuthenticationController> logger, 
-            UserManager<Scribe> userManager, 
-            SignInManager<Scribe> signInManager, 
+            UserManager<AppUser> userManager, 
+            SignInManager<AppUser> signInManager, 
             TesseraDbContext dbContext, 
             TokenService tokenService)
         {
@@ -49,65 +46,85 @@ namespace Aegis.Controllers
         }
 
 
-        /***************************************************
-         * REGISTER HTTP POST
-         * - Register new scribe.
-         ***************************************************/
+        /* ########## AUTHENTICATION ########## */
+
+        /****************************************
+         * REGISTER                      (CREATE)
+         * - Registers a new user.
+         ****************************************/
         [HttpPost("register")]
-        [SwaggerRequestExample(typeof(RegisterRequest), typeof(RegisterRequestExample))]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest model)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
+
+            return Ok(new ApiResponse
+            {
+                Success = true
+            });
             // Log action
-            _logger.LogInformation("REGISTER CALLED");
+            _logger.LogInformation("Register called.");
 
             // Check Model State
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("INVALID STATE");
+                _logger.LogWarning($"400 Bad Request - Request model is invalid: {request}");
                 return BadRequest( new ApiResponse
                 {
                     Success = false,
                     Errors = new List<string>
                     {
-                        "400 Rad Request"
+                        "Bad Request - Test"
                     }
                 });
             }
 
             // Check for existing scribe
-            var existingUser = await _userManager.FindByEmailAsync(model.Email);
+            var existingUser = await _userManager.FindByEmailAsync(request.Email);
             if (existingUser != null)
             {
-                _logger.LogWarning("CONFLICT");
+                _logger.LogWarning($"409 Conflict - User already exists: {request.Email}");
                 return Conflict(new ApiResponse
                 {
                     Success = false,
                     Errors = new List<string>
                     {
-                        "409 Conflict: User Already Exists"
+                        "User Already Exists"
                     }
                 });
             }
 
-            // Create the new scribe
-            var user = new Scribe
+            // Create the new app user
+#if Unit_Tests
+
+            var user = new AppUser
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                UserName = model.Email,
-                Email = model.Email
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                UserName = request.Email,
+                Email = request.Email,
+                Id = _testUserId++.ToString()
             };
+
+#else
+            var user = new AppUser
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                UserName = request.Email,
+                Email = request.Email
+            };
+#endif
 
             try
             {
-                var result = await _userManager.CreateAsync(user, model.Password);
+                // Create user.
+                var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("REGISTER SUCCEEDED");
+                    _logger.LogInformation($"200 OK - Registration for {user.Email} successful.");
                     
                     return Ok(new ApiResponse
                     {
@@ -122,7 +139,7 @@ namespace Aegis.Controllers
                         errors.Add(error.Description);
                     }
 
-                    _logger.LogWarning("REGISTER FAILED");
+                    _logger.LogWarning($"400 Bad Request - Registration for {user.Email} failed.");
                     return BadRequest(new ApiResponse
                     {
                         Success = false,
@@ -130,46 +147,43 @@ namespace Aegis.Controllers
                     });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Return Internal Server Error (500)
-                _logger.LogError("INTERNAL SERVER ERROR");
+                _logger.LogError($"500 Internal Server Error - Error: {ex}");
                 return StatusCode(500, new ApiResponse
                 {
                     Success = false,
-                    Errors = new List<string> { "500 Internal Server Error" }
+                    Errors = new List<string> { $"500 Internal Server Error - Error: {ex}" }
                 });
             }
-            // Submit changes to Database
         }
 
 
-        /***************************************************
-         * LOGIN HTTP POST
-         * - Verify scribe credentials.
-         ***************************************************/
+        /****************************************
+         * LOGIN                           (READ)
+         * - Verify login credentials.
+         ****************************************/
         [HttpPost("login")]
-        [AllowAnonymous]
-        [SwaggerRequestExample(typeof(LoginRequest), typeof(CheckInRequestExample))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiLoginResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CheckIn([FromBody] LoginRequest model)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             // Log action
-            _logger.LogInformation("CHECK IN CALLED");
+            _logger.LogInformation("Login called.");
 
             // Check Model State
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("INVALID MODEL STATE");
+                _logger.LogWarning($"400 Bad Request - Request model is invalid: {request}");
                 return BadRequest(new ApiResponse
                 {
                     Success = false,
                     Errors = new List<string>
                     {
-                        "400 Bad Request"
+                        "Bad Request"
                     }
                 });
             }
@@ -177,18 +191,18 @@ namespace Aegis.Controllers
             try
             {
                 // Get scribe
-                var user = await _userManager.FindByEmailAsync(model.Email);
+                var user = await _userManager.FindByEmailAsync(request.Email);
 
                 // Authenticate scribe
-                if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+                if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
                 {
-                    _logger.LogWarning("UNAUTHORIZED");
+                    _logger.LogWarning($"401 Unauthorized - Access denied for {request.Email}.");
                     return Unauthorized(new ApiResponse
                     {
                         Success = false,
                         Errors = new List<string>
                         {
-                            "401 Unauthorized"
+                            "Access Denied"
                         }
                     });
                 }
@@ -205,7 +219,7 @@ namespace Aegis.Controllers
                 if (result.Succeeded)
                 {
                     // Log success
-                    _logger.LogInformation("CHECK IN SUCCEEDED");
+                    _logger.LogInformation($"200 Ok - Login for {request.Email} successful");
 
                     // Return response
                     return Ok(new ApiLoginResponse
@@ -214,7 +228,7 @@ namespace Aegis.Controllers
                         JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
                         Expiration = token.ValidTo,
                         RefreshToken = refreshToken,
-                        Author = new ScribeDto() 
+                        Author = new AppUserDto() 
                         {
                             FirstName = user.FirstName,
                             LastName = user.LastName,
@@ -230,7 +244,7 @@ namespace Aegis.Controllers
                         errors.Add(error.Description);
                     }
 
-                    _logger.LogWarning("CHECK IN FAILED");
+                    _logger.LogWarning($"400 Bad Request - Login failed for {request.Email}.");
                     return BadRequest(new ApiResponse
                     {
                         Success = false,
@@ -239,71 +253,77 @@ namespace Aegis.Controllers
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Return Internal Server Error (500)
-                _logger.LogError("INTERNAL SERVER ERROR");
+                _logger.LogError($"500 Internal Server Error - Error: {ex}.");
                 return StatusCode(500, new ApiResponse
                 {
                     Success = false,
-                    Errors = new List<string> { "500 Internal Server Error" }
+                    Errors = new List<string> { "Internal Server Error" }
                 });
             }
         }
 
 
-        /***************************************************
-         * REVOKE HTTP DELETE
+        /****************************************
+         * DELETE USER                   (DELETE)
          * - Generates a Jwt token.
-         ***************************************************/
+         ****************************************/
+        [Authorize]
         [HttpDelete("deleteuser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> BanishScibe()
+        public async Task<IActionResult> DeleteUser()
         {
             // Get email
-            _logger.LogInformation("BANISH SCRIBE CALLED");
-            var email = HttpContext.User.Identity?.Name;
-            if (email is null)
+            _logger.LogInformation("Delete user called.");
+
+            // Extract user id from token.
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Verify user id.
+            if (userId == null)
             {
-                _logger.LogWarning("UNATHORIZED");
-                return Unauthorized(new ApiResponse
+                _logger.LogWarning("400 Bad Request: Unable to extract user id from claims.");
+                return BadRequest(new ApiResponse
                 {
                     Success = false,
                     Errors = new List<string>
                     {
-                        "401 Unauthorized"
+                        "Token Claim Error",
+
                     }
                 });
             }
 
-
             try
             {
-                var scribe = await _userManager.FindByEmailAsync(email);
-                if (scribe is null)
+                // Get user data 
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user is null)
                 {
-                    // Log the not found error
-                    _logger.LogWarning("NOT FOUND");
-                    return NotFound(new ApiResponse
+                    _logger.LogWarning($"400 Bad Request: Failed to retrieve user from id.");
+                    return BadRequest(new ApiResponse
                     {
                         Success = false,
-                        Errors = new List<string> { "404 Not Found: Person does not exist" }
+                        Errors = new List<string>
+                            {
+                                "Bad Request"
+                            }
                     });
                 }
 
                 // Remove the person from the database
-                _dbContext.Scribes.Remove(scribe);
+                _dbContext.Users.Remove(user);
 
                 // Save the changes
                 await _dbContext.SaveChangesAsync();
 
                 // Log success
-                _logger.LogInformation($"SUCCESS");
-
-                // Return No Content (204) or OK (200)
+                _logger.LogInformation($"200 OK - Successfully deleted user: {user.Email}.");
                 return Ok(new ApiLoginResponse
                 {
                     Success = true
@@ -311,88 +331,20 @@ namespace Aegis.Controllers
             }
             catch (Exception)
             {
-                _logger.LogError("INTERNAL SERVER ERROR");
-                // Return Internal Server Error (500)
+                _logger.LogError("500 Internal Server Error: Failed to delete user.");
                 return StatusCode(500, new ApiResponse
                 {
                     Success = false,
-                    Errors = new List<string> { "500 Internal Server Error: Failed to delete person" }
+                    Errors = new List<string> { "Failed To Deactivate Account" }
                 });
             }
         }
 
 
-
-
-        /***************************************************
-         * REVOKE HTTP DELETE
-         * - Generates a Jwt token.
-         ***************************************************/
-        [Authorize]
-        [HttpDelete("Checkout")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Checkout()
-        {
-            // Log action
-            _logger.LogInformation("Checkout called");
-
-            // Get email
-            var username = HttpContext.User.Identity?.Name;
-            if (username is null)
-            {
-                _logger.LogWarning("UNAUTHORIZED");
-                return Unauthorized(new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string>
-                        {
-                            "401 Unauthorized"
-                        }
-                });
-            }
-
-            try
-            {
-                // Get scribe 
-                var user = await _userManager.FindByNameAsync(username);
-                if (user is null)
-                {
-                    _logger.LogWarning("UNAUTHORIZED");
-                    return Unauthorized(new ApiResponse
-                    {
-                        Success = false,
-                        Errors = new List<string>
-                            {
-                                "401 Unauthorized"
-                            }
-                    });
-                }
-
-                // Remove token
-                user.RefreshToken = null;
-                await _userManager.UpdateAsync(user);
-
-                // Log success
-                _logger.LogInformation("CHECKOUT SUCCEEDED");
-                return Ok(new ApiLoginResponse
-                {
-                    Success = true
-                });
-            }
-            catch (Exception)
-            {
-                _logger.LogError("INTERNAL SERVER ERROR");
-                // Return Internal Server Error (500)
-                return StatusCode(500, new ApiResponse
-                {
-                    Success = false,
-                    Errors = new List<string> { "500 Internal Server Error: Failed To Checkout Scribe" }
-                });
-            }
-        }
-
+        /****************************************
+         * REFRESH                       (UPDATE)
+         * - Refreshes the Jwt token.
+         ****************************************/
         [HttpPost("Refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -446,5 +398,76 @@ namespace Aegis.Controllers
             });
         }
 
+
+        /****************************************
+         * LOGOUT                        (DELETE)
+         * - Deletes users Jwt token.
+         ****************************************/
+        [Authorize]
+        [HttpDelete("logout")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Logout()
+        {
+            // Log action
+            _logger.LogInformation("Logout called.");
+
+            // Extract user id from token.
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Verify user id.
+            if (userId == null)
+            {
+                _logger.LogWarning("400 Bad Request: Unable to extract user id from claims.");
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Token Claim Error"
+                    }
+                });
+            }
+
+            try
+            {
+                // Get user data 
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user is null)
+                {
+                    _logger.LogWarning($"400 Bad Request: Failed to retrieve user from id.");
+                    return BadRequest(new ApiResponse
+                    {
+                        Success = false,
+                        Errors = new List<string>
+                            {
+                                "Bad Request"
+                            }
+                    });
+                }
+
+                // Remove token
+                user.RefreshToken = null;
+                await _userManager.UpdateAsync(user);
+
+                // Log success
+                _logger.LogInformation($"200 OK - Logout for user {user.Email} Successful.");
+                return Ok(new ApiLoginResponse
+                {
+                    Success = true
+                });
+            }
+            catch (Exception)
+            {
+                _logger.LogError("500 Internal Server Error: Failed to logout user");
+                // Return Internal Server Error (500)
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string> { "500 Internal Server Error: Failed To Logout AppUser" }
+                });
+            }
+        }
     }
 }

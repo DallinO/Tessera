@@ -10,44 +10,27 @@ namespace Tessera.CodeGenerators
     {
         private static Random _random = new Random();
 
-        public static string StringOfDigits(int digits)
+        public static string GenerateNumberOfLength(int length)
         {
-            Random _rng = new();
-            string id = string.Empty;
+            if (length <= 0)
+                throw new ArgumentException("Length must be greater than zero.", nameof(length));
 
-            for (int i = 0; i < digits; i++)
-            {
-                id += _rng.Next(9).ToString();
-            }
-
-            return id;
-        }
-
-        //public static string PurchaseOrder()
-        //{
-        //    Random _rng = new();
-        //    string id = "PO-" + (DateTime.Now.Year % 100);
-
-        //    int year = DateTime.Now.Year % 100;
-
-        public static string GenerateNineDigitId()
-        {
             string number;
             do
             {
-                number = GenerateNumber();
+                number = GenerateNumber(length);
             } while (!IsValid(number));
 
             return number;
         }
 
-        private static string GenerateNumber()
+        private static string GenerateNumber(int length)
         {
-            char[] digits = "123456789".ToCharArray(); // Start with digits 1-9
-            char[] result = new char[9];
+            char[] digits = "123456789".ToCharArray(); // Start with digits 1-9 for the first digit
+            char[] result = new char[length];
             result[0] = digits[_random.Next(digits.Length)]; // Ensure it doesn't start with 0
 
-            for (int i = 1; i < 9; i++)
+            for (int i = 1; i < length; i++)
             {
                 char nextDigit;
                 do
@@ -68,29 +51,28 @@ namespace Tessera.CodeGenerators
             {
                 count++;
             }
-            return count >= 3;
+            return count >= 3; // Adjust this if you want to allow more or fewer consecutive repeats
         }
 
         private static bool IsValid(string number)
         {
-            // Check for at least 4 different digits
-            if (number.Distinct().Count() < 4)
+            // Check for at least 4 different digits (or less for shorter numbers)
+            int requiredDistinctDigits = Math.Min(4, number.Length);
+            if (number.Distinct().Count() < requiredDistinctDigits)
                 return false;
 
             // Check that no digit repeats more than 3 times consecutively
             for (int i = 0; i < number.Length - 3; i++)
             {
-                if (number[i] == number[i + 1] && number[i] == number[i + 2] && number[i] == number[i + 3])
+                if (number[i] == number[i + 1] 
+                    && number[i] == number[i + 2] 
+                    && number[i] == number[i + 3])
                     return false;
             }
 
             return true;
         }
 
-
-
-
-        //}
     }
 
 }

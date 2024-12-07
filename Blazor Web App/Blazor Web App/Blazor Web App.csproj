@@ -36,6 +36,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Components\document.razor" />
     <_ContentIncludedByDefault Remove="wwwroot\css\document.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\List.css" />
   </ItemGroup>
 
   <ItemGroup>

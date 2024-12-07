@@ -7,6 +7,7 @@ namespace Aegis.Data
     {
         public DbSet<ChapterEntity> Chapters { get; set; }
         public DbSet<DocumentEntity> Documents { get; set; }
+        public DbSet<RowEntity> Rows { get; set; }
 
         public BookDbContext(DbContextOptions<BookDbContext> options) : base(options) { }
 
@@ -14,17 +15,17 @@ namespace Aegis.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            
+            modelBuilder.Entity<ChapterEntity>()
+                .HasOne(c => c.Document)              
+                .WithOne(d => d.Chapter)        
+                .HasForeignKey<DocumentEntity>(d => d.ChapterId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<ChapterEntity>()
-            //    .HasOne(c => c.List)
-            //    .WithOne()
-            //    .HasForeignKey<ListEntity>(l => l.ChapterId);
-
-            //modelBuilder.Entity<ChapterEntity>()
-            //    .HasOne(c => c.Calendar)
-            //    .WithOne()
-            //    .HasForeignKey<CalendarEntity>(cal => cal.ChapterId);
+            modelBuilder.Entity<ChapterEntity>()
+                .HasMany<RowEntity>(c => c.Rows)
+                .WithOne()
+                .HasForeignKey(r => r.ChapterId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

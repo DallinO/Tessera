@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tessera Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8ccf3c7f1b4a00a849711493cd569d5911a25e96")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bae7fa11bf61185ffc21f7f33228c34603dbe0f2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tessera Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tessera Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

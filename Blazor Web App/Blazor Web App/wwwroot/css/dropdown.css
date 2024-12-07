@@ -1,0 +1,70 @@
+﻿/***********************************************************
+    DROPDOWN
+***********************************************************/
+.ts-dropdown-container {
+    position: relative;
+    display: flex;
+    padding: 0px 10px 0px 10px;
+    height: 35px;
+    border: 2px solid;
+    border-color: var(--theme-1-accent-2);
+    border-radius: 12px;
+    background-color: transparent;
+}
+
+.ts-dropdown-overlay {
+    position: absolute;
+    top: 120%; /* This makes the dropdown appear below the input */
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4000; /* Ensure it appears above other content */
+}
+
+.ts-dropdown-content {
+    background: var(--theme-1-dropdown-content);
+    border-radius: 12px;
+    min-width: 200px;
+    max-width: 1200px;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid;
+    border-color: var(--theme-1-accent-2);
+}
+
+.ts-dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.ts-dropdown-body {
+    display: flex;
+    flex-direction: column;
+    color: var(--theme-1-accent-2);
+}
+
+.ts-dropdown-item {
+    border: none;
+    padding-top: 7.5px;
+    padding-bottom: 7.5px;
+    background-color: transparent;
+    color: var(--theme-1-accent-2);
+}
+
+    .ts-dropdown-item:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+.ts-dropdown-body-section {
+}
+
+.ts-dropdown-footer {
+    display: flex;
+    justify-content: space-between;
+}
