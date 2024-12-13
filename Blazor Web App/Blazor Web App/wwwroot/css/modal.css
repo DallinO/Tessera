@@ -12,10 +12,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1000;
 }
 
 .ts-modal-content {
-    background-color: gray;
+    background-color: red;
     border-radius: 5px;
     width: fit-content;
     min-width: 250px;

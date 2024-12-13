@@ -1,0 +1,130 @@
+﻿.calendar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background-color: #f4f4f4;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.calendar-header-item {
+    padding: 10px;
+}
+
+.calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 4px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    /* Make the calendar body scrollable */
+    max-height: calc(100vh - 130px); /* Adjust 100px to account for any header or margin space */
+    overflow-y: auto;
+}
+
+.calendar-day {
+    background-color: #fff;
+    padding: 10px;
+    margin-top: 4px;
+    height: 150px;
+    text-align: center;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    cursor: pointer;
+    min-height: 80px; /* Ensures a consistent height */
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+    .calendar-day:hover {
+        background-color: #f0f0f0;
+    }
+
+    .calendar-day.empty {
+        background-color: #f9f9f9;
+        border: none;
+    }
+
+    .calendar-day.selected {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .calendar-day.today {
+        background-color: #ff9900;
+        font-weight: bold;
+    }
+
+
+.calendar-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.calendar-day-number {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.calendar-day-header div {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Section for holidays on the right of the header */
+.calendar-day-holidays {
+    font-size: 14px;
+    color: #d9534f; /* Red for holiday emphasis */
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.calendar-day-event-list {
+    font-size: 14px;
+    padding: 5px;
+    flex-grow: 1; /* Allows the event section to expand if needed */
+    overflow: auto;
+    border-radius: 4px;
+}
+
+.ts-calendar-add-event-button {
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Ensure square shape */
+    background-color: transparent;
+    border: none; /* Optional: a light border for better visibility */
+    border-radius: 4px; /* Optional: slightly rounded edges */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    z-index: 11; /* Ensure inner button is on top */
+}
+
+    .ts-calendar-add-event-button:hover {
+        background-color: red;
+    }
+
+.ts-calendar-button {
+    align-items: center;
+    text-align: center;
+    background-color: lightsteelblue;
+    border: 2px solid gray;
+    border-radius: 12px;
+    color: gray; /* Set text color to white */
+    display: flex;
+    height: 30px;
+    padding: 5px; /* Padding to make the button larger */
+    position: relative; /* Make sure the position is relative */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    width: 100%; /* Adjust as needed */
+    z-index: 2;
+}

@@ -1,4 +1,5 @@
 ﻿using Tessera.Models.Chapter;
+using Tessera.Models.Chapter.Data;
 
 namespace Tessera.Models.Authentication
 {
@@ -20,7 +21,7 @@ namespace Tessera.Models.Authentication
         public string JwtToken { get; set; }
         public string RefreshToken { get; set; }
         public DateTime Expiration { get; set; }
-        public AppUserDto Author { get; set; }
+        public AppUserDto AppUser { get; set; }
 
         public ApiLoginResponse() { }
         public ApiLoginResponse(List<string> errors) : base(errors) { }
@@ -63,6 +64,39 @@ namespace Tessera.Models.Authentication
         public ApiListResponse(List<string> errors) : base(errors) { }
     }
 
+    public class ApiCalendarResponse : ApiResponse
+    {
+        public List<EventDto> Events { get; set; }
+        public ApiCalendarResponse() { }
+        public ApiCalendarResponse(List<string> errors) : base(errors) { }
+    }
 
+    public class ApiUpcomingTasksResponse : ApiResponse
+    {
+        public List<UpcomingTask> Tasks { get; set; } = new List<UpcomingTask>();
+        public ApiUpcomingTasksResponse() { }
+        public ApiUpcomingTasksResponse(List<string> errors) : base(errors) { }
+    }
+
+    public class ApiUpcomingEventsResponse : ApiResponse
+    {
+        public List<UpcomingEvent> Events { get; set; } = new List<UpcomingEvent>();
+        public ApiUpcomingEventsResponse() { }
+        public ApiUpcomingEventsResponse(List<string> errors) : base(errors) { }
+    }
+
+    public class ApiPriorityTasksResponse : ApiResponse
+    {
+        public List<PriorityTask> Tasks { get; set; } = new List<PriorityTask>();
+        public ApiPriorityTasksResponse() { }
+        public ApiPriorityTasksResponse(List<string> errors) : base(errors) { }
+    }
+
+    public class ApiNotificationResponse : ApiResponse
+    {
+        public List<NotificationDto> Notifications { get; set; } = new ();
+        public ApiNotificationResponse() { }
+        public ApiNotificationResponse(List<string> errors) : base(errors) { }
+    }
 
 }

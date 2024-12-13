@@ -1,4 +1,4 @@
-﻿#define Unit_Tests
+﻿//#define Unit_Tests
 
 using Aegis.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +10,12 @@ using System.Security.Claims;
 using Aegis.Data;
 using Swashbuckle.AspNetCore.Filters;
 using Azure.Core;
+using Tessera.Models.Book;
+using Tessera.Constants;
+using Microsoft.IdentityModel.Tokens;
+using Tessera.Models.Chapter.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.HttpResults;
 namespace Aegis.Controllers
 {
     [Route("api/auth")]
@@ -29,11 +35,11 @@ namespace Aegis.Controllers
 #endif
 
         public AuthenticationController(
-            IConfiguration configuration, 
-            ILogger<AuthenticationController> logger, 
-            UserManager<AppUser> userManager, 
-            SignInManager<AppUser> signInManager, 
-            TesseraDbContext dbContext, 
+            IConfiguration configuration,
+            ILogger<AuthenticationController> logger,
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            TesseraDbContext dbContext,
             TokenService tokenService)
         {
             _configuration = configuration;
@@ -45,6 +51,54 @@ namespace Aegis.Controllers
             _tokenService = tokenService;
         }
 
+
+        [HttpPost("report")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Report([FromBody] ReportDto report)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning($"400 Bad Request - Request model is invalid: {report}");
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Bad Request - Test"
+                    }
+                });
+            }
+
+            var newReport = new ReportEntity()
+            {
+                Date = report.Date,
+                Issue = report.Issue
+            };
+
+            _dbContext.Reports.Add(newReport);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                return Ok(new ApiResponse
+                {
+                    Success = true
+                });
+            }
+            catch (Exception ex)
+            {
+                // Return Internal Server Error (500)
+                _logger.LogError($"500 Internal Server Error - Error: {ex}");
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string> { $"500 Internal Server Error - Error: {ex}" }
+                });
+            }
+        }
 
         /* ########## AUTHENTICATION ########## */
 
@@ -59,11 +113,6 @@ namespace Aegis.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-
-            return Ok(new ApiResponse
-            {
-                Success = true
-            });
             // Log action
             _logger.LogInformation("Register called.");
 
@@ -71,7 +120,7 @@ namespace Aegis.Controllers
             if (!ModelState.IsValid)
             {
                 _logger.LogWarning($"400 Bad Request - Request model is invalid: {request}");
-                return BadRequest( new ApiResponse
+                return BadRequest(new ApiResponse
                 {
                     Success = false,
                     Errors = new List<string>
@@ -114,7 +163,10 @@ namespace Aegis.Controllers
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 UserName = request.Email,
-                Email = request.Email
+                Email = request.Email,
+                PetSecurityAnswer = request.PetSecurityAnswer,
+                CarSecurityAnswer = request.CarSecurityAnswer,
+                JobSecurityAnswer = request.JobSecurityAnswer
             };
 #endif
 
@@ -125,7 +177,6 @@ namespace Aegis.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation($"200 OK - Registration for {user.Email} successful.");
-                    
                     return Ok(new ApiResponse
                     {
                         Success = true
@@ -210,7 +261,7 @@ namespace Aegis.Controllers
                 // Generate tokens
                 JwtSecurityToken token = _tokenService.GenerateJwt(user.Id);
                 var refreshToken = TokenService.GenerateRefreshToken();
-            
+
                 // Set scribe tokens
                 user.RefreshToken = refreshToken;
                 user.RefreshTokenExpiry = DateTime.UtcNow.AddMinutes(1);
@@ -228,11 +279,12 @@ namespace Aegis.Controllers
                         JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
                         Expiration = token.ValidTo,
                         RefreshToken = refreshToken,
-                        Author = new AppUserDto() 
+                        AppUser = new AppUserDto()
                         {
                             FirstName = user.FirstName,
                             LastName = user.LastName,
-                            Email = user.Email
+                            Email = user.Email,
+                            Theme = (Theme)user.Theme
                         }
                     });
                 }
@@ -266,9 +318,272 @@ namespace Aegis.Controllers
         }
 
 
+        [HttpGet("validatetoken")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiLoginResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ValidateToken([FromQuery] string token)
+        {
+            try
+            {
+                // Validate the token and get the ClaimsPrincipal
+                var principal = _tokenService.GetPrincipalFromExpiredToken(token);
+
+                if (principal == null)
+                {
+                    return Unauthorized(new ApiResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>() { $"{token} invalid" }
+                    });
+                }
+
+                var expClaim = principal?.Claims.FirstOrDefault(c => c.Type == "exp");
+
+                if (expClaim == null || !long.TryParse(expClaim.Value, out var expUnixTime))
+                {
+                    return Unauthorized(new ApiResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>() { $"{token} invalid" }
+                    });
+                }
+
+                var expiration = DateTimeOffset.FromUnixTimeSeconds(expUnixTime).DateTime;
+
+                // Extract user ID claim from the token
+                var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized(new ApiResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>() { $"{token} invalid token claims" }
+                    });
+                }
+
+                var user = await _userManager.FindByIdAsync(userId);
+
+                // Authenticate scribe
+                if (user == null)
+                {
+                    _logger.LogWarning($"401 Unauthorized - Access denied for {userId}.");
+                    return Unauthorized(new ApiResponse
+                    {
+                        Success = false,
+                        Errors = new List<string>
+                        {
+                            "Access Denied"
+                        }
+                    });
+                }
+                    
+                _logger.LogInformation($"200 Ok - Login for {userId} successful");
+
+                // Return response
+                return Ok(new ApiLoginResponse
+                {
+                    Success = true,
+                    Expiration = expiration,
+                    AppUser = new AppUserDto()
+                    {
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email,
+                        Theme = (Theme)user.Theme
+                    }
+                });
+            }
+            catch (SecurityTokenException ex)
+            {
+                return Unauthorized(new { message = $"Token validation failed: {ex.Message}" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = $"An error occurred: {ex.Message}" });
+            }
+        }
+    
+
+        /****************************************
+         * RESET PASSWORD                  (READ)
+         * - 
+         ****************************************/
+        [HttpPut("resetpassword")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiLoginResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            // Log action
+            _logger.LogInformation("Password reset called.");
+
+            // Check Model State
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning($"400 Bad Request - Request model is invalid: {request}");
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Bad Request"
+                    }
+                });
+            }
+
+            try
+            {
+                // Get user by email
+                var user = await _userManager.FindByEmailAsync(request.Email);
+
+                // Check if user exists
+                if (user == null)
+                {
+                    _logger.LogWarning($"401 Unauthorized - Access denied for {request.Email}.");
+                    return Unauthorized(new ApiResponse
+                    {
+                        Success = false,
+                        Errors = new List<string>
+                        {
+                            "Access Denied"
+                        }
+                    });
+                }
+
+                // Reset user's password
+                var resetResult = await _userManager.RemovePasswordAsync(user);
+                if (!resetResult.Succeeded)
+                {
+                    _logger.LogWarning($"Error removing password for {request.Email}");
+                    return BadRequest(new ApiResponse
+                    {
+                        Success = false,
+                        Errors = new List<string>
+                        {
+                            "Error removing existing password"
+                        }
+                    });
+                }
+
+                var addPasswordResult = await _userManager.AddPasswordAsync(user, request.Password);
+                if (!addPasswordResult.Succeeded)
+                {
+                    _logger.LogWarning($"Error adding new password for {request.Email}");
+                    return BadRequest(new ApiResponse
+                    {
+                        Success = false,
+                        Errors = addPasswordResult.Errors.Select(e => e.Description).ToList()
+                    });
+                }
+
+                // Log success
+                _logger.LogInformation($"Password successfully reset for {request.Email}");
+
+                // Return successful response
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error resetting password.");
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "An error occurred while resetting the password."
+                    }
+                });
+            }
+        }
+
+        /****************************************
+         * RESET PASSWORD                  (READ)
+         * - 
+         ****************************************/
+        [HttpPut("updateuser")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiLoginResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateUser([FromBody] AppUserDto model)
+        {
+            // Log action
+            _logger.LogInformation("Password reset called.");
+            
+            // Get user by email
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            // Check if user exists
+            if (user == null)
+            {
+                _logger.LogWarning($"User with email {model.Email} not found.");
+                return NotFound(new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "User not found"
+                    }
+                });
+            }
+
+            // Update properties if they have changed
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = model.Email;
+            user.Theme = (int)model.Theme;
+
+            try
+            {
+                // Reset user's password
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    _logger.LogWarning($"Error updating user info for {model.Email}");
+                    return BadRequest(new ApiResponse
+                    {
+                        Success = false,
+                        Errors = new List<string>
+                        {
+                            "Error updating account information"
+                        }
+                    });
+                }
+
+                // Log success
+                _logger.LogInformation($"Account information updated for {model.Email}");
+
+                // Return successful response
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating account information");
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "An error occurred while updating account info"
+                    }
+                });
+            }
+        }
+
+
         /****************************************
          * DELETE USER                   (DELETE)
-         * - Generates a Jwt token.
+         * - 
          ****************************************/
         [Authorize]
         [HttpDelete("deleteuser")]

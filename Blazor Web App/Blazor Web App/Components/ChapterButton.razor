@@ -20,11 +20,12 @@
 
 <ChapterSettings @ref="chapterSettings" 
     ChapterIndex="@ChapterIndex"
-    OnOpenSettings="OpenSettings"/>
+    OnClose="OnDeleteChapter"/>
 
 @code {
     [Parameter] public int ChapterIndex { get; set; }
     [Parameter] public Action OnOpenAddMenu { get; set; }
+    [Parameter] public EventCallback OnDeleteChapter { get; set; }
     [Parameter] public string ChapterIcon { get; set; }
     [Parameter] public string ButtonId { get; set; }
 
@@ -41,7 +42,7 @@
     private void OpenSettings()
     {
         Book.SelectedChapter = Book.Chapters[ChapterIndex];
-        chapterSettings.isVisible = true;
+        chapterSettings.ToggleModal(true);
     }
 
     private async Task OpenPage()

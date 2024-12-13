@@ -1,0 +1,9 @@
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis.UnitTests\bin\Debug\net8.0\.msCoverageSourceRootsMapping_Aegis.UnitTests
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis.UnitTests\bin\Debug\net8.0\CoverletSourceRootsMapping_Aegis.UnitTests
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis.UnitTests\obj\Debug\net8.0\Aegis.UnitTests.csproj.AssemblyReference.cache
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis.UnitTests\obj\Debug\net8.0\MvcTestingAppManifest.json
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis.UnitTests\obj\Debug\net8.0\Aegis.UnitTests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis.UnitTests\obj\Debug\net8.0\Aegis.UnitTests.AssemblyInfoInputs.cache
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis.UnitTests\obj\Debug\net8.0\Aegis.UnitTests.AssemblyInfo.cs
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis.UnitTests\obj\Debug\net8.0\Aegis.UnitTests.csproj.CoreCompileInputs.cache
+C:\Users\Olson\Documents\GitHub\Tessera\Web API\Aegis.UnitTests\obj\Debug\net8.0\Aegis.UnitTests.sourcelink.json

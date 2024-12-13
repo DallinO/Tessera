@@ -1,0 +1,108 @@
+﻿@namespace Tessera.Web
+
+@inject NavigationManager Navigation
+@inject IBookService Book
+@inject IApiService Api
+@inject IJSRuntime JS
+
+@if (_isVisible)
+{
+    <div class="ts-modal-overlay">
+        <div class="ts-modal-content">
+            <div class="ts-modal-body">
+                <div class="ts-modal-body-section">
+                    <div class="ts-auth-container-item">
+                        <div class="ts-label-container">
+                            <label for="fn-input" class="ts-label">Name</label>
+                        </div>
+                        <div class="ts-input-container">
+                            <input class="ts-primary-input" type="text" id="fn-input" required="" @bind="Book.AppUser.FirstName">
+                        </div>
+                        <div class="ts-label-container">
+                            <label for="ln-input" class="ts-label">Last Name</label>
+                        </div>
+                        <div class="ts-input-container">
+                            <input class="ts-primary-input" type="text" id="ln-input" required="" @bind="Book.AppUser.LastName">
+                        </div>
+                    </div>
+                    <div class="ts-auth-container-item">
+                        <div class="ts-label-container">
+                            <label for="em-input" class="ts-label">Email</label>
+                        </div>
+                        <div class="ts-input-container">
+                            <input class="ts-primary-input" type="text" id="em-input" required="" @bind="Book.AppUser.Email">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ts-modal-footer">
+                <button @onclick="()=> ToggleModal(false)" class="ts-secondary-btn ts-modal-button-left">Close</button>
+                <button @onclick="Save" class="ts-primary-btn ts-modal-button-right">Save</button>
+                <button @onclick="Logout" class="ts-primary-btn ts-modal-button-right">Logout</button>
+
+
+            </div>
+            @if (_showErrors)
+            {
+                <div class="ts-auth-container-item-bottom">
+                    <p class="ts-auth-errors @(_showErrors ? "visible" : "")">
+                        @_errors
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private string _message = "test";
+    private bool _isVisible = false;
+    private bool _showErrors;
+    private MarkupString _errors;
+
+    public void ToggleModal(bool isVisible)
+    {
+        _isVisible = isVisible;
+        StateHasChanged();
+    }
+
+
+    private async Task Save()
+    {
+        var result = await Api.UpdateUser(Book.AppUser);
+        if (!result.Success)
+        {
+            DisplayErrors(result.Errors);
+        }
+        else
+        {
+            ToggleModal(false);
+        }
+    }
+
+    private async Task Logout()
+    {
+        await Api.LogoutAsync();
+        Navigation.NavigateTo("/");
+    }
+
+    private void ResetErrors()
+    {
+        _showErrors = false;
+        _errors = new MarkupString();
+    }
+
+    private void DisplayErrors(List<string> errors)
+    {
+        ResetErrors();
+        StringBuilder errorMessage = new();
+        foreach (string error in errors)
+        {
+            errorMessage.AppendLine(string.Join("<br />", error));
+            errorMessage.Append("<br />");
+        }
+        _errors = new MarkupString(errorMessage.ToString());
+        _showErrors = true;
+        StateHasChanged();
+    }
+}

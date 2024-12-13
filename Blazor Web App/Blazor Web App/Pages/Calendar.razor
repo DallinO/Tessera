@@ -1,0 +1,281 @@
+﻿@namespace Tessera.Web.Pages
+
+@page "/b/{BookId:int}/c"
+
+@layout BookLayout
+@inject NavigationManager Navigation
+@inject IViewService View
+@inject IApiService Api
+
+<PageTitle>Calendar</PageTitle>
+
+<div>
+    <div class="ts-input-container">
+        <select @bind="schedule">
+            <option value="@Schedule.Month">Month</option>
+            <option value="@Schedule.Week">Week</option>
+            <option value="@Schedule.Day">Day</option>
+        </select>
+    </div>
+    @if (schedule == Schedule.Month)
+    {
+        <div class="calendar">
+            <!-- Calendar Header: Weekdays -->
+            <div class="calendar-header">
+                <div class="calendar-header-item">Sun</div>
+                <div class="calendar-header-item">Mon</div>
+                <div class="calendar-header-item">Tue</div>
+                <div class="calendar-header-item">Wed</div>
+                <div class="calendar-header-item">Thu</div>
+                <div class="calendar-header-item">Fri</div>
+                <div class="calendar-header-item">Sat</div>
+            </div>
+
+            <!-- Calendar Body: Days Grid -->
+            <div class="calendar-body">
+                @for (int i = 0; i < 7; i++)
+                {
+                    <div class="calendar-column">
+                        @for (int j = i; j < CalendarDays.Count; j+=7)
+                        {
+                            var day = CalendarDays[j];
+                            <div class="calendar-day @(day == null ? "empty" : "") @(day?.IsToday == true ? "today" : "")">
+                                <div class="calendar-day-header">
+                                    <div class="calendar-day-number">
+                                        @if (day != null)
+                                        {
+                                            @day.DayNumber
+                                        }
+                                    </div>
+                                    <div>
+                                        @* Holidays *@
+                                    </div>
+                                    <div class="calendar-add-event">
+                                        <button class="ts-calendar-add-event-button" @onclick="() => DisplayEventDetails(day)">
+                                            <img src="plus.svg" alt="add" />
+                                        </button>
+                                    </div>
+                                </div
+                                <div class="calendar-day-event-list">
+                                    @if (day != null && day.Events.Count > 0)
+                                    {
+                                        for (int z = 0; z < day.Events.Count; z++)
+                                        {
+                                            <CalendarEventButton
+                                                Day="day"
+                                                EventIndex="@z"
+                                                EventIcon="@day.Events[z].EventType.ToString()"
+                                                ButtonId="@View.ButtonIdGen()"
+                                                Title="@day.Events[z].Title"
+                                                OnDisplayEventDetails="DisplayEventDetails"
+                                                />
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else if (schedule == Schedule.Week)
+    {
+        <div class="calendar">
+            <!-- Calendar Header: Weekdays -->
+            <div class="calendar-header">
+                <div class="calendar-header-item">Sun</div>
+                <div class="calendar-header-item">Mon</div>
+                <div class="calendar-header-item">Tue</div>
+                <div class="calendar-header-item">Wed</div>
+                <div class="calendar-header-item">Thu</div>
+                <div class="calendar-header-item">Fri</div>
+                <div class="calendar-header-item">Sat</div>
+            </div>
+            <div class="calendar-body">
+                @{
+                    int date = DateTime.UtcNow.Day;
+                    int index = date - (int)DateTime.UtcNow.DayOfWeek - 1;
+                }
+                @for (int i = index; i < index + 7; i++)
+                {
+                    var day = CalendarDays[i];
+                    <div class="calendar-column">
+                            <div class="calendar-day @(day == null ? "empty" : "") @(day?.IsToday == true ? "today" : "")">
+                                <div class="calendar-day-header">
+                                    <div class="calendar-day-number">
+                                        @if (day != null)
+                                        {
+                                            @day.DayNumber
+                                        }
+                                    </div>
+                                    <div>
+                                        @* Holidays *@
+                                    </div>
+                                    <div class="calendar-add-event">
+                                        <button class="ts-calendar-add-event-button" @onclick="() => DisplayEventDetails(day)">
+                                            <img src="plus.svg" alt="add" />
+                                        </button>
+                                    </div>
+                                </div
+                                <div class="calendar-day-event-list">
+                                    @if (day != null && day.Events.Count > 0)
+                                    {
+                                        for (int z = 0; z < day.Events.Count; z++)
+                                        {
+                                            <CalendarEventButton
+                                                Day="day"
+                                                EventIndex="@z"
+                                                EventIcon="@day.Events[z].EventType.ToString()"
+                                                ButtonId="@View.ButtonIdGen()"
+                                                Title="@day.Events[z].Title"
+                                                OnDisplayEventDetails="DisplayEventDetails"
+                                                />
+                                        }
+                                    }
+                                </div>
+                            </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>
+            @{
+                var day = CalendarDays[DateTime.UtcNow.Day - 1];
+            }
+             <div class="calendar-day @(day == null ? "empty" : "")">
+                <div class="calendar-day-header">
+                    <div class="calendar-day-number">
+                        @if (day != null)
+                        {
+                            @day.DayNumber
+                        }
+                    </div>
+                    <div>
+                        @* Holidays *@
+                    </div>
+                    <div class="calendar-add-event">
+                        <button class="ts-calendar-add-event-button" @onclick="() => DisplayEventDetails(day)">
+                            <img src="plus.svg" alt="add" />
+                        </button>
+                    </div>
+                </div
+                <div class="calendar-day-event-list">
+                    @if (day != null && day.Events.Count > 0)
+                    {
+                        for (int z = 0; z < day.Events.Count; z++)
+                        {
+                            <CalendarEventButton
+                                Day="day"
+                                EventIndex="@z"
+                                EventIcon="@day.Events[z].EventType.ToString()"
+                                ButtonId="@View.ButtonIdGen()"
+                                Title="@day.Events[z].Title"
+                                OnDisplayEventDetails="DisplayEventDetails"
+                                />
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<EventDetails @ref="addEvent" OnModalClose="OnModalClose"/>
+
+@code {
+    [Parameter] public int BookId { get; set; }
+    private List<CalendarDay?> CalendarDays = new List<CalendarDay?>();
+    private int CurrentMonth = DateTime.UtcNow.Month;
+    private int CurrentYear = DateTime.UtcNow.Year;
+    private EventDetails addEvent;
+    private Schedule schedule = Schedule.Month;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GenerateCalendar(CurrentYear, CurrentMonth);
+        await base.OnInitializedAsync();
+    }
+
+    private int StartDay()
+    {
+        // Get the first day of the current month
+        DateTime firstOfMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+
+        // Calculate the number of days from Sunday to the first of the month
+        int daysFromSunday = (int)firstOfMonth.DayOfWeek;
+
+        return daysFromSunday;
+    }
+
+    private async Task GenerateCalendar(int year, int month)
+    {
+        // Get the first day of the month and the number of days in the month
+        var firstDayOfMonth = new DateTime(year, month, 1);
+        int firstDayOfWeek = (int)firstDayOfMonth.DayOfWeek; // Sunday = 0, Monday = 1, etc.
+        int daysInMonth = DateTime.DaysInMonth(year, month);
+
+        // Initialize the list for calendar days
+        CalendarDays.Clear();
+
+        // Add empty cells for the days before the first day of the month (to align the first day correctly)
+        for (int i = 0; i < firstDayOfWeek; i++)
+        {
+            CalendarDays.Add(null); // Placeholder for empty days before the 1st
+        }
+
+        // Add days of the month
+        for (int day = 1; day <= daysInMonth; day++)
+        {
+            // Construct the DateOnly for the current day
+            var currentDayDate = new DateOnly(year, month, day);
+
+            // Call the API to get events for this specific day
+            var response = await Api.GetDayEventsAsync(BookId, currentDayDate);
+
+            // Add the current calendar day along with the events if any exist
+            CalendarDays.Add(new CalendarDay
+            {
+                DayNumber = day,
+                IsToday = (day == DateTime.UtcNow.Day),
+                Events = response.Success && response.Events.Count > 0 ? response.Events : new List<EventDto>()
+            });
+        }
+
+        // Fill in remaining empty cells for the last week, if necessary, to make a full week
+        int totalDays = CalendarDays.Count;
+        while (totalDays % 7 != 0)
+        {
+            CalendarDays.Add(null); // Add empty cells to complete the last row
+            totalDays++;
+        }
+    }
+
+    private async Task DisplayEventDetails(DisplayEventArgs Args)
+    {
+        addEvent.Day = Args.Day;
+        addEvent.Index = Args.Index;
+        addEvent.OpenModal();
+    }
+
+    private async Task DisplayEventDetails(CalendarDay day)
+    {
+        addEvent.Day = day;
+        addEvent.OpenModal();
+    }
+
+    public void OnModalClose()
+    {
+        StateHasChanged();
+    }
+
+    private enum Schedule
+    {
+        Month,
+        Week,
+        Day
+    }
+}

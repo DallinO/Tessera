@@ -1,0 +1,49 @@
+﻿.ts-dash {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Automatically adjusts the number of columns based on available width */
+    gap: 20px; /* Adjusts the space between the grid items */
+    margin: 20px;
+    cursor: grab; /* Change cursor to grab when hovering */
+    transition: border 0.3s;
+}
+
+.ts-dash-section {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+    .ts-dash-section.droppable {
+        border: 2px dashed #5c5c5c; /* Optional: visual feedback for droppable area */
+    }
+
+    .ts-dash-section:active {
+        cursor: grabbing; /* Change cursor to grabbing when dragging */
+    }
+
+.ts-dash-section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.ts-dash-section-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.ts-dash-section-body-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.ts-dash-section-body-item-element {
+    margin-bottom: 8px;
+}
+
+.ts-dash-section-body-item:last-child {
+    border-bottom: none; /* Remove border for the last item */
+}

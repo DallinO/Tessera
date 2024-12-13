@@ -1,0 +1,161 @@
+﻿@namespace Tessera.Web
+
+@if (isVisible)
+{
+    <div class="ts-modal-overlay">
+        <div class="ts-modal-content">
+            <div class="ts-modal-body">
+                <div class="ts-modal-body-section">
+                    @* Title *@
+                    <div class="ts-label-container">
+                        <label for="cus-title-input" class="ts-label">Title</label>
+                    </div>
+                    <div class="ts-input-container">
+                    <input class="ts-primary-input " type="text" id="cus-title-input" @bind="Day.Events[Index].Title" />
+                    </div>
+                    @* Description *@
+                    <div class="ts-label-container">
+                        <label for="cus-description-input" class="ts-label">Description</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input " type="text" id="cus-description-input" @bind="Day.Events[Index].Description" />
+                    </div>
+                    @* Event Type *@
+                    <div class="ts-label-container">
+                        <label for="cus-event-type-input" class="ts-label">Event Type</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <select @bind="Day.Events[Index].EventType">
+                            <option value="@EventType.Personal">Personal</option>
+                            <option value="@EventType.Work">Work</option>
+                            <option value="@EventType.School">School</option>
+                            <option value="@EventType.Medical">Medical</option>
+                            <option value="@EventType.Religious">Religious</option>
+                        </select>
+                    </div>
+                    @* <div class="ts-dropdown-container">
+                        <button class="ts-primary-input" @onclick="OpenEventTypeModal">@_event.EventType</button>
+                        <DropdownB @ref="dropdown"
+                            TItem="EventType"
+                            Items="Enum.GetValues(typeof(EventType))
+                                .Cast<EventType>()
+                                .ToList()"
+                            SelectedValue="EventType.Personal"
+                            SelectedValueChanged="OnEventTypeChanged" />
+                    </div> *@
+                    @* Date *@
+                    <div class="ts-label-container">
+                        <label for="cus-date-input" class="ts-label">Date</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input" type="date" @bind="Day.Events[Index].Date" />
+                    </div>
+                    @* Start Time *@
+                    <div class="ts-label-container">
+                        <label for="cus-start-input" class="ts-label">Start Time</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input" type="time" @bind="Day.Events[Index].Start" id="cus-start-input"/>
+                    </div>
+                    @* FinishTime *@
+                    <div class="ts-label-container">
+                        <label for="cus-finish-input" class="ts-label">Start Time</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input" type="time" @bind="Day.Events[Index].Finish" id="cus-finish-input" />
+                    </div>
+                </div>
+            </div>
+            <div>
+                @if (validationErrors.Count > 0)
+                {
+                    <ul class="ts-customer-validation-summary">
+                        @foreach (var error in validationErrors)
+                        {
+                            <li>@error</li>
+                        }
+                    </ul>
+                }
+            </div>
+            <div class="ts-modal-footer">
+                <button @onclick="CloseModal" class="ts-secondary-btn ts-modal-button-left">Close</button>
+            @* <button @onclick="OnSubmit" class="ts-primary-btn ts-modal-button-right">Submit</button> *@
+            </div>
+        </div>
+    </div>
+
+}
+
+@code {
+    //[Parameter] public EventCallback<DisplayEventArgs> OnAddEvent { get; set; }
+    [Parameter] public EventCallback OnModalClose { get; set; }
+
+    public CalendarDay Day { get; set; } = new CalendarDay();
+    public int Index { get; set; } = -1;
+
+
+    private List<string> validationErrors = new();
+    private bool isVisible = false;
+
+    public void CloseModal()
+    {
+        isVisible = false;
+        validationErrors.Clear();
+        Day = new();
+        Index = -1;
+        StateHasChanged();
+        OnModalClose.InvokeAsync();
+    }
+
+    public void OpenModal()
+    {
+        if (Index == -1)
+        {
+            Day.Events.Add(new EventDto());
+            Index = Day.Events.Count - 1;
+        }
+        isVisible = true;
+        StateHasChanged();
+    }
+
+    // private void OpenEventTypeModal()
+    // {
+    //     dropdown.IsOpen = true;
+    // }
+
+    // private void OnEventTypeChanged(EventType newValue)
+    // {
+    //     _event.EventType = newValue;
+    // }
+
+    // private void OnSubmit()
+    // {
+    //     // Clear previous errors
+    //     validationErrors.Clear();
+
+    //     // Validate the customer model
+    //     var validationContext = new ValidationContext(_event, serviceProvider: null, items: null);
+    //     var results = new List<ValidationResult>();
+    //     bool isValid = Validator.TryValidateObject(_event, validationContext, results, true);
+
+
+
+    //     if (isValid)
+    //     {
+    //         OnAddEvent.InvokeAsync( new DisplayEventArgs()
+    //         {
+    //             EventData = _event,
+    //             Index = Index
+    //         });
+    //         CloseModal();
+    //     }
+    //     else
+    //     {
+    //         // Add validation errors to the list
+    //         foreach (var validationResult in results)
+    //         {
+    //             validationErrors.Add(validationResult.ErrorMessage);
+    //         }
+    //     }
+    // }
+}

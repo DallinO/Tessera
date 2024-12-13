@@ -2,6 +2,7 @@
 using Tessera.Models.Book;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Tessera.Models.Chapter.Data;
 
 namespace Aegis.Data
 {
@@ -14,6 +15,7 @@ namespace Aegis.Data
 
         public DbSet<AppUser> Users {  get; set; }
         public DbSet<BookEntity> Library { get; set; }
+        public DbSet<ReportEntity> Reports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

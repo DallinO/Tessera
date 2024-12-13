@@ -1,0 +1,161 @@
+﻿@namespace Tessera.Web.Pages
+
+@page "/b/{BookId:int}"
+
+@layout BookLayout
+@inject NavigationManager Navigation
+@inject IViewService View
+@inject IApiService Api
+
+<PageTitle>Dashboard</PageTitle>
+
+<div class="ts-dash" id="tsDash">
+    @foreach (var _section in Sections)
+    {
+        <div class="ts-dash-section" id="@_section.Id">
+            <div class="ts-dash-section-header">
+                <div class="ts-dash-section-title">
+                    @_section.Title
+                </div>
+                <div class="ts-dash-section-move">
+                    <!-- Left Arrow Button (if not the first section) -->
+                    @if (Sections.IndexOf(_section) > 0)
+                    {
+                        <button @onclick="() => MoveSectionLeft(_section)">&#8592;</button>
+                    }
+                    <!-- Right Arrow Button (if not the last section) -->
+                    @if (Sections.IndexOf(_section) < Sections.Count - 1)
+                    {
+                        <button @onclick="() => MoveSectionRight(_section)">&#8594;</button>
+                    }
+                </div>
+            </div>
+            <div class="ts-dash-section-body">
+                @if (_section.Content != null && _section.Content.Count > 0)
+                {
+                    foreach (var item in _section.Content)
+                    {
+                        <div class="ts-dash-section-body-item">
+                            <div class="ts-dash-section-body-item-element">
+                                @item.Name
+                            </div>
+                            <!-- Display the specific properties based on the type of the item -->
+                            @if (item is UpcomingTask upcomingTask)
+                            {
+                                <div class="ts-dash-section-body-item-element">
+                                    Due: @upcomingTask.Due.ToString("MM/dd/yyyy")
+                                </div>
+                            }
+                            else if (item is PriorityTask priorityTask)
+                            {
+                                <div class="ts-dash-section-body-item-element">
+                                    Priority: @priorityTask.Priority
+                                </div>
+                            }
+                            else if (item is UpcomingEvent upcomingEvent)
+                            {
+                                <div class="ts-dash-section-body-item-element">
+                                    Date: @upcomingEvent.Date.ToString("MM/dd/yyyy")
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="ts-dash-section-body-item">
+                        No items available!
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public int BookId { get; set; }
+
+    private List<DashboardSection> Sections { get; set; } = new List<DashboardSection>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadData();
+        StateHasChanged();
+    }
+
+    private async Task LoadData()
+    {
+        await GetUpcomingTasks();
+        await GetUpcomingEvents();
+        await GetPriorityTasks();
+
+        // Creating sections dynamically
+        Sections = new List<DashboardSection>
+        {
+            new DashboardSection { Id = "section-1", Title = "Upcoming Events", Content = _events.Cast<DashboardItem>().ToList() },
+            new DashboardSection { Id = "section-2", Title = "Priority Items", Content = _items.Cast<DashboardItem>().ToList() },
+            new DashboardSection { Id = "section-3", Title = "Upcoming Tasks", Content = _tasks.Cast<DashboardItem>().ToList() }
+        };
+    }
+
+    private async Task GetUpcomingTasks()
+    {
+        var response = await Api.GetUpcomingTasksAsync(BookId);
+        if (response.Success && response.Tasks.Count > 0)
+        {
+            _tasks = response.Tasks;
+        }
+    }
+
+    private async Task GetUpcomingEvents()
+    {
+        var response = await Api.GetUpcomingEventsAsync(BookId);
+        if (response.Success && response.Events.Count > 0)
+        {
+            _events = response.Events;
+        }
+    }
+
+    private async Task GetPriorityTasks()
+    {
+        var response = await Api.GetPriorityTasksAsync(BookId);
+        if (response.Success && response.Tasks.Count > 0)
+        {
+            _items = response.Tasks;
+        }
+    }
+
+    // Move a section to the left
+    private void MoveSectionLeft(DashboardSection section)
+    {
+        int index = Sections.IndexOf(section);
+        if (index > 0)
+        {
+            Sections.RemoveAt(index);
+            Sections.Insert(index - 1, section);
+        }
+    }
+
+    // Move a section to the right
+    private void MoveSectionRight(DashboardSection section)
+    {
+        int index = Sections.IndexOf(section);
+        if (index < Sections.Count - 1)
+        {
+            Sections.RemoveAt(index);
+            Sections.Insert(index + 1, section);
+        }
+    }
+
+    // Section model to represent each dashboard section
+    public class DashboardSection
+    {
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public List<DashboardItem> Content { get; set; }
+    }
+
+    private List<UpcomingTask> _tasks = new List<UpcomingTask>();
+    private List<PriorityTask> _items = new List<PriorityTask>();
+    private List<UpcomingEvent> _events = new List<UpcomingEvent>();
+}

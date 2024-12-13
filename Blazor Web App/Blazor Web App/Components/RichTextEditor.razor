@@ -1,57 +1,67 @@
 ﻿@namespace Tessera.Web
 
+@using Microsoft.AspNetCore.Components.Web
+
 @inject IJSRuntime JS
 
-<BlazoredTextEditor @ref="@QuillHtml">
-    <ToolbarContent>
-        <div class="ts-document-header">
-            <select class="ql-header">
-                <option selected=""></option>
-                <option value="1"></option>
-                <option value="2"></option>
-                <option value="3"></option>
-                <option value="4"></option>
-                <option value="5"></option>
-            </select>
-            <span class="ql-formats">
-                <button class="ql-bold"></button>
-                <button class="ql-italic"></button>
-                <button class="ql-underline"></button>
-                <button class="ql-strike"></button>
-            </span>
-            <span class="ql-formats">
-                <select class="ql-color"></select>
-                <select class="ql-background"></select>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-list" value="ordered"></button>
-                <button class="ql-list" value="bullet"></button>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-link"></button>
-            </span>
-            <span>
-                <button class="ts-primary-btn" @onclick="Save">Save</button>
-            </span>
+<div class="rich-text-editor">
+    <!-- Toolbar for formatting options -->
+    <div class="toolbar">
+        <button type="button" @onclick='() => ExecuteCommand("bold")'>Bold</button>
+        <button type="button" @onclick='() => ExecuteCommand("italic")'>Italic</button>
+        <button type="button" @onclick='() => ExecuteCommand("underline")'>Underline</button>
+        <button type="button" @onclick='() => ExecuteCommand("insertOrderedList")'>Numbered List</button>
+        <button type="button" @onclick='() => ExecuteCommand("insertUnorderedList")'>Bullet List</button>
+        <button type="button" @onclick="Save">Save</button>
+    </div>
+
+    <div style="border: 2px solid red">
+        <div contenteditable="true"
+             @ref="editorRef"
+             class="editor"
+             @oninput="HandleInput"
+             @onblur="UpdateContent">
         </div>
-    </ToolbarContent>
-    <EditorContent>
-        @_content
-    </EditorContent>
-</BlazoredTextEditor>
-
+    </div>
+</div>
 @code {
+    private ElementReference editorRef;
+    [Parameter] public string Content { get; set; } = "<p>Default content here...</p>";
+    [Parameter] public EventCallback<string> ContentChanged { get; set; }
     [Parameter] public EventCallback<string> OnSave { get; set; }
-    [Parameter] public MarkupString _content { get; set; }
 
-    public BlazoredTextEditor QuillHtml;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("setEditorContent", editorRef, Content);
+        }
+    }
+
+    private async Task ExecuteCommand(string command)
+    {
+        await JS.InvokeVoidAsync("execCommandOnContent", command);
+    }
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        Content = await JS.InvokeAsync<string>("getEditorContent", editorRef);
+        Console.WriteLine();
+    }
+
+    private async Task UpdateContent()
+    {
+        await ContentChanged.InvokeAsync();
+    }
 
     private async Task Save()
     {
-        if (OnSave.HasDelegate)
-        {
-            var content = await this.QuillHtml.GetHTML();
-            await OnSave.InvokeAsync(content);
-        }
+        await OnSave.InvokeAsync(Content);
+    }
+
+    public async Task Refresh()
+    {
+        await JS.InvokeVoidAsync("setEditorContent", editorRef, Content);
+        StateHasChanged();
     }
 }

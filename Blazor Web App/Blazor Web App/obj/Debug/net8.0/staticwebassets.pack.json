@@ -41,6 +41,10 @@
       "PackagePath": "staticwebassets\\css\\buttons.css"
     },
     {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\calendar.css",
+      "PackagePath": "staticwebassets\\css\\calendar.css"
+    },
+    {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\chaptersettings.css",
       "PackagePath": "staticwebassets\\css\\chaptersettings.css"
     },
@@ -49,8 +53,8 @@
       "PackagePath": "staticwebassets\\css\\containers.css"
     },
     {
-      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\customerpage.css",
-      "PackagePath": "staticwebassets\\css\\customerpage.css"
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\dashboard.css",
+      "PackagePath": "staticwebassets\\css\\dashboard.css"
     },
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\document.css",
@@ -59,6 +63,10 @@
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\dropdown.css",
       "PackagePath": "staticwebassets\\css\\dropdown.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\help.css",
+      "PackagePath": "staticwebassets\\css\\help.css"
     },
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\home.css",
@@ -79,6 +87,14 @@
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\modal.css",
       "PackagePath": "staticwebassets\\css\\modal.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\notification.css",
+      "PackagePath": "staticwebassets\\css\\notification.css"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\richtext.css",
+      "PackagePath": "staticwebassets\\css\\richtext.css"
     },
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\css\\selectfield.css",
@@ -119,6 +135,26 @@
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\plus_lg.svg",
       "PackagePath": "staticwebassets\\plus_lg.svg"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\scripts\\cookie.js",
+      "PackagePath": "staticwebassets\\scripts\\cookie.js"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\scripts\\dashboard.js",
+      "PackagePath": "staticwebassets\\scripts\\dashboard.js"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\scripts\\default.js",
+      "PackagePath": "staticwebassets\\scripts\\default.js"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\scripts\\inactivity.js",
+      "PackagePath": "staticwebassets\\scripts\\inactivity.js"
+    },
+    {
+      "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\scripts\\texteditor.js",
+      "PackagePath": "staticwebassets\\scripts\\texteditor.js"
     },
     {
       "Id": "C:\\Users\\Olson\\Documents\\GitHub\\Tessera\\Blazor Web App\\Blazor Web App\\wwwroot\\switch.svg",

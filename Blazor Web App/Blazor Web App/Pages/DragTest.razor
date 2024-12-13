@@ -1,0 +1,118 @@
+﻿@page "/dragdrop"
+@inject IJSRuntime JS
+
+<h3>Drag and Drop to Rearrange</h3>
+
+<div class="drag-container">
+    <div class="slot" id="slot1" @ref="slot1">
+        <div class="draggable" id="section1" @ref="section1" @onmousedown="() => StartDrag(section1)">Section 1</div>
+    </div>
+    <div class="slot" id="slot2" @ref="slot2">
+        <div class="draggable" id="section2" @ref="section2" @onmousedown="() => StartDrag(section2)">Section 2</div>
+    </div>
+    <div class="slot" id="slot3" @ref="slot3">
+        <div class="draggable" id="section3" @ref="section3" @onmousedown="() => StartDrag(section3)">Section 3</div>
+    </div>
+</div>
+
+@code {
+    private ElementReference section1;
+    private ElementReference section2;
+    private ElementReference section3;
+    private ElementReference slot1;
+    private ElementReference slot2;
+    private ElementReference slot3;
+
+    private async Task StartDrag(ElementReference element)
+    {
+        await JS.InvokeVoidAsync("initializeDrag", element, slot1, slot2, slot3);
+    }
+}
+
+
+
+<script>
+    window.initializeDrag = (element, slot1, slot2, slot3) => {
+        let draggedElement = element;
+        let offsetX = 0, offsetY = 0;
+        let slots = [slot1, slot2, slot3];
+        let currentSlot = null;
+
+        draggedElement.onmousedown = (e) => {
+            offsetX = e.clientX - draggedElement.offsetLeft;
+            offsetY = e.clientY - draggedElement.offsetTop;
+
+            document.onmousemove = (e) => {
+                draggedElement.style.position = 'absolute';
+                draggedElement.style.left = e.clientX - offsetX + 'px';
+                draggedElement.style.top = e.clientY - offsetY + 'px';
+            }
+
+            document.onmouseup = () => {
+                // Check if the element is near any of the slots
+                let draggedRect = draggedElement.getBoundingClientRect();
+                let closestSlot = null;
+                let minDistance = Number.MAX_VALUE;
+
+                slots.forEach((slot) => {
+                    let slotRect = slot.getBoundingClientRect();
+                    let distance = Math.sqrt(
+                        Math.pow(draggedRect.left - slotRect.left, 2) + Math.pow(draggedRect.top - slotRect.top, 2)
+                    );
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestSlot = slot;
+                    }
+                });
+
+                if (closestSlot) {
+                    // Snap to the closest slot
+                    draggedElement.style.left = closestSlot.getBoundingClientRect().left + 'px';
+                    draggedElement.style.top = closestSlot.getBoundingClientRect().top + 'px';
+                }
+
+                // Reset the movement event listeners
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
+        }
+    }
+</script>
+
+<style>
+    .drag-container {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .slot {
+        width: 150px;
+        height: 100px;
+        background-color: #ccc;
+        border: 2px dashed #888;
+        position: relative;
+    }
+
+    .draggable {
+        width: 150px;
+        height: 100px;
+        background-color: #4CAF50;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 5px;
+        position: absolute; /* This ensures it's positioned within its slot */
+    }
+
+    .drag-items {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+
+</style>

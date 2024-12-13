@@ -33,6 +33,10 @@ namespace Tessera.Models.Authentication
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public string PetSecurityAnswer { get; set; }
+        public string CarSecurityAnswer { get; set; }
+        public string JobSecurityAnswer { get; set; }
     }
 
     public class ApiRegisterResponse

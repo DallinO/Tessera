@@ -1,0 +1,13 @@
+﻿@namespace Tessera.Web
+
+@if (IsVisible)
+{
+    <div class="custom-notification">
+        @Message
+    </div>
+}
+
+@code {
+    [Parameter] public string? Message { get; set; }
+    [Parameter] public bool IsVisible { get; set; }
+}

@@ -12,6 +12,7 @@ using System.Security.Claims;
 using Tessera.CodeGenerators;
 using Tessera.Models.Authentication;
 using Tessera.Models.Book;
+using Tessera.Models.Chapter;
 
 namespace Aegis.Controllers
 {
@@ -251,7 +252,7 @@ namespace Aegis.Controllers
                     return NotFound(response);
             }
 
-            // Get request list.
+            // Get notification list.
             var chapters = await _bookService.GetChaptersAsync(database, bookId);
 
             if (chapters == null)
@@ -287,7 +288,7 @@ namespace Aegis.Controllers
          * - Delete a chapter.
          ***************************************************/
         [Authorize]
-        [HttpDelete("deletechapters")]
+        [HttpDelete("deletechapter")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -415,23 +416,6 @@ namespace Aegis.Controllers
                     return NotFound(response);
             }
 
-            // Verify database string.
-            if (database == null)
-            {
-                _logger.LogWarning("BOOK IS NULL");
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new ApiResponse
-                    {
-                        Success = false,
-                        Errors = new List<string>
-                        {
-                            "500 Internal Server Error: Failed To Retrieve Book Data"
-                        }
-
-                    });
-            }
-
             // Attempt to save the changes to the database.
             var saveResponse = await _bookService.SaveDocumentAsync(database, request);
 
@@ -479,10 +463,10 @@ namespace Aegis.Controllers
             }
 
             // Get list data.
-            var list = await _bookService.AddRowAsync(database, request);
+            var serviceResponse = await _bookService.AddRowAsync(database, request);
 
             // Verify list
-            if (list == null)
+            if (serviceResponse == null)
             {
                 _logger.LogWarning("CHAPTERS NOT FOUND");
                 return NotFound(new ApiListResponse
@@ -497,8 +481,94 @@ namespace Aegis.Controllers
             }
 
             _logger.LogInformation("CHAPTERS RETURNED");
-            return Ok(list);
+            return Ok(serviceResponse);
         }
+
+
+        [Authorize]
+        [HttpPost("addnotification")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddNotification([FromBody] NotificationEntity notification)
+        {
+            // Get user data
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, notification.BookId);
+
+            if (response != null)
+            {
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            // Get list data.
+            var serviceResponse = await _bookService.AddNotificationAsync(database, notification);
+
+            // Verify list
+            if (serviceResponse == null)
+            {
+                _logger.LogWarning("CHAPTERS NOT FOUND");
+                return NotFound(new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "404 Not Found: No Chapters Associated With Book"
+                    }
+
+                });
+            }
+
+            _logger.LogInformation("CHAPTERS RETURNED");
+            return Ok(serviceResponse);
+        }
+
+        [Authorize]
+        [HttpGet("getnotifications")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetNotifications([FromQuery] int bookId)
+        {
+            // Get user data
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
+
+            if (response != null)
+            {
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            // Get list data.
+            var serviceResponse = await _bookService.GetNotificationsAsync(database, bookId);
+
+            // Verify list
+            if (serviceResponse == null)
+            {
+                _logger.LogWarning("CHAPTERS NOT FOUND");
+                return NotFound(new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "404 Not Found: No Chapters Associated With Book"
+                    }
+
+                });
+            }
+
+            _logger.LogInformation("CHAPTERS RETURNED");
+            return Ok(serviceResponse);
+        }
+
+
+
 
         /****************************************
          * GET ROWS                        (READ)
@@ -570,10 +640,10 @@ namespace Aegis.Controllers
             }
 
             // Get list data.
-            var list = await _bookService.UpdateRowAsync(database, request);
+            var serviceResponse = await _bookService.UpdateRowAsync(database, request);
 
             // Verify list
-            if (list == null)
+            if (serviceResponse == null)
             {
                 _logger.LogWarning("CHAPTERS NOT FOUND");
                 return NotFound(new ApiListResponse
@@ -589,7 +659,7 @@ namespace Aegis.Controllers
             else
             {
                 _logger.LogInformation("CHAPTERS RETURNED");
-                return Ok(list);
+                return Ok(serviceResponse);
             }
         }
 
@@ -604,7 +674,7 @@ namespace Aegis.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteRow([FromBody] int bookId, int chapterId, int rowId)
+        public async Task<IActionResult> DeleteRow([FromQuery] int bookId, int chapterId, int rowId)
         {
             // Get user data
             var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
@@ -643,6 +713,200 @@ namespace Aegis.Controllers
 
         }
 
+
+
+
+
+
+        /****************************************
+         * GET ROWS                        (READ)
+         * - 
+         ****************************************/
+        [Authorize]
+        [HttpGet("getupcomingtasks")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetUpcomingTasks([FromQuery] int bookId)
+        {
+            // Get user data
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
+
+            if (response != null)
+            {
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            // Get list data.
+            var list = await _bookService.GetUpcomingTasksAsync(database, bookId);
+
+            // Verify list
+            if (list == null)
+            {
+                _logger.LogWarning($"404 Not Found - No chapters associated with book: {bookId}");
+                return NotFound(new ApiUpcomingTasksResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Not Found"
+                    }
+
+                });
+            }
+
+            // Return list.
+            _logger.LogInformation("CHAPTERS RETURNED");
+            return Ok(list);
+        }
+
+        /****************************************
+         * GET ROWS                        (READ)
+         * - 
+         ****************************************/
+        [Authorize]
+        [HttpGet("getupcomingevents")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetUpcomingEvents([FromQuery] int bookId)
+        {
+            // Get user data
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
+
+            if (response != null)
+            {
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            // Get list data.
+            var list = await _bookService.GetUpcomingEventsAsync(database, bookId);
+
+            // Verify list
+            if (list == null)
+            {
+                _logger.LogWarning($"404 Not Found - No chapters associated with book: {bookId}");
+                return NotFound(new ApiUpcomingEventsResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Not Found"
+                    }
+
+                });
+            }
+
+            // Return list.
+            _logger.LogInformation("CHAPTERS RETURNED");
+            return Ok(list);
+        }
+
+
+        /****************************************
+         * GET ROWS                        (READ)
+         * - 
+         ****************************************/
+        [Authorize]
+        [HttpGet("getprioritytasks")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetPriorityTasks([FromQuery] int bookId)
+        {
+            // Get user data
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
+
+            if (response != null)
+            {
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            // Get list data.
+            var serviceResponse = await _bookService.GetPriorityTasksAsync(database, bookId);
+
+            // Verify list
+            if (serviceResponse == null)
+            {
+                _logger.LogWarning($"404 Not Found - No chapters associated with book: {bookId}");
+                return NotFound(new ApiPriorityTasksResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Not Found"
+                    }
+
+                });
+            }
+
+            // Return list.
+            _logger.LogInformation("CHAPTERS RETURNED");
+            return Ok(serviceResponse);
+        }
+
+
+
+
+
+
+        /****************************************
+        * GET ROWS                        (READ)
+        * - 
+        ****************************************/
+        [Authorize]
+        [HttpGet("getdayevents")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetDayEvents([FromQuery] int bookId, DateOnly date)
+        {
+            // Get user data
+            var (userId, database, response) = await GetUserDataAsync(ClaimsPrincipal.Current, bookId);
+
+            if (response != null)
+            {
+                if (userId != null)
+                    return BadRequest(response);
+                else
+                    return NotFound(response);
+            }
+
+            // Get list data.
+            var serviceResponse = await _bookService.GetDayEventsAsync(database, bookId, date);
+
+            // Verify list
+            if (serviceResponse == null)
+            {
+                _logger.LogWarning($"404 Not Found - No chapters associated with book: {bookId}");
+                return NotFound(new ApiCalendarResponse
+                {
+                    Success = false,
+                    Errors = new List<string>
+                    {
+                        "Not Found"
+                    }
+
+                });
+            }
+
+            // Return list.
+            _logger.LogInformation("CHAPTERS RETURNED");
+            return Ok(serviceResponse);
+        }
 
 
 

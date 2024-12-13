@@ -8,60 +8,108 @@
 
 <div class="ts-auth-page">
     <div class="ts-auth-container">
-        <div class="ts-auth-container-item">
-            <div class="ts-label-container">
-                <label for="fn-input" class="ts-label">First Name</label>
+        @if (!SecurityQuestions)
+        {
+            <div class="ts-auth-container-item">
+                <div class="ts-label-container">
+                    <label for="fn-input" class="ts-label">First Name</label>
+                </div>
+                <div class="ts-input-container">
+                    <input class="ts-primary-input" type="text" id="fn-input" required="" @bind="FirstName">
+                </div>
             </div>
-            <div class="ts-input-container">
-                <input class="ts-primary-input" type="text" id="fn-input" required="" @bind="FirstName">
+            <div class="ts-auth-container-item">
+                <div class="ts-label-container">
+                    <label for="ln-input" class="ts-label">Last Name</label>
+                </div>
+                <div class="ts-input-container">
+                    <input class="ts-primary-input" type="text" id="ln-input" required="" @bind="LastName">
+                </div>
             </div>
-        </div>
-        <div class="ts-auth-container-item">
-            <div class="ts-label-container">
-                <label for="ln-input" class="ts-label">Last Name</label>
+            <div class="ts-auth-container-item">
+                <div class="ts-label-container">
+                    <label for="em-input" class="ts-label">Email</label>
+                </div>
+                <div class="ts-input-container">
+                    <input class="ts-primary-input" type="text" id="em-input" required="" @bind="Email">
+                </div>
             </div>
-            <div class="ts-input-container">
-                <input class="ts-primary-input" type="text" id="ln-input" required="" @bind="LastName">
+            <div class="ts-auth-container-item">
+                <div class="ts-label-container">
+                    <label for="ce-input" class="ts-label">Confirm Email</label>
+                </div>
+                <div class="ts-input-container">
+                    <input class="ts-primary-input" type="text" id="ce-input" required="" @bind="ConfirmEmail">
+                </div>
             </div>
-        </div>
-        <div class="ts-auth-container-item">
-            <div class="ts-label-container">
-                <label for="em-input" class="ts-label">Email</label>
+            <div class="ts-auth-container-item">
+                <div class="ts-label-container">
+                    <label for="pw-input" class="ts-label">Password</label>
+                </div>
+                <div class="ts-input-container">
+                    <input class="ts-primary-input" type="text" id="pw-input" required="" @bind="Password">
+                </div>
             </div>
-            <div class="ts-input-container">
-                <input class="ts-primary-input" type="text" id="em-input" required="" @bind="Email">
+            <div class="ts-auth-container-item">
+                <div class="ts-label-container">
+                    <label for="cp-input" class="ts-label">Confirm Password</label>
+                </div>
+                <div class="ts-input-container">
+                    <input class="ts-primary-input" type="text" id="cp-input" required="" @bind="ConfirmPassword">
+                </div>
             </div>
-        </div>
-        <div class="ts-auth-container-item">
-            <div class="ts-label-container">
-                <label for="ce-input" class="ts-label">Confirm Email</label>
+        }
+        else
+        {
+            <div class="ts-auth-container-item">
+                <div class="ts-label-container">
+                    <label for="sq1-input" class="ts-label">
+                        What is the name of your first pet?
+                    </label>
+                </div>
+                <div class="ts-input-container">
+                    <input class="ts-primary-input" type="text" id="sq1-input" required="" @bind="_securityQ1">
+                </div>
             </div>
-            <div class="ts-input-container">
-                <input class="ts-primary-input" type="text" id="ce-input" required="" @bind="ConfirmEmail">
+            <div class="ts-auth-container-item">
+                <div class="ts-label-container">
+                    <label for="sq2-input" class="ts-label">
+                        What is the make and model of your first car?
+                    </label>
+                </div>
+                <div class="ts-input-container">
+                    <input class="ts-primary-input" type="text" id="sq2-input" required="" @bind="_securityQ2">
+                </div>
             </div>
-        </div>
-        <div class="ts-auth-container-item">
-            <div class="ts-label-container">
-                <label for="pw-input" class="ts-label">Password</label>
+            <div class="ts-auth-container-item">
+                <div class="ts-label-container">
+                    <label for="sq3-input" class="ts-label">
+                        What was the name of the company of your first job?
+                    </label>
+                </div>
+                <div class="ts-input-container">
+                    <input class="ts-primary-input" type="text" id="sq3-input" required="" @bind="_securityQ3">
+                </div>
             </div>
-            <div class="ts-input-container">
-                <input class="ts-primary-input" type="text" id="pw-input" required="" @bind="Password">
+        }
+        @if (!SecurityQuestions)
+        {
+            <div class="ts-auth-container-item">
+                <button class="ts-primary-btn" @onclick="() => ToggleSecurityQuestions(true)">Next</button>
             </div>
-        </div>
-        <div class="ts-auth-container-item">
-            <div class="ts-label-container">
-                <label for="cp-input" class="ts-label">Confirm Password</label>
+            <div class="ts-auth-container-btn-container">
+                <button class="ts-secondary-btn" @onclick="SwitchToLogin">Back To Login</button>
             </div>
-            <div class="ts-input-container">
-                <input class="ts-primary-input" type="text" id="cp-input" required="" @bind="ConfirmPassword">
+        }
+        else
+        {
+            <div class="ts-auth-container-item">
+                <button class="ts-primary-btn" @onclick="RegisterAsync">Register</button>
             </div>
-        </div>
-        <div class="ts-auth-container-item">
-            <button class="ts-primary-btn" @onclick="RegisterAsync">Register</button>
-        </div>
-        <div class="ts-auth-container-btn-container">
-            <button class="ts-secondary-btn" @onclick="SwitchToLogin">Back To Login</button>
-        </div>
+            <div class="ts-auth-container-btn-container">
+                <button class="ts-secondary-btn" @onclick="() => ToggleSecurityQuestions(false)">Back</button>
+            </div>
+        }
         @if (ShowErrors)
         {
             <div class="ts-auth-container-item-bottom">
@@ -75,6 +123,11 @@
 
 @code {
     private bool ShowErrors { get; set; } = false;
+    private bool SecurityQuestions = false;
+
+    private string _securityQ1 = "Buddy";
+    private string _securityQ2 = "Jeep Cherokee";
+    private string _securityQ3 = "McDonalds";
 
     // RegisterDefualtModel Inputs
     private string FirstName { get; set; } = "TestDummy";
@@ -89,14 +142,18 @@
     private async Task RegisterAsync()
     {
         var model = new RegisterRequest
-            {
-                FirstName = FirstName,
-                LastName = LastName,
-                Email = Email,
-                ConfirmEmail = ConfirmEmail,
-                Password = Password,
-                ConfirmPassword = ConfirmPassword
-            };
+        {
+            FirstName = FirstName,
+            LastName = LastName,
+            Email = Email,
+            ConfirmEmail = ConfirmEmail,
+            Password = Password,
+            ConfirmPassword = ConfirmPassword,
+
+            PetSecurityAnswer = _securityQ1,
+            CarSecurityAnswer = _securityQ2,
+            JobSecurityAnswer = _securityQ3
+        };
 
         var result = await Api.RegisterAsync(model);
 
@@ -104,17 +161,7 @@
         {
             if (result.Success)
             {
-                var book = await Api.GetBookIdAsync();
-                if (book.Success)
-                {
-                    Book.BookId = book.BookId;
-                    Navigation.NavigateTo($"/b/{book.BookId}");
-                    ResetErrors();
-                }
-                else
-                {
-                    DisplayErrors(book.Errors);
-                }
+                await SwitchToLogin();
             }
             else
             {
@@ -133,6 +180,11 @@
     {
         ResetErrors();
         Navigation.NavigateTo("/login");
+    }
+
+    private void ToggleSecurityQuestions(bool status)
+    {
+        SecurityQuestions = status;
     }
 
     private void ResetErrors()

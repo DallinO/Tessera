@@ -1,0 +1,76 @@
+﻿@namespace Tessera.Web
+
+@inject IBookService Book
+@inject IApiService Api
+
+@if (isVisible)
+{
+    <div class="ts-modal-overlay">
+        <div class="ts-modal-content">
+            <div class="ts-modal-body">
+                <div class="ts-modal-body-section">
+                    <p class="ts-auth-errors @(ShowErrors ? "visible" : "")">
+                        @errors
+                    </p>
+                </div>
+                <div class="ts-modal-body-section">
+                    <div class="ts-label-container">
+                        <label for="rp-input" class="ts-label">Report issue:</label>
+                    </div>
+                    <div class="ts-input-container">
+                        <input class="ts-primary-input" type="text" id="rp-input" required="" @bind="_issue">
+                    </div>
+                </div>
+            </div>
+            <div class="ts-modal-footer">
+                <button @onclick="CloseModal" class="ts-secondary-btn ts-modal-button-left">Cancel</button>
+                <button @onclick="Submit" class="ts-primary-btn ts-modal-button-right">Submit</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool isVisible = false;
+    private string? _issue;
+    private bool ShowErrors { get; set; } = false;
+    private MarkupString errors;
+
+    public void CloseModal()
+    {
+        isVisible = false;
+        StateHasChanged();
+    }
+
+    public void OpenModal()
+    {
+        isVisible = true;
+        StateHasChanged();
+    }
+
+    private async Task Submit()
+    {
+        ShowErrors = false;
+
+        if (_issue != null)
+        {
+            var response = await Api.SendReportAsync(_issue);
+            if (!response.Success)
+            {
+                errors = new MarkupString("Unable to send report");
+                ShowErrors = true;
+                StateHasChanged();
+            }
+            else
+            {
+                CloseModal();
+            }
+        }
+        else
+        {
+            errors = new MarkupString("Please describe the issue");
+            ShowErrors = true;
+            StateHasChanged();
+        }
+    }
+}

@@ -24,11 +24,16 @@
                 <input class="ts-primary-input" type="text" id="pw-input" required="" @bind="Password">
             </div>
         </div>
-        <div class="ts-auth-container-item">
-            <button class="ts-primary-btn" @onclick="LoginAsync">Login</button>
-        </div>
-        <div class="ts-auth-container-btn-container">
-            <button class="ts-secondary-btn" @onclick="SwitchToRegister">Register</button>
+        <div>
+            <div class="ts-auth-container-item">
+                <button class="ts-primary-btn" @onclick="LoginAsync">Login</button>
+            </div>
+            <div class="ts-auth-container-btn-container">
+                <button class="ts-secondary-btn" @onclick="SwitchToRegister">Register</button>
+            </div>
+            <div class="ts-auth-container-btn-container">
+                <button class="ts-secondary-btn" @onclick="ForgotPassword">Forgot Password?</button>
+            </div>
         </div>
         @if (ShowErrors)
         {
@@ -44,7 +49,7 @@
 @code {
     private bool ShowErrors { get; set; } = false;
     private string Email { get; set; } = "td1@test.com";
-    private string Password { get; set; } = "Test@123";
+    private string Password { get; set; } = "Test@999";
     private MarkupString LoginError { get; set; }
 
     private async Task LoginAsync()
@@ -60,10 +65,13 @@
 
         if (login.Success)
         {
+            Library.AppUser = login.AppUser;
             var book = await Api.GetBookIdAsync();
             if (book.Success)
             {
                 Library.BookId = book.BookId;
+                Library.IsAuthenticated = true;
+                Library.TokenExp = login.Expiration;
                 Navigation.NavigateTo($"/b/{book.BookId}");
                 ResetErrors();
             }
@@ -81,6 +89,11 @@
     private void SwitchToRegister()
     {
         Navigation.NavigateTo("/register");
+    }
+
+    private void ForgotPassword()
+    {
+        Navigation.NavigateTo("/resetpassword");
     }
 
     private void ResetErrors()

@@ -1,0 +1,60 @@
+﻿@namespace Tessera.Web.Pages
+
+@page "/b/{BookId:int}/r/{DocId:int}"
+
+@layout BookLayout
+@inject NavigationManager Navigation
+@inject IBookService Book
+@inject IApiService Api
+@inject IJSRuntime JS
+
+@if (_document != null)
+{
+    <PageTitle>@_document.Title</PageTitle>
+
+    <div class="ts-document-page">
+        <RichTextEditor @ref="textEditor" OnSave="Save" Content="@(new MarkupString(_document.Content))" />
+    </div>
+}
+else
+{
+    <PageTitle>@DocId</PageTitle>
+}
+
+@code {
+    [Parameter] public int BookId { get; set; }
+    [Parameter] public int DocId { get; set; }
+
+
+    private DocumentDto _document { get; set; }
+    private RichTextEditor textEditor;
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+        var response = await Api.GetDocumentAsync(BookId, DocId);
+        if (response != null)
+        {
+            if(response.Success)
+            {
+                _document = response.Document;
+            }
+        }
+
+
+        await base.OnParametersSetAsync();
+        StateHasChanged();
+    }
+
+    public async void Save()
+    {
+        SaveDocumentRequest request = new()
+        {
+            BookId = Book.BookId,
+            Document = _document
+        };
+
+        var response = await Api.SaveDocumentAsync(request);
+        StateHasChanged();
+    }
+}

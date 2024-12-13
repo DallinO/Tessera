@@ -1,20 +1,13 @@
 ﻿using Aegis.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
 using Tessera.Models.Authentication;
 using Tessera.Models.Chapter;
-using Microsoft.Data.SqlClient;
 using Tessera.Constants;
-using Tessera.Models.Book;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Tessera.CodeGenerators;
+using System;
 using System.Net;
-using System.Reflection.Metadata;
-using Microsoft.Identity.Client;
-using System.Linq.Expressions;
-using Azure.Core;
+using Tessera.Models.Chapter.Data;
 
 namespace Aegis.Services
 {
@@ -92,7 +85,8 @@ namespace Aegis.Services
                         var newDocument = new DocumentEntity
                         {
                             Id = bookId,
-                            ChapterId = chapterId
+                            ChapterId = chapterId,
+                            Content = "<p></p>"
                         };
 
                         dbContext.Documents.Add(newDocument);
@@ -258,7 +252,7 @@ namespace Aegis.Services
             {
                 try
                 {
-                    // Retrieve the document using the DocumentId from the row
+                    // Retrieve the document using the DocumentId from the n
                     var document = await dbContext.Documents
                         .FirstOrDefaultAsync(d => d.Id == request.Document.DocumentId);
 
@@ -307,32 +301,15 @@ namespace Aegis.Services
         {
             using (var dbContext = _dbFactory.CreateDbContext(dbName))
             {
-                // Generate a unique nine digit chapter id. Attempts five time.
-                var (chapterSuccess, rowId) = await GenerateIdAsync<ChapterEntity>(dbContext, 4, async (set, id) => await set.AnyAsync(c => c.Id == id));
-
-                // Check if rowId generation was successful
-                if (!chapterSuccess)
-                {
-                    return new ApiResponse
-                    {
-                        Success = false,
-                        Errors = new List<string>
-                        {
-                            "409 Conflict: ID already exists"
-                        }
-                    };
-                }
-
                 // Create a new chapter entity
                 var newRow = new RowEntity
                 {
-                    Id = rowId,
-                    Name = request.Row.Name,
-                    Description = request.Row.Description,
-                    Priority = (int)request.Row.Priority,
+                    Name = null,
+                    Description = null,
+                    Priority = 0,
                     IsComplete = request.Row.IsComplete,
                     Created = request.Row.Created,
-                    Due = request.Row.Due,
+                    Due = null,
                     ChapterId = request.ChapterId
                 };
 
@@ -350,6 +327,86 @@ namespace Aegis.Services
                 }
                 catch (Exception ex)
                 {
+                    string error = ex.ToString();
+                    Console.WriteLine(ex.ToString());
+                    return (new ApiResponse
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "500 Internal Server Error"
+                        }
+                    });
+                }
+            }
+        }
+
+
+        /***************************************************
+         * 
+         * - 
+         ***************************************************/
+        public async Task<ApiNotificationResponse> GetNotificationsAsync(string dbName, int bookId)
+        {
+            using (var dbContext = _dbFactory.CreateDbContext(dbName))
+            {
+                DateTime end = DateTime.UtcNow.AddHours(1);
+                DateTime now = DateTime.UtcNow.AddSeconds(30);
+                try
+                {
+                    var notifications = await dbContext.Notifications
+                    .Where(n => n.BookId == bookId 
+                        && n.Schedule <= end
+                        && n.Schedule >= now)
+                    .Select(n => new NotificationDto
+                    {
+                        Message = n.Message,
+                        Schedule = n.Schedule,
+                    })
+                    .ToListAsync();
+
+                    return new ApiNotificationResponse()
+                    {
+                        Success = true,
+                        Notifications = notifications
+                    };
+                }
+                catch (Exception ex)
+                {
+                    // Log exception
+                    Console.WriteLine($"Error fetching document data: {ex.Message}");
+                    return null;
+                }
+            }
+        }
+
+
+
+        /***************************************************
+         * 
+         * - 
+         ***************************************************/
+        public async Task<ApiResponse> AddNotificationAsync(string dbName, NotificationEntity notification)
+        {
+            using (var dbContext = _dbFactory.CreateDbContext(dbName))
+            {
+
+                // Add the new chapter to the context
+                dbContext.Notifications.Add(notification);
+
+                // Save changes to the database
+                try
+                {
+                    await dbContext.SaveChangesAsync();
+                    return (new ApiResponse
+                    {
+                        Success = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    string error = ex.ToString();
+                    Console.WriteLine(ex.ToString());
                     return (new ApiResponse
                     {
                         Success = false,
@@ -377,7 +434,7 @@ namespace Aegis.Services
                     .Where(row => row.ChapterId == chapterId) // Filter by ChapterId
                     .Select(row => new RowDto
                     {
-                        RowId = row.Id,
+                        Id = row.Id,
                         Name = row.Name,
                         Description = row.Description,
                         Priority = (Priority)row.Priority, // Cast if Priority is an enum
@@ -405,13 +462,55 @@ namespace Aegis.Services
             }
         }
 
+
         /***************************************************
          * UPDATE ROW ASYNC
          * - 
          ***************************************************/
         public async Task<ApiResponse> UpdateRowAsync(string dbName, ApiRowRequest request)
         {
-            return new ApiResponse();
+            using (var dbContext = _dbFactory.CreateDbContext(dbName))
+            {
+                // Find the existing n by its ID or some other unique identifier
+                var existingRow = await dbContext.Rows.FirstOrDefaultAsync(r => r.Id == request.Row.Id);
+
+                // If the n does not exist, return a 404 error
+                if (existingRow == null)
+                {
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Errors = new List<string> { "Row not found" }
+                    };
+                }
+
+                // Update properties with values from the notification
+                existingRow.Name = request.Row.Name;
+                existingRow.Description = request.Row.Description;
+                existingRow.Priority = (int)request.Row.Priority;
+                existingRow.IsComplete = request.Row.IsComplete;
+                existingRow.Due = request.Row.Due;
+
+                // Save changes to the database
+                try
+                {
+                    await dbContext.SaveChangesAsync();
+                    return new ApiResponse
+                    {
+                        Success = true
+                    };
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception details for debugging purposes
+                    Console.WriteLine(ex.ToString());
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Errors = new List<string> { "500 Internal Server Error" }
+                    };
+                }
+            }
         }
 
         /***************************************************
@@ -420,8 +519,195 @@ namespace Aegis.Services
          ***************************************************/
         public async Task<ApiResponse> DeleteRowAsync(string dbName, int chapterId, int rowId)
         {
-            return new ApiResponse();
+            using (var dbContext = _dbFactory.CreateDbContext(dbName))
+            {
+                try
+                {
+                    var row = await dbContext.Rows
+                        .FirstOrDefaultAsync(r => r.Id == rowId && r.ChapterId == chapterId);
+
+                    if (row != null)
+                    {
+                        dbContext.Rows.Remove(row);
+                        await dbContext.SaveChangesAsync();
+
+                        return new ApiResponse
+                        {
+                            Success = true
+                        };
+
+                    }
+
+                    return null;
+
+                }
+                catch (Exception ex)
+                {
+                    // Log exception
+                    Console.WriteLine($"Error fetching chapters: {ex.Message}");
+                    return null;
+                }
+            }
         }
+
+
+
+        /***************************************************
+         * GET ROWS ASYNC
+         * - 
+         ***************************************************/
+        public async Task<ApiUpcomingTasksResponse> GetUpcomingTasksAsync(string dbName, int bookId)
+        {
+            using (var dbContext = _dbFactory.CreateDbContext(dbName))
+            {
+                try
+                {
+                    var upcomingTasks = await dbContext.Rows
+                    .Where(row => row.Chapter.BookId == bookId &&
+                                  row.Due.HasValue &&
+                                  row.Due.Value <= DateTime.Now.AddDays(3) &&
+                                  row.Due.Value >= DateTime.Now)
+                    .Select(row => new UpcomingTask
+                    {
+                        Name = row.Name,
+                        Due = row.Due.Value
+                    })
+                    .ToListAsync();
+
+                    return new ApiUpcomingTasksResponse
+                    {
+                        Success = true,
+                        Tasks = upcomingTasks
+                    };
+                }
+                catch (Exception ex)
+                {
+                    // Log exception
+                    Console.WriteLine($"Error fetching document data: {ex.Message}");
+                    return null;
+                }
+            }
+        }
+
+
+        /***************************************************
+        * GET ROWS ASYNC
+        * - 
+        ***************************************************/
+        public async Task<ApiUpcomingEventsResponse> GetUpcomingEventsAsync(string dbName, int bookId)
+        {
+            using (var dbContext = _dbFactory.CreateDbContext(dbName))
+            {
+                try
+                {
+                    var upcomingEvents = await dbContext.Events
+                    .Where(e => e.BookId == bookId &&
+                                  e.Date <= DateOnly.FromDateTime(DateTime.Now.AddDays(3)) &&
+                                  e.Date >= DateOnly.FromDateTime(DateTime.Now))
+                    .Select(e => new UpcomingEvent
+                    {
+                        Name = e.Title,
+                        Date = e.Date
+                    })
+                    .ToListAsync();
+
+                    return new ApiUpcomingEventsResponse
+                    {
+                        Success = true,
+                        Events = upcomingEvents
+                    };
+                }
+                catch (Exception ex)
+                {
+                    // Log exception
+                    Console.WriteLine($"Error fetching document data: {ex.Message}");
+                    return null;
+                }
+            }
+        }
+
+
+
+        /***************************************************
+        * GET ROWS ASYNC
+        * - 
+        ***************************************************/
+        public async Task<ApiPriorityTasksResponse> GetPriorityTasksAsync(string dbName, int bookId)
+        {
+            using (var dbContext = _dbFactory.CreateDbContext(dbName))
+            {
+                try
+                {
+                    var upcomingTasks = await dbContext.Rows
+                    .Where(row => row.Chapter.BookId == bookId &&
+                                  row.Priority == (int)Priority.High)
+                    .Select(row => new PriorityTask
+                    {
+                        Name = row.Name,
+                        Priority = (Priority)row.Priority
+                    })
+                    .ToListAsync();
+
+                    return new ApiPriorityTasksResponse
+                    {
+                        Success = true,
+                        Tasks = upcomingTasks
+                    };
+                }
+                catch (Exception ex)
+                {
+                    // Log exception
+                    Console.WriteLine($"Error fetching document data: {ex.Message}");
+                    return null;
+                }
+            }
+        }
+
+
+        /***************************************************
+        * GET ROWS ASYNC
+        * - 
+        ***************************************************/
+        public async Task<ApiCalendarResponse> GetDayEventsAsync(string dbName, int bookId, DateOnly date)
+        {
+            using (var dbContext = _dbFactory.CreateDbContext(dbName))
+            {
+                try
+                {
+                    // Fetch events for the given BookId from the Calendar DbSet
+                    var events = await dbContext.Events
+                    .Where(e => e.BookId == bookId && e.Date == date) 
+                    .Select(e => new EventDto
+                    {
+                        Title = e.Title,
+                        Description = e.Description,
+                        IsComplete = e.IsComplete,
+                        Date = e.Date,
+                        Start = e.Start,
+                        Finish = e.Finish,
+                        EventType = (EventType)e.EventType
+                    })
+                    .ToListAsync();
+
+                    // Return the response with the fetched events
+                    return new ApiCalendarResponse()
+                    {
+                        Success = true,
+                        Events = events
+                    };
+                }
+                catch (Exception ex)
+                {
+                    // Log exception
+                    Console.WriteLine($"Error fetching document data: {ex.Message}");
+                    return null;
+                }
+            }
+        }
+
+
+
+
 
         /***************************************************
          * GENERATE ID ASYNC

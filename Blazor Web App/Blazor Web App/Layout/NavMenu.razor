@@ -5,6 +5,9 @@
 @inject IViewService View
 @inject NavigationManager Navigation
 
+<AddChapter @ref="addChapterModal" OnAddChapter="AddChapter" />
+<Report @ref="report"/>
+
 <div class="ts-top-row ts-sidebar-top">
     <div class="ts-sidebar-top-content">
         <div class="ts-sidebar-top-content-item">
@@ -15,22 +18,31 @@
 
 <div class="ts-nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="ts-nav-column">
+        <div>
+            <button @onclick="OpenCalendar" class="ts-primary-btn">Calendar</button>
+        </div>
         <div class="ts-nav-scrollable-item">
             @for (int i = 0; i < Book.Chapters.Count; i++)
             {
                 ChapterDto chapter = Book.Chapters[i];
 
-                <ChapterButton ButtonId="@View.ButtonIdGen()"
-                               ChapterIndex="i"/>
+                <ChapterButton 
+                    ButtonId="@View.ButtonIdGen()"
+                    OnDeleteChapter="OnDeleteChapter"
+                    ChapterIndex="i"/>
             }
+        </div>
+        <div>
+            <button @onclick="OpenHelp" class="ts-primary-btn">Help</button>
+            <button @onclick="OpenReport" class="ts-primary-btn">Report</button>
         </div>
     </nav>
 </div>
 
-<AddChapter @ref="addChapterModal" OnAddChapter="AddChapter" />
 
 @code {
     private AddChapter addChapterModal;
+    private Report report;
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,10 +71,30 @@
         }
     }
 
+    private void OpenCalendar()
+    {
+        Navigation.NavigateTo($"/b/{Book.BookId}/c");
+    }
+
+    private void OpenReport()
+    {
+        report.OpenModal();
+    }
+
+    private void OpenHelp()
+    {
+        Navigation.NavigateTo($"/b/help");
+    }
+
 
     private void OpenAddChapterModal()
     {
         addChapterModal.OpenModal();
+    }
+
+    private void OnDeleteChapter()
+    {
+        StateHasChanged();
     }
 
     private async Task AddChapter(ChapterDto chapter)

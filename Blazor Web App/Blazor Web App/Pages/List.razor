@@ -5,44 +5,34 @@
 @layout BookLayout
 @inject NavigationManager Navigation
 @inject IBookService Book
+@inject IViewService View
 @inject IApiService Api
 
-<PageTitle>@_list.Title</PageTitle>
 
 @if (_list != null)
 {
-    <div class="ts-top-row ts-utility ts-border">
-        <div class="ts-utility-root">
-                @_list.Title
-        </div>
-        <div class="ts-utility-search">
-        </div>
-        <div class="ts-utility-account-container">
-            <button class="ts-account-button">
-                            
-            </button>
-        </div>
-    </div>
+    <PageTitle>@_list.Title</PageTitle>
     <div class="ts-customer-page-header">
         <button class="ts-primary-btn" @onclick="AddTask">Add Item</button>
-        <button class="ts-primary-btn" @onclick="AddTask">Save</button>
+        <button class="ts-primary-btn" @onclick="DeleteTask">Delete</button>
     </div>
     <div class="ts-customer-table-container">
         <table class="ts-customer-table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Created</th>
-                    <th>Due</th>
-                    <th>Priority</th>
+                    <th class="col-complete">Complete</th>
+                    <th class="col-name">Name</th>
+                    <th class="col-description">Description</th>
+                    <th class="col-calendar">Created</th>
+                    <th class="col-calendar">Due</th>
+                    <th class="col-selection">Priority</th>
                 </tr>
             </thead>
             <tbody>
                 @if (_list == null || _list.Rows.Count == 0)
                 {
                     <tr>
-                        <td colspan="4" style="text-align: center;">No item data available</td>
+                        <td colspan="6" style="text-align: center;">No item data available</td>
                     </tr>
                 }
                 else
@@ -52,33 +42,61 @@
                         RowDto row = _list.Rows[i];
                         var z = i;
                         <tr id="@i.ToString()"
-                            class="@(IsRowSelected(i) ? "selected-row" : "")"
-                            @onclick="() => SelectRow(i)">
+                            class="@(IsRowSelected(z) ? "selected-row" : "")"
+                            tabindex="0"
+                            @onclick="() => SelectRow(z)"
+                            
+                            @onfocusout="SaveTaskAsync">
+
                             <td>
-                                <input type="text" @bind="row.Name" />
+                                <div class="ts-input-container">
+                                    <input class="ts-primary-input" type="checkbox"                                 @bind="row.IsComplete" />
+                                </div>
                             </td>
                             <td>
-                                <input type="text" @bind="row.Description" />
+                                <div class="ts-input-container">
+                                    <input class="ts-primary-input" type="text" @bind="row.Name" />
+                                </div>
                             </td>
                             <td>
-                                <input type="date" @bind="row.Created" />
+                                <div class="ts-input-container">
+                                    <input class="ts-primary-input" type="text" @bind="row.Description" />
+                                </div>
                             </td>
                             <td>
-                                <input type="date" @bind="row.Due" />
+                                <div class="ts-input-container">
+                                    <input class="ts-primary-input"  type="date" @bind="row.Created" />
+                                </div>
                             </td>
                             <td>
-                                <select @bind="row.Priority">
-                                    <option value="@Priority.Low">Low</option>
-                                    <option value="@Priority.Moderate">Moderate</option>
-                                    <option value="@Priority.High">High</option>
-                                </select>
+                                <div class="ts-input-container">
+                                    <input class="ts-primary-input"  type="date" @bind="row.Due" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="ts-input-container">
+                                    <select @bind="row.Priority">
+                                        <option value="@Priority.Low">Low</option>
+                                        <option value="@Priority.Moderate">Moderate</option>
+                                        <option value="@Priority.High">High</option>
+                                    </select>
+                                </div>
                             </td>
                         </tr>
                     } 
                 }
+                <tr>
+                    <td colspan="6" style="text-align: center;">
+                        <button class="ts-primary-btn" @onclick="AddTask">Add Item</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
+}
+else
+{
+    <PageTitle>Loading</PageTitle>
 }
 
 @* <AddRowItem @ref="addRowItem" OnAddCustomer="AddTask"/> *@
@@ -89,7 +107,7 @@
     [Parameter] public int ChapterId { get; set; }
 
     private ListDto _list = new();
-    private int? _selectedRowIndex; // Tracks the selected row index
+    private int _selectedRowIndex; // Tracks the selected row index
     private RowDto? _selectedRow;  // Tracks the selected row object
     private MarkupString _errorMsg;
 
@@ -113,7 +131,7 @@
     private void SelectRow(int index)
     {
         _selectedRowIndex = index;
-        _selectedRow = _list.Rows[index];
+        _selectedRow = new RowDto(_list.Rows[index]);
     }
 
 
@@ -125,24 +143,53 @@
 
     public async void AddTask()
     {
-        //var response = await Api.AddRowAsync(BookId, ChapterId);
-        
-        StateHasChanged();
-    }
-
-
-    public async void SaveTask()
-    {
-        if (_selectedRow != null && _selectedRowIndex.HasValue)
+        var response = await Api.AddRowAsync(new ApiRowRequest()
         {
-            
+            BookId = Book.BookId,
+            ChapterId = ChapterId,
+            Row = new RowDto()
+        });
+
+        if (response.Success)
+        {
+            _list.Rows.Add(new RowDto());
+            StateHasChanged();
         }
     }
 
 
-    public async void RemoveTask()
+    public async Task SaveTaskAsync()
     {
-        var response = await Api.DeleteRowAsync(0, 0, 0);
-        StateHasChanged();
+        // if (_selectedRow != null && !_selectedRow.Equals(_list.Rows[_selectedRowIndex]))
+        // {
+        var response = await Api.UpdateRowAsync(new ApiRowRequest()
+            {
+                BookId = BookId,
+                ChapterId = ChapterId,
+                    Row = _list.Rows[_selectedRowIndex]
+            });
+
+        if (!response.Success)
+        {
+
+        }
+        //}
+    }
+
+
+    public async void DeleteTask()
+    {
+        var response = await Api.DeleteRowAsync(BookId, ChapterId, _list.Rows[_selectedRowIndex].Id);
+        if (response.Success)
+        {
+            _list.Rows.RemoveAt(_selectedRowIndex);
+            StateHasChanged();
+        }
+    }
+
+    private void ScheduleNotification()
+    {
+        var scheduledTime = DateTime.UtcNow.AddSeconds(10); 
+        View.ScheduleNotification("This is a test notification", scheduledTime);
     }
 }

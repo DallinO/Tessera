@@ -1,0 +1,27 @@
+﻿@namespace Tessera.Web
+
+@inject IBookService Book
+
+<UserProfile @ref="_userProfile"/>
+
+<div class="ts-top-row ts-utility ts-border">
+    <div class="ts-utility-root">
+        @(Book.SelectedChapter == null ? "Welcome" : Book.SelectedChapter.Title)
+    </div>
+    <div class="ts-utility-search">
+    </div>
+    <div class="ts-utility-account-container">
+        <button @onclick="OpenUserProfile" class="ts-account-button">
+            @Book.AppUser.FirstName[0]
+        </button>
+    </div>
+</div>
+
+@code {
+    private UserProfile _userProfile;
+
+    public void OpenUserProfile()
+    {
+        _userProfile.ToggleModal(true);
+    }
+}

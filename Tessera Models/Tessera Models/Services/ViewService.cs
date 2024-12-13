@@ -1,27 +1,69 @@
-﻿namespace Tessera.Web.Services
+﻿using Tessera.Models.Chapter;
+
+namespace Tessera.Web.Services
 {
     public interface IViewService
     {
-        bool ShowChapterAddMenu { get; set; }
-        bool ShowChapterSettings { get; set; }
-        bool ShowTemplateMenu { get; set; }
-        Type DynamicComponentType { get; set; }
-        Dictionary<string, object> Parameters { get; set; }
+        event Action<string> OnNotificationScheduled;
         string ButtonIdGen();
+        void ScheduleNotification(string message, DateTime scheduledTime);
+        void ResetNotifications();
     }
 
     public class ViewService : IViewService
     {
-        public bool ShowChapterAddMenu { get; set; } = false;
-        public bool ShowChapterSettings { get; set; } = false;
-        public bool ShowTemplateMenu { get; set; } = false;
-        public int ButtonId { get; set; } = 1;
-        public Type DynamicComponentType { get; set; }
-        public Dictionary<string, object> Parameters { get; set; } = new Dictionary<string, object>();
+        private int _buttonId = 1;
+        private List<NotificationDto> _notifications = new List<NotificationDto>();
+        private readonly Timer _timer; // To periodically check for notifications
+        public event Action<string> OnNotificationScheduled;
+
+
+        public ViewService()
+        {
+            // Set the timer to check every 60 seconds
+            _timer = new Timer(async _ => await CheckForNotifications(), null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+        }
+
+        // Schedule a notification
+        public void ScheduleNotification(string message, DateTime schedule)
+        {
+            var notification = new NotificationDto
+            {
+                Message = message,
+                Schedule = schedule
+            };
+
+            _notifications.Add(notification);
+
+            // Notify listeners about the scheduled notification
+            OnNotificationScheduled?.Invoke(notification.Message);
+        }
+
+        // Check if any notification is due to be shown
+        private async Task CheckForNotifications()
+        {
+            var now = DateTime.UtcNow;
+
+            // Loop through the notifications and show any that are due
+            List<NotificationDto> not = _notifications.Where(n => !n.IsShown && n.Schedule <= now).ToList();
+            foreach (var notification in not)
+            {
+                // Mark as shown and raise the event to show the notification
+                notification.IsShown = true;
+                OnNotificationScheduled?.Invoke(notification.Message);
+                await Task.Delay(6500);
+            }
+        }
+
+        // Reset all notifications (e.g., when the app is refreshed or restarted)
+        public void ResetNotifications()
+        {
+            _notifications.Clear();
+        }
 
         public string ButtonIdGen()
         {
-            return ButtonId++.ToString();
+            return _buttonId++.ToString();
         }
     }
 

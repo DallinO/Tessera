@@ -12,19 +12,29 @@
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/authentication.css" />
     <link rel="stylesheet" href="css/buttons.css" />
+    <link rel="stylesheet" href="css/calendar.css" />
     <link rel="stylesheet" href="css/chaptersettings.css" />
     <link rel="stylesheet" href="css/containers.css" />
-    <link rel="stylesheet" href="css/customerpage.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
     <link rel="stylesheet" href="css/document.css" />
     <link rel="stylesheet" href="css/dropdown.css" />
+    <link rel="stylesheet" href="css/help.css" />
     <link rel="stylesheet" href="css/inputfields.css" />
     <link rel="stylesheet" href="css/list.css" />
     <link rel="stylesheet" href="css/mainlayout.css" />
     <link rel="stylesheet" href="css/modal.css" />
+    <link rel="stylesheet" href="css/notification.css" />
     <link rel="stylesheet" href="css/home.css" />
     <link rel="stylesheet" href="css/selectfield.css" />
     <link rel="stylesheet" href="css/text.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
+    <script src="scripts/cookie.js" defer></script>
+    <script src="scripts/dashboard.js" defer></script>
+    <script src="scripts/default.js" defer></script>
+    <script src="scripts/inactivity.js" defer></script>
+    <script src="scripts/texteditor.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
 </head>
 
 <body>
@@ -46,76 +56,10 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="_content/Blazored.TextEditor/quill-blot-formatter.min.js"></script>
     <script src="_content/Blazored.TextEditor/Blazored-BlazorQuill.js"></script>
-    <script>
 
-        // cookie-helper.js
-        function setCookie(name, value, days) {
-            let expires = "";
-            if (days) {
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        }
-
-        function getCookie(name) {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
-
-        // cookie-helper.js
-        function deleteCookie(name) {
-            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        }
-
-        function getElementRect(element) {
-            return element.getBoundingClientRect();
-        }
-
-        function toggleButtonColor(buttonId) {
-            // Deselect all buttons
-            const allButtons = document.querySelectorAll('.ts-basic-button');
-            allButtons.forEach(button => {
-                button.classList.remove('clicked');
-            });
-
-            // Select the clicked button
-            const button = document.getElementById(buttonId);
-            if (button) {
-                button.classList.add('clicked');
-            }
-        }
-
-        window.getMouseX = function () {
-            return new Promise(resolve => {
-                document.addEventListener('click', function (event) {
-                    resolve(event.clientX);
-                }, { once: true });
-            });
-        };
-
-        window.getMouseY = function () {
-            return new Promise(resolve => {
-                document.addEventListener('click', function (event) {
-                    resolve(event.clientY);
-                }, { once: true });
-            });
-        };
-
-        function notifyBlazorAfterDOMLoaded() {
-            DotNet.invokeMethodAsync('Tessera.Web.Pages', 'OnDOMReady');
-        }
-
-
-    </script>
 </body>
 
 
 </html>
+
+

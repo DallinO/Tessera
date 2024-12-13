@@ -4,21 +4,149 @@
 
 @inject IBookService Book
 @inject IApiService Api
+@inject IViewService View
+@inject IJSRuntime JS
 @inject NavigationManager Navigation
 
-<div class="ts-page">
-    <div class="ts-sidebar">
-        <NavMenu />
-    </div>
-
-    <main class="ts-page-content">
-        <div>
-            @Body
+@if (Book.IsAuthenticated)
+{
+    <div class="ts-page">
+        <div class="ts-sidebar">
+            <NavMenu />
         </div>
-    </main>
-</div>
+
+        <main class="ts-page-content">
+            <div>
+                <UtilityBar/>
+            </div>
+            <div>
+                @Body
+            </div>
+        </main>
+    </div>
+}
+else
+{
+    <div>
+        <main>
+            Loading
+        </main>
+    </div>
+}
+
+<Notification Message="@currentNotificationMessage" IsVisible="@isNotificationVisible"/>
 
 
 @code {
-    private bool isLoading = true;
+    //private bool isLoading;
+    private bool isInactive = false;
+    private bool isNotificationVisible = true;
+    private bool notificationsLoaded = false;
+    private string currentNotificationMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Book.AppUser == null)
+        {
+            var token = await Api.ValidateTokenAsync();
+            if (token.Success)
+            {
+                Book.AppUser = token.AppUser;
+                var book = await Api.GetBookIdAsync();
+                if (book.Success)
+                {
+                    Book.BookId = book.BookId;
+                    Book.IsAuthenticated = true;
+                    Book.TokenExp = token.Expiration;
+                    //isLoading = false;
+                    StateHasChanged();
+                    //ResetErrors();
+                }
+                else
+                {
+                    //DisplayErrors(book.Errors);
+                    Navigation.NavigateTo($"/login");
+                }
+            }
+            else
+            {
+                //DisplayErrors(token.Errors);
+                Navigation.NavigateTo($"/login");
+            }
+        }
+        else if (Book.TokenExp == null || Book.TokenExp < DateTime.UtcNow)
+        {
+            await Api.LogoutAsync();
+            Navigation.NavigateTo($"/login");
+        }
+
+        if (!notificationsLoaded)
+        {
+            var response = await Api.GetNotificationsAsync(Book.BookId);
+            if (response.Success && response.Notifications.Count > 0)
+            {
+                foreach (NotificationDto notification in response.Notifications)
+                {
+                    View.ScheduleNotification(notification.Message, notification.Schedule);
+                }
+            }
+        }
+
+        //await JS.InvokeVoidAsync("inactivityFunctions.addEventListeners");
+        View.OnNotificationScheduled += ShowNotification;
+    }
+
+    private async Task ScheduleTestNotifications()
+    {
+        int counter = 0;
+        for (int i = 90; i < 1200; i += 15)
+        {
+            var response = await Api.AddNotificationAsync(new NotificationEntity
+            {
+                BookId = Book.BookId,
+                EntityId = 0,
+                EntityType = 0,
+                Message = $"Test Notification {counter++}",
+                Schedule = DateTime.UtcNow.AddSeconds(i)
+            });
+        }
+    }
+
+    private void ShowNotification(string message)
+    {
+        currentNotificationMessage = message;
+        isNotificationVisible = true;
+        StateHasChanged();
+        // Hide the notification after 5 seconds
+        Task.Delay(5000).ContinueWith(_ =>
+        {
+            isNotificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+
+    public void Dispose()
+    {
+        View.OnNotificationScheduled -= ShowNotification;
+    }
 }
+
+    @* // [JSInvokable]
+    // public static void OnUserInactive()
+    // {
+    //     // Perform the inactivity action (like showing a modal or logging the user out)
+    //     //isInactive = true;
+    //     // You can also redirect to login page or clear session
+    //     //Navigation.NavigateTo("/login");
+    //     Console.WriteLine();
+    // }
+
+    // [JSInvokable]
+    // // Call to reset inactivity timer when user interacts
+    // private static void ResetInactivityTimer()
+    // {
+    //     Console.WriteLine();
+    //     //isInactive = false;
+    //     // Reset JS timer
+    // }
+//} *@

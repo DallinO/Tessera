@@ -1,0 +1,53 @@
+﻿@namespace Tessera.Web.Pages
+
+@page "/b/help"
+
+@layout BookLayout
+@inject NavigationManager Navigation
+@inject IViewService View
+@inject IApiService Api
+
+<PageTitle>Help</PageTitle>
+
+<div class="help-container">
+    <section class="faq-section">
+        <h4>Frequently Asked Questions</h4>
+        <details>
+            <summary>How do I reset my password?</summary>
+            <p>To reset your password, go to the login page and click on "Forgot Password?" Follow the instructions to reset your password via email.</p>
+        </details>
+
+        <details>
+            <summary>Where can I find my account settings?</summary>
+            <p>You can find your account settings by clicking on your profile icon in the top-right corner and selecting "Settings" from the dropdown.</p>
+        </details>
+
+        <details>
+            <summary>How do I contact support?</summary>
+            <p>You can contact support by sending an email to <a href="mailto:support@example.com">support@example.com</a>.</p>
+        </details>
+    </section>
+
+    <section class="contact-section">
+        <h4>Contact Us</h4>
+        <p>If you need further assistance, feel free to reach out:</p>
+        <ul>
+            <li>Email: <a href="mailto:support@example.com">support@example.com</a></li>
+            <li>Phone: +1 (800) 123-4567</li>
+            <li>Office Hours: Monday to Friday, 9 AM - 5 PM</li>
+        </ul>
+    </section>
+
+    <section class="tips-section">
+        <h4>Quick Tips</h4>
+        <ul>
+            <li>Ensure your browser is up-to-date for the best experience.</li>
+            <li>Clear your cache if you encounter any issues.</li>
+            <li>Use the navigation menu to quickly access different sections of the app.</li>
+        </ul>
+    </section>
+</div>
+
+@code {
+    
+}

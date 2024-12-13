@@ -5,6 +5,10 @@ using Tessera.Models.Authentication;
 using Microsoft.JSInterop;
 using Blazored.SessionStorage;
 using Microsoft.Extensions.Logging;
+using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Tessera.Models.Chapter.Data;
+using Tessera.Models.Chapter;
 
 namespace Tessera.Web.Services
 {
@@ -13,11 +17,18 @@ namespace Tessera.Web.Services
         // Authentication
         Task<ApiResponse> RegisterAsync(RegisterRequest model);
         Task<ApiLoginResponse> LoginAsync(LoginRequest model);
+        Task<ApiResponse> UpdateUser(AppUserDto model);
+        Task<ApiResponse> ResetPasswordAsync(ResetPasswordRequest request);
         Task<bool> LogoutAsync();
         Task<ApiResponse> DeleteAccountAsync();
+        Task<ApiResponse> SendReportAsync(string issue);
+        // Notifications
+        Task<ApiResponse> AddNotificationAsync(NotificationEntity notification);
+        Task<ApiNotificationResponse> GetNotificationsAsync(int bookId);
         // Tokens
         ValueTask<string> GetJwtAsync();
         Task<bool> RefreshAsync();
+        Task<ApiLoginResponse> ValidateTokenAsync();
         // Book
         Task<ApiResponse> CreateBookAsync();
         Task<ApiBookResponse> GetBookIdAsync();
@@ -32,10 +43,15 @@ namespace Tessera.Web.Services
         Task<ApiResponse> DeleteDocumentAsync(int bookId, int chapterId);
         // Row
         Task<ApiListResponse> GetListAsync(int bookId, int chapterId);
-        Task<ApiResponse> DeleteListRowAsync(int bookId, int chapterId);
         Task<ApiResponse> AddRowAsync(ApiRowRequest request);
         Task<ApiResponse> UpdateRowAsync(ApiRowRequest request);
         Task<ApiResponse> DeleteRowAsync(int bookId, int chapterId, int rowId);
+        // Calendar
+        Task<ApiCalendarResponse> GetDayEventsAsync(int bookId, DateOnly date);
+        // Queries
+        Task<ApiUpcomingTasksResponse> GetUpcomingTasksAsync(int bookId);
+        Task<ApiUpcomingEventsResponse> GetUpcomingEventsAsync(int bookId);
+        Task<ApiPriorityTasksResponse> GetPriorityTasksAsync(int bookId);
     }
 
     public class ApiService : IApiService
@@ -57,6 +73,84 @@ namespace Tessera.Web.Services
             _jsRuntime = jsRuntime;
             _sss = sss;
             _logger = logger;
+        }
+
+
+
+
+        public async Task<ApiNotificationResponse> GetNotificationsAsync(int bookId)
+        {
+            try
+            {
+                var client = _factory.CreateClient("ServerApi");
+                var url = $"api/library/getnotifications?bookId={bookId}";
+                var response = await client.GetAsync(url);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiNotificationResponse>();
+                if (content == null)
+                {
+                    return new ApiNotificationResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Null Api Response"
+                        }
+                    };
+                }
+                else
+                {
+                    return content;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiNotificationResponse()
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
+            }
+        }
+
+        public async Task<ApiResponse> AddNotificationAsync(NotificationEntity notification)
+        {
+            try
+            {
+                var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/library/addnotification", notification);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                return content;
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
+            }
+        }
+
+
+
+        public async Task<ApiResponse> SendReportAsync(string issue)
+        {
+            try
+            {
+                var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/auth/report", new ReportDto() { Date = DateTime.UtcNow, Issue = issue });
+
+                var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                return content;
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
+            }
         }
 
 
@@ -141,6 +235,52 @@ namespace Tessera.Web.Services
             }
         }
 
+
+        public async Task<ApiResponse> UpdateUser(AppUserDto model)
+        {
+            var response = await _factory.CreateClient("ServerApi").PutAsJsonAsync("api/auth/updateuser", model);
+            var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
+            if (content == null)
+            {
+                return new ApiResponse()
+                {
+                    Success = false,
+                    Errors = new List<string>()
+                    {
+                        "Null Api Response"
+                    }
+                };
+            }
+            else
+            {
+                return content;
+            }
+        }
+
+        /****************************************
+         * RESET PASSWORD ASYNC            (READ)
+         ****************************************/
+        public async Task<ApiResponse> ResetPasswordAsync(ResetPasswordRequest request)
+        {
+            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/auth/resetpassword", request);
+            var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
+            if (content == null)
+            {
+                return new ApiResponse()
+                {
+                    Success = false,
+                    Errors = new List<string>()
+                    {
+                        "Null Api Response"
+                    }
+                };
+            }
+            else
+            {
+                return content;
+            }
+        }
+
         /****************************************
          * LOGOUT ASYNC                  (UPDATE)
          ****************************************/
@@ -185,6 +325,48 @@ namespace Tessera.Web.Services
             }
 
             return _jwtCache;
+        }
+
+
+        public async Task<ApiLoginResponse> ValidateTokenAsync()
+        {
+            if (string.IsNullOrEmpty(_jwtCache))
+            {
+                //_jwtCache = await _sss.GetItemAsync<string>(JWT_KEY);
+                _jwtCache = await _jsRuntime.InvokeAsync<string>("getCookie", "JWT");
+            }
+
+            if (string.IsNullOrEmpty(_jwtCache))
+            {
+                return new ApiLoginResponse()
+                {
+                    Success = false,
+                    Errors = new List<string>()
+                    {
+                        "Null Token"
+                    }
+                };
+            }
+            var client = _factory.CreateClient("ServerApi");
+            var url = $"api/auth/validatetoken?token={_jwtCache}";
+            var response = await client.GetAsync(url);
+
+            var content = await response.Content.ReadFromJsonAsync<ApiLoginResponse>();
+            if (content == null)
+            {
+                return new ApiLoginResponse()
+                {
+                    Success = false,
+                    Errors = new List<string>()
+                    {
+                        "Null Api Response"
+                    }
+                };
+            }
+            else
+            {
+                return content;
+            }
         }
 
         /****************************************
@@ -351,7 +533,37 @@ namespace Tessera.Web.Services
          ****************************************/
         public async Task<ApiResponse> DeleteChapterAsync(int bookId, int chapterId)
         {
-            return new ApiResponse();
+            try
+            {
+                var client = _factory.CreateClient("ServerApi");
+                var url = $"api/library/deletechapter?bookId={bookId}&documentId={chapterId}";
+                var response = await client.DeleteAsync(url);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (content == null)
+                {
+                    return new ApiResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Null Api Response"
+                        }
+                    };
+                }
+                else
+                {
+                    return content;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
+            }
         }
 
 
@@ -365,7 +577,7 @@ namespace Tessera.Web.Services
          ****************************************/
         public async Task<ApiResponse> SaveDocumentAsync(SaveDocumentRequest request)
         {
-            var response = await _factory.CreateClient("ServerApi").PatchAsJsonAsync("api/library/savedocument", request);
+            var response = await _factory.CreateClient("ServerApi").PutAsJsonAsync("api/library/savedocument", request);
             var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
             if (content == null)
             {
@@ -387,12 +599,12 @@ namespace Tessera.Web.Services
         /****************************************
          * GET DOCUMENT DATA ASYNC         (READ)
          ****************************************/
-        public async Task<ApiDocumentResponse> GetDocumentAsync(int bookId, int chapterId)
+        public async Task<ApiDocumentResponse> GetDocumentAsync(int bookId, int documentId)
         {
             try
             {
                 var client = _factory.CreateClient("ServerApi");
-                var url = $"api/library/getdocument?bookId={bookId}&chapterId={chapterId}";
+                var url = $"api/library/getdocument?bookId={bookId}&chapterId={documentId}";
                 var response = await client.GetAsync(url);
 
                 var content = await response.Content.ReadFromJsonAsync<ApiDocumentResponse>();
@@ -427,7 +639,37 @@ namespace Tessera.Web.Services
          ****************************************/
         public async Task<ApiResponse> DeleteDocumentAsync(int bookId, int chapterId)
         {
-            return new ApiResponse();
+            try
+            {
+                var client = _factory.CreateClient("ServerApi");
+                var url = $"api/library/deletedocument?bookId={bookId}&documentId={chapterId}";
+                var response = await client.DeleteAsync(url);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (content == null)
+                {
+                    return new ApiResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Null Api Response"
+                        }
+                    };
+                }
+                else
+                {
+                    return content;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
+            }
         }
 
 
@@ -444,7 +686,7 @@ namespace Tessera.Web.Services
             try
             {
                 var client = _factory.CreateClient("ServerApi");
-                var url = $"api/library/getlist?bookId={bookId}&chapterId={chapterId}";
+                var url = $"api/library/getrows?bookId={bookId}&chapterId={chapterId}";
                 var response = await client.GetAsync(url);
 
                 var content = await response.Content.ReadFromJsonAsync<ApiListResponse>();
@@ -474,13 +716,6 @@ namespace Tessera.Web.Services
             }
         }
 
-        /***************************************************
-         * DELETE LIST DATA ASYNC
-         * *************************************************/
-        public async Task<ApiResponse> DeleteListRowAsync(int bookId, int chapterId)
-        {
-            return new ApiResponse();
-        }
 
         /***************************************************
          * UPDATE LIST DATA ASYNC
@@ -511,7 +746,7 @@ namespace Tessera.Web.Services
          * *************************************************/
         public async Task<ApiResponse> UpdateRowAsync(ApiRowRequest request)
         {
-            var response = await _factory.CreateClient("ServerApi").PostAsJsonAsync("api/library/updaterow", request);
+            var response = await _factory.CreateClient("ServerApi").PutAsJsonAsync("api/library/updaterow", request);
             var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
             if (content == null)
             {
@@ -535,7 +770,191 @@ namespace Tessera.Web.Services
          * *************************************************/
         public async Task<ApiResponse> DeleteRowAsync(int bookId, int chapterId, int rowId)
         {
-            return new ApiResponse();
+            try
+            {
+                var client = _factory.CreateClient("ServerApi");
+                var url = $"api/library/deleterow?bookId={bookId}&documentId={chapterId}&rowId={rowId}";
+                var response = await client.DeleteAsync(url);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                if (content == null)
+                {
+                    return new ApiResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Null Api Response"
+                        }
+                    };
+                }
+                else
+                {
+                    return content;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
+            }
+        }
+
+
+
+
+        public async Task<ApiCalendarResponse> GetDayEventsAsync(int bookId, DateOnly date)
+        {
+            try
+            {
+                var client = _factory.CreateClient("ServerApi");
+                var url = $"api/library/getdayevents?bookId={bookId}&date={date}";
+                var response = await client.GetAsync(url);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiCalendarResponse>();
+                if (content == null)
+                {
+                    return new ApiCalendarResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Null Api Response"
+                        }
+                    };
+                }
+                else
+                {
+                    return content;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiCalendarResponse()
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
+            }
+        }
+
+
+
+        /***************************************************
+         * GET UPCOMING TASKS ASYNC
+         * *************************************************/
+        public async Task<ApiUpcomingTasksResponse> GetUpcomingTasksAsync(int bookId)
+        {
+            try
+            {
+                var client = _factory.CreateClient("ServerApi");
+                var url = $"api/library/getupcomingtasks?bookId={bookId}";
+                var response = await client.GetAsync(url);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiUpcomingTasksResponse>();
+                if (content == null)
+                {
+                    return new ApiUpcomingTasksResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Null Api Response"
+                        }
+                    };
+                }
+                else
+                {
+                    return content;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiUpcomingTasksResponse()
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
+            }
+        }
+
+        /***************************************************
+         * GET UPCOMING EVENTS ASYNC
+         * *************************************************/
+        public async Task<ApiUpcomingEventsResponse> GetUpcomingEventsAsync(int bookId)
+        {
+            try
+            {
+                var client = _factory.CreateClient("ServerApi");
+                var url = $"api/library/getupcomingevents?bookId={bookId}";
+                var response = await client.GetAsync(url);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiUpcomingEventsResponse>();
+                if (content == null)
+                {
+                    return new ApiUpcomingEventsResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                 {
+                     "Null Api Response"
+                 }
+                    };
+                }
+                else
+                {
+                    return content;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiUpcomingEventsResponse()
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
+            }
+        }
+
+        /***************************************************
+         * GET PRIORITY TASKS ASYNC
+         * *************************************************/
+        public async Task<ApiPriorityTasksResponse> GetPriorityTasksAsync(int bookId)
+        {
+            try
+            {
+                var client = _factory.CreateClient("ServerApi");
+                var url = $"api/library/getprioritytasks?bookId={bookId}";
+                var response = await client.GetAsync(url);
+
+                var content = await response.Content.ReadFromJsonAsync<ApiPriorityTasksResponse>();
+                if (content == null)
+                {
+                    return new ApiPriorityTasksResponse()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                 {
+                     "Null Api Response"
+                 }
+                    };
+                }
+                else
+                {
+                    return content;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiPriorityTasksResponse()
+                {
+                    Success = false,
+                    Errors = new List<string> { $"{ex.Message}" }
+                };
+            }
         }
     }
 }

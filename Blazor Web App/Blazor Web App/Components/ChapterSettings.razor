@@ -1,8 +1,9 @@
 ﻿@namespace Tessera.Web
 
 @inject IBookService Book
+@inject IApiService Api
 
-@if (isVisible)
+@if (_isVisible)
 {
     <div class="ts-modal-overlay">
         <div class="ts-modal-content">
@@ -11,7 +12,7 @@
                 <input type="text" @bind="Book.Chapters[ChapterIndex].Description" />
             </div>
             <div class="ts-modal-body">
-                <button class="ts-secondary-btn">
+                <button @onclick="DeleteChapter" class="ts-secondary-btn">
                     <div class="ts-leaf-icon">
                         <img src="trash_fill.svg" alt="trash" />
                     </div>
@@ -19,7 +20,7 @@
                 </button>
             </div>
             <div class="ts-modal-footer">
-                <button @onclick="CloseModal" class="ts-secondary-btn ts-modal-button-left">Close</button>
+                <button @onclick="()=> ToggleModal(false)" class="ts-secondary-btn ts-modal-button-left">Close</button>
             </div>
         </div>
     </div>
@@ -27,20 +28,28 @@
 
 @code {
     [Parameter] public int ChapterIndex { get; set; }
-    [Parameter] public EventCallback OnOpenSettings { get; set; }
-    public bool isVisible = false;
+    [Parameter] public EventCallback OnClose { get; set; }
 
-    private void CloseModal()
+    private bool _isVisible = false;
+
+    public void ToggleModal(bool isVisible)
     {
-        isVisible = false;
+        _isVisible = isVisible;
         StateHasChanged();
     }
 
-    public async Task OpenModal()
+    public async Task DeleteChapter()
     {
-        if(OnOpenSettings.HasDelegate)
+        var response = await Api.DeleteChapterAsync(Book.BookId, Book.Chapters[ChapterIndex].ChapterId);
+
+        if(response.Success)
         {
-            await OnOpenSettings.InvokeAsync(null);
+            Book.Chapters.RemoveAt(ChapterIndex);
+            ToggleModal(false);
+            if (OnClose.HasDelegate)
+            {
+                await OnClose.InvokeAsync();
+            }
         }
     }
 }

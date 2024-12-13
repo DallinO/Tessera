@@ -18,29 +18,56 @@
 
 .ts-customer-table {
     width: 100%;
+    table-layout: fixed;
+    border-collapse: separate; /* Ensure border-spacing works */
+    border-spacing: 10px; /* Adjust the gap between columns */
 }
 
-    .ts-customer-table tr {
-        border-bottom: 1px solid #ddd; /* Add a bottom border to each row */
-        border-radius: 4px;
+    .ts-customer-table tbody tr {
+        border-bottom: 1px solid #988d92;
     }
 
-        .ts-customer-table tr.selected {
-            background-color: var(--theme-1-accent-3); /* Change to your preferred selected color */
+        .ts-customer-table tbody tr.selected {
+            background-color: red;
         }
 
-        .ts-customer-table tr:not(.selected):hover {
-            background-color: var(--theme-1-accent-2); /* Change to your preferred hover color */
+        .ts-customer-table tbody tr:not(.selected):hover {
+            outline: 2px solid black; /* Use outline instead of border for the hover effect */
         }
 
-
-        .ts-customer-table tr:last-child {
-            border-bottom: none; /* Remove the border from the last row */
+        .ts-customer-table tbody tr:last-child {
+            border-bottom: none;
         }
+
+.selected-row {
+    outline: 2px solid Red;
+}
 
 .row-test {
     background-color: green;
 }
 
 .ts-customer-validation-summary {
+}
+
+.col-complete{
+    width: 100px;
+}
+
+.col-name {
+    width: 350px;
+    min-width: 100px;
+    max-width: 350px;
+}
+
+.col-description {
+    min-width: 200px;
+}
+
+.col-calendar{
+    width: 100px;
+}
+
+.col-selection {
+    width: 100px;
 }

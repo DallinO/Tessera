@@ -11,6 +11,7 @@ C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\blazor.webassembly.js
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\Blazored.SessionStorage.wasm
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\Blazored.TextEditor.wasm
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\Blazored.Toast.wasm
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\dotnet.js
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\dotnet.js.map
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\dotnet.native.8.0.5.7c8i5zyw9q.js
@@ -300,6 +301,7 @@ C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\System.Web.HttpUtility.wasm.gz
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\System.ValueTuple.wasm.gz
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.Logging.Abstractions.wasm.gz
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\Blazored.Toast.wasm.gz
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\System.Web.wasm.gz
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\System.Diagnostics.TextWriterTraceListener.wasm.gz
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\wwwroot\_framework\dotnet.js.gz
@@ -470,6 +472,7 @@ C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\Blazor Web App.pdb
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\Blazored.SessionStorage.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\Blazored.TextEditor.dll
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\Blazored.Toast.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\System.Web.Cors.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\Microsoft.AspNetCore.Authorization.dll
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\Microsoft.AspNetCore.Components.dll
@@ -696,6 +699,7 @@ C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\bin\Debug\net8.0\Tessera Models.pdb
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\webcil\Blazored.SessionStorage.wasm
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\webcil\Blazored.TextEditor.wasm
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\webcil\Blazored.Toast.wasm
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\webcil\System.Web.Cors.wasm
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Authorization.wasm
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Components.wasm
@@ -928,6 +932,7 @@ C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\compressed\3fegawm1hb.gz
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\compressed\6eh38o5cxu.gz
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\compressed\3ge43cl9r5.gz
+C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\compressed\cuzr96vaaw.gz
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\compressed\oy6h83gfzb.gz
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\compressed\fugz9huf9v.gz
 C:\Users\Olson\Documents\GitHub\Tessera\Blazor Web App\Blazor Web App\obj\Debug\net8.0\compressed\1ii6du919v.gz

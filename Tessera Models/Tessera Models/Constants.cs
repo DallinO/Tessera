@@ -44,7 +44,35 @@
 
     public enum LeafType
     {
-        Document,   // 0
-        List        // 1
+        Document,
+        List
     }
+
+    public enum EventType
+    {
+        Work,
+        School,
+        Medical,
+        Personal,
+        Religious
+    }
+
+    public enum Theme
+    {
+        Default,
+        Blue,
+        Red,
+        Orange,
+        Green
+    }
+
+
+    public enum EntityType
+    {
+        Row,
+        Event
+    }
+
+
+
 }

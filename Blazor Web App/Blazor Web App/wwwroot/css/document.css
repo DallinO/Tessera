@@ -16,3 +16,7 @@
 .ts-document-header-item {
     margin: 10px;
 }
+
+.ts-document-page{
+    z-index:-1;
+}

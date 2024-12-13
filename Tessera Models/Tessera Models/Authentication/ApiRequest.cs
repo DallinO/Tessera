@@ -1,5 +1,6 @@
 ﻿using Tessera.Constants;
 using Tessera.Models.Chapter;
+using Tessera.Models.Chapter.Data;
 
 namespace Tessera.Models.Authentication
 {
@@ -19,6 +20,21 @@ namespace Tessera.Models.Authentication
     {
         public int BookId { get; set; }
         public int ChapterId { get; set; }
-        public RowDto? Row { get; set; }
+        public RowDto Row { get; set; }
     }
+
+    public class ApiDeleteRowRequest
+    {
+        public int BookId { get; set; }
+        public int ChapterId { get; set; }
+        public int RowId { get; set; }
+    }
+
+    public class ApiAddNotificationRequest
+    {
+        public int BookId { get; set; }
+        public NotificationEntity Notification { get; set; }
+    }
+
+
 }

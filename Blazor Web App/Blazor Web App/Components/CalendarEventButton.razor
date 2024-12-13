@@ -1,0 +1,32 @@
+﻿@namespace Tessera.Web
+
+@inject IViewService ViewService
+@inject IBookService Book
+@inject NavigationManager Navigation
+
+<button class="ts-calendar-button" id="@ButtonId" @onclick="DisplayEventDetails">
+    <div class="ts-basic-button-text">@Title</div>
+</button>
+
+@code {
+    [Parameter] public CalendarDay Day { get; set; }
+    [Parameter] public int EventIndex { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public EventCallback<DisplayEventArgs> OnDisplayEventDetails { get; set; }
+    [Parameter] public string EventIcon { get; set; }
+    [Parameter] public string ButtonId { get; set; }
+
+    private async Task DisplayEventDetails()
+    {
+        await OnDisplayEventDetails.InvokeAsync(new DisplayEventArgs()
+        {
+            Day = Day,
+            Index = EventIndex
+        });
+    }
+
+    private string BuildIconPath(string leafName)
+    {
+        return $"{EventIcon.ToLower()}.svg";
+    }
+}
